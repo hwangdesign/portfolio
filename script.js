@@ -477,20 +477,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 // 섹션별 이모티콘 매핑
                 const emojiMap = {
                     'Creative Director': '🥳',
+                    'Creative Director Hwang Seonyoon': '🥳',
                     'Core Competencies': '🖋️',
                     'Career Experience': '💡',
                     'Education': '🎒',
                     'Awards': '🪅',
                     'Activities': '🪄',
                     'Cover Letter': '🦄',
-                    'MartPlus Design': '🎨',
+                    'Works': '💎',
+                    'About': '😎',
+                    'MartPlus': '🎨',
                     'Design System': '🎨',
-                    'PDP UX Redesign': '🎨',
-                    '11Kitties Design': '🎨',
-                    '#OOTD Fashion Platform': '🎨',
-                    'OOAh Luxury Commerce Platform': '🎨',
-                    '11st Brand Identity & Rebranding': '🎨',
-                    'Amazon Global Store Integration': '🎨'
+                    'PDP UX': '🎨',
+                    '11Kitties': '🎨',
+                    '#OOTD Fashion': '🎨',
+                    'OOAh Luxury': '🎨',
+                    '11st Brand': '🎨',
+                    'Amazon Global Store': '🎨'
                 };
                 
                 const sectionTitle = title.dataset.title || text;
@@ -597,20 +600,23 @@ document.addEventListener('DOMContentLoaded', () => {
             // 섹션별 이모티콘 매핑 (모든 OS 호환성 고려)
             const emojiMap = {
                 'Creative Director': '🥳',
+                'Creative Director Hwang Seonyoon': '🥳',
                 'Core Competencies': '🖋️',
                 'Career Experience': '💡',
                 'Education': '🎒',
                 'Awards': '🪅',
                 'Activities': '🪄',
                 'Cover Letter': '🦄',
-                'MartPlus Design': '🎨',
+                'Works': '💎',
+                'About': '😎',
+                'MartPlus': '🎨',
                 'Design System': '🎨',
-                'PDP UX Redesign': '🎨',
-                '11Kitties Design': '🎨',
-                '#OOTD Fashion Platform': '🎨',
-                'OOAh Luxury Commerce Platform': '🎨',
-                '11st Brand Identity & Rebranding': '🎨',
-                'Amazon Global Store Integration': '🎨'
+                'PDP UX': '🎨',
+                '11Kitties': '🎨',
+                '#OOTD Fashion': '🎨',
+                'OOAh Luxury': '🎨',
+                '11st Brand': '🎨',
+                'Amazon Global Store': '🎨'
             };
             
             const sectionTitle = title.dataset.title || text;
@@ -909,7 +915,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // nav-brand 애니메이션
     const navBrand = document.getElementById('navBrandAnimated');
     if (navBrand) {
-        const navBrandTitles = ['welcome to'];
+        const navBrandTitles = ['hwangdesign_works'];
         
         function animateNavBrand() {
             if (navBrand.dataset.animating === 'true') return;
