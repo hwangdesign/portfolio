@@ -601,6 +601,18 @@ body {
     }
 }
 
+/* 프로젝트 날짜 스타일 */
+.project-date {
+    font-size: 14px;
+    font-weight: 500;
+    font-family: var(--font-family-base);
+    color: #ffffff;
+    background-color: #000000;
+    padding: 8px;
+    display: inline-block;
+    margin-bottom: 16px;
+}
+
 /* Description containers - 공통 스타일 */
 .hero-info-description {
     margin-left: 0;
