@@ -885,7 +885,7 @@ html {
 
 .portfolio-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, 440px);
+    grid-template-columns: repeat(auto-fill, 600px);
     gap: 120px 40px;
     width: 100%;
     justify-content: start;
@@ -893,7 +893,7 @@ html {
 
 .portfolio-item {
     position: relative;
-    width: 440px;
+    width: 600px;
     cursor: pointer;
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
@@ -904,7 +904,7 @@ html {
 
 .portfolio-thumbnail {
     position: relative;
-    width: 440px;
+    width: 600px;
     padding-bottom: 56.25%; /* 16:9 비율 (가로:세로 = 16:9) */
     overflow: hidden;
     background: var(--bg-color);
@@ -943,10 +943,6 @@ html {
     margin-bottom: 10px;
     min-height: auto;
     height: auto;
-}
-
-.portfolio-title .section-title-box {
-    display: none !important;
 }
 
 .portfolio-subtitle {

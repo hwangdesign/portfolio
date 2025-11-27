@@ -482,7 +482,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     'Education': '🎒',
                     'Awards': '🪅',
                     'Activities': '🪄',
-                    'Cover Letter': '🦄'
+                    'Cover Letter': '🦄',
+                    'MartPlus Design': '🎨',
+                    'Design System': '🎨',
+                    'PDP UX Redesign': '🎨',
+                    '11Kitties Design': '🎨',
+                    '#OOTD Fashion Platform': '🎨',
+                    'OOAh Luxury Commerce Platform': '🎨',
+                    '11st Brand Identity & Rebranding': '🎨',
+                    'Amazon Global Store Integration': '🎨'
                 };
                 
                 const sectionTitle = title.dataset.title || text;
@@ -594,7 +602,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 'Education': '🎒',
                 'Awards': '🪅',
                 'Activities': '🪄',
-                'Cover Letter': '🦄'
+                'Cover Letter': '🦄',
+                'MartPlus Design': '🎨',
+                'Design System': '🎨',
+                'PDP UX Redesign': '🎨',
+                '11Kitties Design': '🎨',
+                '#OOTD Fashion Platform': '🎨',
+                'OOAh Luxury Commerce Platform': '🎨',
+                '11st Brand Identity & Rebranding': '🎨',
+                'Amazon Global Store Integration': '🎨'
             };
             
             const sectionTitle = title.dataset.title || text;
@@ -729,8 +745,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 배경 라인 요소들 생성 및 관리
     const backgroundLines = [];
     const shortLines = [];
-    const lineSpacing = 480;
-    const shortLineSpacing = 480;
+    const lineSpacing = 640;
+    const shortLineSpacing = 640;
     const minLineGap = 20;
     const maxAttempts = 100;
     const shortLineConfig = {
