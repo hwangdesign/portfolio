@@ -76,27 +76,7 @@ const COLORS = {
     }, 200);
 })();
 
-// Nav brand click - 페이지 최상단으로 이동 및 새로고침
-const navBrand = document.querySelector('.nav-brand');
-if (navBrand) {
-    navBrand.style.cursor = 'pointer';
-    navBrand.addEventListener('click', () => {
-        // 프로젝트 페이지인 경우 index.html로 이동
-        const isProjectPage = window.location.pathname.includes('/works/');
-        if (isProjectPage) {
-            window.location.href = '../index.html';
-        } else {
-            // 메인 페이지인 경우 최상단으로 이동 및 새로고침
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-            setTimeout(() => {
-                window.location.reload();
-            }, 300);
-        }
-    });
-}
+// Nav brand click 이벤트는 nav-brand 애니메이션 부분에서 처리됨
 
 
 
@@ -961,23 +941,79 @@ document.addEventListener('DOMContentLoaded', () => {
     // nav-brand 애니메이션
     const navBrand = document.getElementById('navBrandAnimated');
     if (navBrand) {
-        const navBrandTitles = ['hwangdesign_works'];
+        const navBrandTitles = ['home sweet home'];
+        const hoverText = '← go to home';
+        let navBrandTimer = null;
+        let isHovering = false;
+        
+        // index.html 페이지인지 확인
+        const isIndexPage = !window.location.pathname.includes('/works/');
         
         function animateNavBrand() {
-            if (navBrand.dataset.animating === 'true') return;
+            if (navBrand.dataset.animating === 'true' || isHovering) return;
             
             const currentTitle = navBrandTitles[0];
+            const repeatDelay = isIndexPage ? 10000 : 30000; // index.html은 10초, 프로젝트 페이지는 30초
             
-            // 애니메이션 완료 후 30초 대기하고 재실행
+            // 애니메이션 완료 후 대기하고 재실행
             animateToText(currentTitle, navBrand, false, [], () => {
-                setTimeout(() => {
-                    // 30초 후 모션 재실행
-                    animateNavBrand();
-                }, 30000); // 30초 대기 후 재실행
+                if (!isHovering) {
+                    navBrandTimer = setTimeout(() => {
+                        // 대기 후 모션 재실행
+                        animateNavBrand();
+                    }, repeatDelay);
+                }
             });
         }
         
-        // 초기 애니메이션 시작
+        // 프로젝트 페이지에서만 마우스 오버 이벤트 추가
+        if (!isIndexPage) {
+            // 마우스 오버 시 텍스트 변경 (랜덤 모션 적용)
+            navBrand.addEventListener('mouseenter', () => {
+                isHovering = true;
+                // 타이머 취소
+                if (navBrandTimer) {
+                    clearTimeout(navBrandTimer);
+                    navBrandTimer = null;
+                }
+                // 랜덤 모션으로 텍스트 변경
+                if (navBrand.dataset.animating !== 'true') {
+                    animateToText(hoverText, navBrand, false, [], () => {
+                        navBrand.dataset.animating = 'false';
+                    });
+                }
+            });
+            
+            // 마우스 아웃 시 원래 텍스트로 복원 (랜덤 모션 적용)
+            navBrand.addEventListener('mouseleave', () => {
+                isHovering = false;
+                // 랜덤 모션으로 원래 텍스트로 복원
+                if (navBrand.dataset.animating !== 'true') {
+                    animateToText(navBrandTitles[0], navBrand, false, [], () => {
+                        navBrand.dataset.animating = 'false';
+                        // 애니메이션 재시작
+                        navBrandTimer = setTimeout(() => {
+                            animateNavBrand();
+                        }, 30000);
+                    });
+                }
+            });
+        }
+        
+        // 클릭 이벤트 추가
+        navBrand.style.cursor = 'pointer';
+        navBrand.addEventListener('click', () => {
+            // 프로젝트 페이지인 경우 index.html로 이동
+            const isProjectPage = window.location.pathname.includes('/works/');
+            if (isProjectPage) {
+                window.location.href = '../index.html';
+            } else {
+                // 메인 페이지인 경우 페이지 새로고침
+                window.location.reload();
+            }
+        });
+        
+        // 모든 페이지에서 초기 애니메이션 시작
         setTimeout(() => {
             animateNavBrand();
         }, 500);
