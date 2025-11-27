@@ -81,14 +81,20 @@ const navBrand = document.querySelector('.nav-brand');
 if (navBrand) {
     navBrand.style.cursor = 'pointer';
     navBrand.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-        // 페이지 새로고침
-        setTimeout(() => {
-            window.location.reload();
-        }, 300);
+        // 프로젝트 페이지인 경우 index.html로 이동
+        const isProjectPage = window.location.pathname.includes('/works/');
+        if (isProjectPage) {
+            window.location.href = '../index.html';
+        } else {
+            // 메인 페이지인 경우 최상단으로 이동 및 새로고침
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+            setTimeout(() => {
+                window.location.reload();
+            }, 300);
+        }
     });
 }
 
