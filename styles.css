@@ -401,6 +401,10 @@ body {
 }
 
 /* Navigation */
+:root {
+    --nav-height: 64px;
+}
+
 .navbar {
     position: fixed;
     top: 0;
@@ -414,6 +418,13 @@ body {
     z-index: 1000;
     padding: 32px 0;
     overflow: hidden;
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+}
+
+.navbar.hidden {
+    opacity: 0;
+    transform: translateY(-100%);
+    visibility: hidden;
 }
 
 .navbar .container {
@@ -612,36 +623,13 @@ body {
 }
 
 /* Description containers - 공통 스타일 */
-.hero-info-description,
-.competency-description,
-.experience-description,
-.education-description,
-.military-description,
-.award-description,
-.activity-description {
-    margin-left: 0;
-}
-
 .hero-info-description {
+    margin-left: 0;
     margin-top: 32px;
 }
 
-.competency-description,
-.experience-description,
-.education-description,
-.military-description,
-.award-description,
-.activity-description {
-    margin-bottom: 16px;
-}
-
 /* Description text - 공통 스타일 */
-.hero-info-description p,
-.competency-description p,
-.experience-description p,
-.education-description p,
-.award-description p,
-.activity-description p {
+.hero-info-description p {
     font-size: var(--font-size-base);
     font-weight: 500;
     font-family: var(--font-family-base);
@@ -679,124 +667,6 @@ body {
     opacity: 1;
 }
 
-.military-description p {
-    color: var(--text-light);
-}
-
-/* Experience */
-.experience-item {
-    margin-bottom: 64px;
-}
-
-.experience-company-title {
-    font-size: var(--font-size-subtitle);
-    font-weight: 700;
-    font-family: var(--font-family-system);
-    line-height: normal;
-    color: var(--text-color);
-    margin-bottom: 8px;
-    margin-left: 0;
-}
-
-.experience-period {
-    font-size: var(--font-size-small);
-    font-family: var(--font-family-base);
-    line-height: normal;
-    color: var(--text-tertiary-color);
-    margin-bottom: 16px;
-    margin-left: 0;
-}
-
-/* 공통 보더 스타일 */
-.experience-projects,
-.cover-letter-content {
-    margin: 16px 0 0 40px;
-    border-left: 1px solid var(--border-white-50);
-    padding-left: 8px;
-    padding-right: 20%;
-    max-width: calc(100% - 40px);
-    box-sizing: border-box;
-}
-
-.experience-projects {
-    list-style: none;
-    padding: 0;
-    padding-left: 8px;
-}
-
-.experience-projects li,
-.cover-letter-content p {
-    font-size: var(--font-size-small);
-    font-family: var(--font-family-base);
-    line-height: normal;
-    color: var(--white-50);
-    padding-left: 0;
-    position: relative;
-}
-
-.experience-projects li a {
-    color: var(--white-50);
-    text-decoration: underline;
-    transition: var(--transition);
-}
-
-.experience-projects li a:hover {
-    color: var(--yellow-color);
-}
-
-.experience-projects li:hover .link-arrow {
-    color: var(--yellow-color);
-    transition: var(--transition);
-}
-
-.experience-projects li .link-arrow {
-    color: var(--white-50);
-    transition: var(--transition);
-}
-
-.cover-letter-content p {
-    margin-bottom: 16px;
-    word-break: keep-all;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-}
-
-.experience-projects li {
-    margin-bottom: 4px;
-}
-
-/* Cover Letter */
-.cover-letter-section {
-    background: var(--bg-color);
-}
-
-.cover-letter-content strong {
-    color: var(--text-color);
-    font-weight: 500;
-}
-
-/* Footer */
-.footer {
-    background: var(--bg-color);
-    color: var(--text-color);
-    height: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.footer .container,
-.footer p {
-    text-align: center;
-}
-
-.footer p {
-    font-size: var(--font-size-tiny);
-    font-family: var(--font-family-base);
-    color: var(--text-light);
-    text-transform: uppercase;
-    margin: 0;
-}
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -817,10 +687,6 @@ body {
 
     .section {
         padding: 80px 0;
-    }
-
-    .cover-letter-content {
-        padding-right: 10%;
     }
 
     .section-title-box {
@@ -846,9 +712,6 @@ body {
         }
     }
 
-    .footer {
-        height: 200px;
-    }
 }
 
 /* PC에서 폰트 사이즈 14px로 설정 */
@@ -908,6 +771,22 @@ html {
     padding: 0;
     border: 1px solid var(--yellow-20);
     border-radius: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.portfolio-view-toggle.floating {
+    position: fixed;
+    top: calc(var(--nav-height, 0px) + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+    background: var(--bg-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--yellow-20);
+}
+
+[data-theme="light"] .portfolio-view-toggle.floating {
+    border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .view-toggle-btn {
@@ -971,7 +850,7 @@ html {
 .portfolio-thumbnail {
     position: relative;
     width: 600px;
-    padding-bottom: 75%; /* 4:3 비율 (가로:세로 = 4:3) */
+    padding-bottom: 100%; /* 1:1 비율 (가로:세로 = 1:1) */
     overflow: hidden;
     background: var(--bg-color);
     border: 1px solid var(--border-white-20);
@@ -1035,23 +914,9 @@ html {
     color: #000000;
 }
 
-.portfolio-title .section-title-box,
-.portfolio-title .section-title-box-emoji {
+.portfolio-info .portfolio-title .section-title-box,
+.portfolio-info .portfolio-title .section-title-box-emoji {
     display: none !important;
-}
-
-.portfolio-subtitle {
-    font-size: var(--font-size-base);
-    font-weight: 500;
-    font-family: var(--font-family-base);
-    line-height: normal;
-    color: var(--text-color);
-    margin: 0;
-    padding: 0;
-}
-
-.portfolio-description {
-    display: none;
 }
 
 /* TEXT 모드 스타일 */
@@ -1125,9 +990,6 @@ html {
     transform-origin: left;
 }
 
-.portfolio-grid.text-view .portfolio-subtitle {
-    display: none;
-}
 
 /* 반응형 그리드 조정 */
 @media (max-width: 480px) {
@@ -1142,7 +1004,7 @@ html {
     
     .portfolio-thumbnail {
         width: 100%;
-        padding-bottom: 75%; /* 4:3 비율 유지 */
+        padding-bottom: 100%; /* 1:1 비율 유지 */
         overflow: hidden;
         margin-bottom: 10px;
     }
@@ -1158,16 +1020,11 @@ html {
 
 /* Print Styles */
 @media print {
-    .navbar,
-    .footer {
+    .navbar {
         display: none;
     }
 
     .section {
-        page-break-inside: avoid;
-    }
-
-    .experience-item {
         page-break-inside: avoid;
     }
 }

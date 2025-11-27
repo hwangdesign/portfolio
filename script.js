@@ -417,6 +417,11 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 섹션 타이틀에 박스 추가 및 위치 업데이트 함수
     function updateTitleBox(title) {
+        // portfolio-info 내의 타이틀은 이모지를 표시하지 않음
+        if (title.closest('.portfolio-info')) {
+            return;
+        }
+        
         // 기존 박스가 있으면 제거
         const existingBox = title.querySelector('.section-title-box');
         if (existingBox) {
@@ -884,21 +889,56 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // 모바일 여부 확인하여 라인 간격 조정
         const isMobile = window.innerWidth <= 768;
-        const currentLineSpacing = isMobile ? 200 : lineSpacing;
-        const currentShortLineSpacing = isMobile ? 200 : shortLineSpacing;
         
-        // 배경 세로 라인 생성
-        for (let left = firstLineLeft; left < windowWidth; left += currentLineSpacing) {
-            backgroundLines.push(createVerticalLine(left));
-        }
-        
-        // 랜덤 짧은 라인 생성
-        for (let shortLineLeft = firstLineLeft; shortLineLeft < windowWidth; shortLineLeft += currentShortLineSpacing) {
-            const usedPositions = [];
-            const numLines = Math.floor(Math.random() * (shortLineConfig.maxCount - shortLineConfig.minCount + 1)) + shortLineConfig.minCount;
+        if (isMobile) {
+            // 모바일: 두 번째 라인을 디바이스 정가운데에 위치
+            const secondLineLeft = windowWidth / 2;
+            const calculatedSpacing = secondLineLeft - firstLineLeft;
             
-            for (let i = 0; i < numLines; i++) {
-                createRandomShortLine(shortLineLeft, usedPositions);
+            // 첫 번째 라인 생성
+            backgroundLines.push(createVerticalLine(firstLineLeft));
+            
+            // 두 번째 라인 생성 (정가운데)
+            backgroundLines.push(createVerticalLine(secondLineLeft));
+            
+            // 오른쪽으로 라인 생성 (두 번째 라인부터 동일한 간격으로)
+            for (let left = secondLineLeft + calculatedSpacing; left < windowWidth; left += calculatedSpacing) {
+                backgroundLines.push(createVerticalLine(left));
+            }
+            
+            // 왼쪽으로 라인 생성 (첫 번째 라인부터 동일한 간격으로)
+            for (let left = firstLineLeft - calculatedSpacing; left >= 0; left -= calculatedSpacing) {
+                backgroundLines.push(createVerticalLine(left));
+            }
+            
+            // 랜덤 짧은 라인 생성 (모든 배경 라인 위치에서)
+            backgroundLines.forEach(line => {
+                const lineLeft = parseFloat(line.style.left);
+                const usedPositions = [];
+                const numLines = Math.floor(Math.random() * (shortLineConfig.maxCount - shortLineConfig.minCount + 1)) + shortLineConfig.minCount;
+                
+                for (let i = 0; i < numLines; i++) {
+                    createRandomShortLine(lineLeft, usedPositions);
+                }
+            });
+        } else {
+            // PC: 기존 로직 유지
+            const currentLineSpacing = lineSpacing;
+            const currentShortLineSpacing = shortLineSpacing;
+            
+            // 배경 세로 라인 생성
+            for (let left = firstLineLeft; left < windowWidth; left += currentLineSpacing) {
+                backgroundLines.push(createVerticalLine(left));
+            }
+            
+            // 랜덤 짧은 라인 생성
+            for (let shortLineLeft = firstLineLeft; shortLineLeft < windowWidth; shortLineLeft += currentShortLineSpacing) {
+                const usedPositions = [];
+                const numLines = Math.floor(Math.random() * (shortLineConfig.maxCount - shortLineConfig.minCount + 1)) + shortLineConfig.minCount;
+                
+                for (let i = 0; i < numLines; i++) {
+                    createRandomShortLine(shortLineLeft, usedPositions);
+                }
             }
         }
         
@@ -953,6 +993,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 포트폴리오 뷰 전환 기능
     const portfolioGrid = document.getElementById('portfolioGrid');
     const viewToggleButtons = document.querySelectorAll('.view-toggle-btn');
+    const portfolioViewToggle = document.querySelector('.portfolio-view-toggle');
+    const portfolioHeader = document.querySelector('.portfolio-header');
     
     if (portfolioGrid && viewToggleButtons.length > 0) {
         viewToggleButtons.forEach(btn => {
@@ -971,8 +1013,56 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     portfolioGrid.classList.remove('text-view');
                 }
+                
+                // 뷰 모드 저장
+                localStorage.setItem('portfolioView', view);
             });
         });
+        
+        // 저장된 뷰 모드 불러오기
+        const savedView = localStorage.getItem('portfolioView') || 'grid';
+        const savedBtn = document.querySelector(`.view-toggle-btn[data-view="${savedView}"]`);
+        if (savedBtn) {
+            savedBtn.click();
+        }
+    }
+    
+    // 플로팅 버튼 기능
+    if (portfolioViewToggle && portfolioHeader) {
+        // nav 높이 계산 및 CSS 변수 설정
+        const navbar = document.querySelector('.navbar');
+        if (navbar) {
+            const navHeight = navbar.offsetHeight;
+            document.documentElement.style.setProperty('--nav-height', `${navHeight}px`);
+        }
+        
+        const headerObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    // 헤더가 뷰포트에서 벗어났을 때 플로팅 클래스 추가 및 nav 숨김
+                    portfolioViewToggle.classList.add('floating');
+                    if (navbar) {
+                        navbar.classList.add('hidden');
+                        // nav가 숨겨졌으므로 플로팅 버튼 위치를 상단 10px로 조정
+                        document.documentElement.style.setProperty('--nav-height', '0px');
+                    }
+                } else {
+                    // 헤더가 뷰포트에 보일 때 플로팅 클래스 제거 및 nav 표시
+                    portfolioViewToggle.classList.remove('floating');
+                    if (navbar) {
+                        navbar.classList.remove('hidden');
+                        // nav가 표시되므로 플로팅 버튼 위치를 nav 아래 10px로 조정
+                        const navHeight = navbar.offsetHeight;
+                        document.documentElement.style.setProperty('--nav-height', `${navHeight}px`);
+                    }
+                }
+            });
+        }, {
+            threshold: 0,
+            rootMargin: '0px'
+        });
+        
+        headerObserver.observe(portfolioHeader);
     }
 });
 
