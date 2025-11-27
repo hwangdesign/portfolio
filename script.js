@@ -484,6 +484,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     '#OOTD Fashion': '🎨',
                     'OOAh Luxury': '🎨',
                     '11st Brand': '🎨',
+                    '11street Brand Identity': '🎨',
                     'Amazon Global Store': '🎨'
                 };
                 
@@ -607,6 +608,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 '#OOTD Fashion': '🎨',
                 'OOAh Luxury': '🎨',
                 '11st Brand': '🎨',
+                '11street Brand Identity': '🎨',
                 'Amazon Global Store': '🎨'
             };
             
@@ -670,6 +672,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // 모든 애니메이션 섹션 제목 관찰
     const animatedSectionTitles = document.querySelectorAll('.animated-section-title');
     animatedSectionTitles.forEach(title => {
+        // portfolio-info 내부의 타이틀은 애니메이션 제외
+        if (title.closest('.portfolio-info')) {
+            // 텍스트를 즉시 표시 (애니메이션 없이)
+            const targetText = title.dataset.title || title.textContent;
+            if (targetText) {
+                title.textContent = targetText;
+            }
+            return;
+        }
         sectionTitleObserver.observe(title);
         
         // 애니메이션 완료 후 박스 업데이트를 위한 MutationObserver
