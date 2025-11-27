@@ -943,5 +943,30 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+    
+    // 포트폴리오 뷰 전환 기능
+    const portfolioGrid = document.getElementById('portfolioGrid');
+    const viewToggleButtons = document.querySelectorAll('.view-toggle-btn');
+    
+    if (portfolioGrid && viewToggleButtons.length > 0) {
+        viewToggleButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const view = this.dataset.view;
+                
+                // 모든 버튼에서 active 클래스 제거
+                viewToggleButtons.forEach(b => b.classList.remove('active'));
+                
+                // 클릭한 버튼에 active 클래스 추가
+                this.classList.add('active');
+                
+                // 뷰 모드 전환
+                if (view === 'text') {
+                    portfolioGrid.classList.add('text-view');
+                } else {
+                    portfolioGrid.classList.remove('text-view');
+                }
+            });
+        });
+    }
 });
 

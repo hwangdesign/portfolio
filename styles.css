@@ -883,6 +883,72 @@ html {
     padding: 120px 0;
 }
 
+.portfolio-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 48px;
+    width: 100%;
+    position: relative;
+}
+
+.portfolio-header .section-title {
+    width: auto;
+    flex: 1;
+}
+
+.portfolio-view-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    font-size: var(--font-size-base);
+    font-weight: 900;
+    font-family: var(--font-family-system);
+    color: var(--text-color);
+    padding: 0;
+    border: 1px solid var(--yellow-20);
+    border-radius: 0;
+}
+
+.view-toggle-btn {
+    background: transparent;
+    border: none;
+    font-size: var(--font-size-base);
+    font-weight: 900;
+    font-family: var(--font-family-system);
+    color: var(--text-color);
+    cursor: pointer;
+    padding: 10px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    opacity: 0.5;
+    flex: 1;
+    text-align: center;
+}
+
+.view-toggle-btn:hover {
+    opacity: 1;
+}
+
+.view-toggle-btn.active {
+    opacity: 1;
+    background-color: var(--yellow-color);
+    color: #000000;
+}
+
+[data-theme="light"] .portfolio-view-toggle {
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="light"] .view-toggle-btn.active {
+    background-color: #000000;
+    color: var(--yellow-color);
+}
+
+.view-toggle-separator {
+    opacity: 0.5;
+    color: var(--text-color);
+}
+
 .portfolio-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, 600px);
@@ -905,11 +971,20 @@ html {
 .portfolio-thumbnail {
     position: relative;
     width: 600px;
-    padding-bottom: 56.25%; /* 16:9 비율 (가로:세로 = 16:9) */
+    padding-bottom: 75%; /* 4:3 비율 (가로:세로 = 4:3) */
     overflow: hidden;
     background: var(--bg-color);
     border: 1px solid var(--border-white-20);
     margin-bottom: 10px;
+    transition: box-shadow 0.3s ease;
+}
+
+.portfolio-item:hover .portfolio-thumbnail {
+    box-shadow: inset 0 0 0 10px var(--yellow-color);
+}
+
+[data-theme="light"] .portfolio-item:hover .portfolio-thumbnail {
+    box-shadow: inset 0 0 0 10px #000000;
 }
 
 .portfolio-thumbnail img {
@@ -936,17 +1011,37 @@ html {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    margin-top: -40px;
+    margin-top: 10px;
 }
 
 .portfolio-title {
     margin-bottom: 10px;
     min-height: auto;
     height: auto;
+    font-size: var(--font-size-subtitle);
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+    color: var(--text-color);
+    transition: color 0.3s ease;
+    text-decoration: none;
+}
+
+.portfolio-title:hover {
+    color: var(--yellow-color);
+}
+
+[data-theme="light"] .portfolio-title:hover {
+    color: #000000;
+}
+
+.portfolio-title .section-title-box,
+.portfolio-title .section-title-box-emoji {
+    display: none !important;
 }
 
 .portfolio-subtitle {
-    font-size: var(--font-size-small);
+    font-size: var(--font-size-base);
     font-weight: 500;
     font-family: var(--font-family-base);
     line-height: normal;
@@ -956,6 +1051,58 @@ html {
 }
 
 .portfolio-description {
+    display: none;
+}
+
+/* TEXT 모드 스타일 */
+.portfolio-grid.text-view {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.portfolio-grid.text-view .portfolio-item {
+    width: 100%;
+    position: relative;
+    padding-bottom: 0;
+}
+
+.portfolio-grid.text-view .portfolio-item:not(:last-child) {
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.portfolio-grid.text-view .portfolio-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-image: repeating-linear-gradient(to right, rgba(0, 0, 0, 0.1) 0, rgba(0, 0, 0, 0.1) 4px, transparent 4px, transparent 8px);
+}
+
+.portfolio-grid.text-view .portfolio-thumbnail {
+    display: none;
+}
+
+.portfolio-grid.text-view .portfolio-info {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.portfolio-grid.text-view .portfolio-title {
+    font-size: var(--font-size-title);
+    font-weight: 900;
+    font-family: var(--font-family-system);
+    letter-spacing: -1px;
+    line-height: normal;
+    color: var(--text-color);
+    margin-bottom: 0;
+}
+
+.portfolio-grid.text-view .portfolio-subtitle {
     display: none;
 }
 
@@ -972,7 +1119,7 @@ html {
     
     .portfolio-thumbnail {
         width: 100%;
-        padding-bottom: 56.25%; /* 16:9 비율 유지 */
+        padding-bottom: 75%; /* 4:3 비율 유지 */
         overflow: hidden;
         margin-bottom: 10px;
     }

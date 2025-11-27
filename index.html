@@ -44,8 +44,14 @@
         <div class="divider"></div>
         <section id="portfolio" class="section portfolio-section">
             <div class="container">
-                <h2 class="section-title animated-section-title" data-title="Portfolio">Portfolio</h2>
-                <div class="portfolio-grid">
+                <div class="portfolio-header">
+                    <h2 class="section-title animated-section-title" data-title="Portfolio"></h2>
+                    <div class="portfolio-view-toggle">
+                        <button class="view-toggle-btn active" data-view="grid">GRID</button>
+                        <button class="view-toggle-btn" data-view="text">TEXT</button>
+                    </div>
+                </div>
+                <div class="portfolio-grid" id="portfolioGrid">
                     <div class="portfolio-item">
                         <div class="portfolio-thumbnail">
                             <img src="https://via.placeholder.com/300x533/111111/ffffff?text=Portfolio+1" alt="MartPlus Design">
