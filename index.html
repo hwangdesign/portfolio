@@ -13,22 +13,14 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="container">
-            <div class="nav-brand" id="navBrandAnimated"></div>
-            <button class="theme-toggle" aria-label="테마 전환" id="themeToggle">
-                <span class="theme-icon-dark">🌙</span>
-                <span class="theme-icon-light">☀️</span>
-            </button>
-        </div>
-    </nav>
+    <div id="shared-nav"></div>
 
     <header class="hero">
     </header>
 
     <main class="main-content">
         <div class="divider"></div>
-        <section class="section hero-content-section">
+        <section id="about" class="section">
             <div class="container">
                 <div class="hero-content">
                     <h1 class="section-title animated-section-title" id="animatedTitle" data-title="Creative Director">Creative Director</h1>
@@ -42,7 +34,7 @@
         </section>
 
         <div class="divider"></div>
-        <section id="portfolio" class="section portfolio-section">
+        <section id="works" class="section portfolio-section">
             <div class="container">
                 <div class="portfolio-header">
                     <h2 class="section-title animated-section-title" data-title="Works">Works</h2>
@@ -145,12 +137,66 @@
         </section>
 
         <div class="divider"></div>
-        <section id="about" class="section">
+        <section id="labs" class="section portfolio-section">
             <div class="container">
-                <h2 class="section-title animated-section-title" data-title="About">About</h2>
+                <div class="portfolio-header">
+                    <h2 class="section-title animated-section-title" data-title="Labs">Labs</h2>
+                    <div class="portfolio-view-toggle">
+                        <button class="view-toggle-btn active" data-view="grid">GRID</button>
+                        <button class="view-toggle-btn" data-view="text">TEXT</button>
+                    </div>
+                </div>
+                <div class="portfolio-grid" id="labsGrid">
+                    <a href="labs/lab-1.html" class="portfolio-item">
+                        <div class="portfolio-thumbnail">
+                            <img src="labs/images/lab-1/thumbnail.jpg" alt="Lab 1" onerror="this.src='https://via.placeholder.com/300x533/111111/ffffff?text=Lab+1'">
+                        </div>
+                        <div class="portfolio-info">
+                            <div class="portfolio-title-wrapper">
+                                <h3 class="portfolio-title section-title animated-section-title" data-title="Lab 1">Lab 1</h3>
+                                <span class="portfolio-category">Experiment</span>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="labs/lab-2.html" class="portfolio-item">
+                        <div class="portfolio-thumbnail">
+                            <img src="labs/images/lab-2/thumbnail.jpg" alt="Lab 2" onerror="this.src='https://via.placeholder.com/300x533/111111/ffffff?text=Lab+2'">
+                        </div>
+                        <div class="portfolio-info">
+                            <div class="portfolio-title-wrapper">
+                                <h3 class="portfolio-title section-title animated-section-title" data-title="Lab 2">Lab 2</h3>
+                                <span class="portfolio-category">Experiment</span>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="labs/lab-3.html" class="portfolio-item">
+                        <div class="portfolio-thumbnail">
+                            <img src="labs/images/lab-3/thumbnail.jpg" alt="Lab 3" onerror="this.src='https://via.placeholder.com/300x533/111111/ffffff?text=Lab+3'">
+                        </div>
+                        <div class="portfolio-info">
+                            <div class="portfolio-title-wrapper">
+                                <h3 class="portfolio-title section-title animated-section-title" data-title="Lab 3">Lab 3</h3>
+                                <span class="portfolio-category">Experiment</span>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="labs/lab-4.html" class="portfolio-item">
+                        <div class="portfolio-thumbnail">
+                            <img src="labs/images/lab-4/thumbnail.jpg" alt="Lab 4" onerror="this.src='https://via.placeholder.com/300x533/111111/ffffff?text=Lab+4'">
+                        </div>
+                        <div class="portfolio-info">
+                            <div class="portfolio-title-wrapper">
+                                <h3 class="portfolio-title section-title animated-section-title" data-title="Lab 4">Lab 4</h3>
+                                <span class="portfolio-category">Experiment</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
             </div>
         </section>
     </main>
+
+    <div id="shared-footer"></div>
 
     <script src="script.js"></script>
 </body>

@@ -6,6 +6,47 @@ const COLORS = {
     SHADOW: 'rgba(0, 0, 0, 0.2)'
 };
 
+function renderSharedLayout() {
+    const navContainer = document.getElementById('shared-nav');
+    const footerContainer = document.getElementById('shared-footer');
+    if (!navContainer || !footerContainer) {
+        return;
+    }
+
+    const currentPath = window.location.pathname;
+    const lastSegment = currentPath.substring(currentPath.lastIndexOf('/') + 1);
+    const isIndexPath = lastSegment === '' || lastSegment === 'index.html';
+    const baseHref = isIndexPath ? '' : '../index.html';
+    const navTargets = ['about', 'works', 'labs'];
+    const navLinksHtml = navTargets.map(section => {
+        const hrefValue = isIndexPath ? `#${section}` : `${baseHref}#${section}`;
+        return `<a href="${hrefValue}" class="nav-menu-item text-nav-menu">${section.charAt(0).toUpperCase() + section.slice(1)}</a>`;
+    }).join('');
+
+    navContainer.innerHTML = `
+<nav class="navbar">
+    <div class="container">
+        <div class="nav-brand" id="navBrandAnimated">sweet home</div>
+        <div class="nav-menu-wrapper">
+            ${navLinksHtml}
+        </div>
+    </div>
+</nav>`;
+
+    footerContainer.innerHTML = `
+<footer class="site-footer">
+    <div class="container site-footer-inner">
+        <p>© Hwangdesign — sweet home</p>
+        <button class="theme-toggle" aria-label="테마 전환" id="themeToggle">
+            <span class="theme-icon-dark">🌙</span>
+            <span class="theme-icon-light">☀️</span>
+        </button>
+    </div>
+</footer>`;
+}
+
+renderSharedLayout();
+
 // Theme Toggle 기능
 (function initTheme() {
     const themeToggle = document.getElementById('themeToggle');
@@ -952,7 +993,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // nav-brand 애니메이션
     const navBrand = document.getElementById('navBrandAnimated');
     if (navBrand) {
-        const navBrandTitles = ['home sweet home'];
+        const navBrandTitles = ['sweet home'];
         const hoverText = '← go to home';
         let navBrandTimer = null;
         let isHovering = false;
@@ -1043,42 +1084,37 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     
-    // 포트폴리오 뷰 전환 기능
-    const portfolioGrid = document.getElementById('portfolioGrid');
+    // 포트폴리오 뷰 전환 기능 (Works & Labs 동기화)
     const viewToggleButtons = document.querySelectorAll('.view-toggle-btn');
-    const portfolioViewToggle = document.querySelector('.portfolio-view-toggle');
-    const portfolioHeader = document.querySelector('.portfolio-header');
-    
-    if (portfolioGrid && viewToggleButtons.length > 0) {
-        viewToggleButtons.forEach(btn => {
-            btn.addEventListener('click', function() {
-                const view = this.dataset.view;
-                
-                // 모든 버튼에서 active 클래스 제거
-                viewToggleButtons.forEach(b => b.classList.remove('active'));
-                
-                // 클릭한 버튼에 active 클래스 추가
-                this.classList.add('active');
-                
-                // 뷰 모드 전환
-                if (view === 'text') {
-                    portfolioGrid.classList.add('text-view');
-                } else {
-                    portfolioGrid.classList.remove('text-view');
-                }
-                
-                // 뷰 모드 저장
-                localStorage.setItem('portfolioView', view);
-            });
+    const portfolioSections = document.querySelectorAll('.portfolio-section');
+
+    const applyViewMode = (view) => {
+        portfolioSections.forEach(section => {
+            const sectionGrid = section.querySelector('.portfolio-grid');
+            if (!sectionGrid) return;
+
+            if (view === 'text') {
+                sectionGrid.classList.add('text-view');
+            } else {
+                sectionGrid.classList.remove('text-view');
+            }
         });
-        
-        // 저장된 뷰 모드 불러오기
-        const savedView = localStorage.getItem('portfolioView') || 'grid';
-        const savedBtn = document.querySelector(`.view-toggle-btn[data-view="${savedView}"]`);
-        if (savedBtn) {
-            savedBtn.click();
-        }
-    }
+
+        viewToggleButtons.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.view === view);
+        });
+    };
+
+    viewToggleButtons.forEach(btn => {
+        btn.addEventListener('click', function () {
+            const view = this.dataset.view;
+            applyViewMode(view);
+            localStorage.setItem('portfolioView', view);
+        });
+    });
+
+    const savedView = localStorage.getItem('portfolioView') || 'grid';
+    applyViewMode(savedView);
     
     // 플로팅 버튼 기능
     if (portfolioViewToggle && portfolioHeader) {

@@ -173,7 +173,7 @@ html, body {
 
 /* 12px, 900 - 네비게이션 메뉴 */
 .text-nav-menu {
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-subtitle);
     font-weight: 900;
     font-family: var(--font-family-system);
 }
@@ -457,7 +457,27 @@ body {
     transition: color 0.3s ease;
 }
 
+/* Navigation Menu */
+.nav-menu-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
 
+.nav-menu-item {
+    color: var(--text-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+.nav-menu-item:hover {
+    color: var(--yellow-color);
+}
+
+[data-theme="light"] .nav-menu-item:hover {
+    color: #000000;
+}
 
 /* Theme Toggle Button */
 .theme-toggle {
@@ -662,6 +682,18 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    .nav-menu-wrapper {
+        gap: 16px;
+    }
+    
+    .nav-menu-item {
+        font-size: 10px;
+    }
+
+    .text-nav-menu {
+        font-size: 14px;
+    }
+    
     .theme-toggle {
         margin-left: 8px;
         width: 36px;
@@ -729,6 +761,7 @@ body {
 /* Smooth Scroll */
 html {
     scroll-behavior: smooth;
+    scroll-padding-top: 120px;
     overflow-x: hidden;
     max-width: 100vw;
 }
@@ -1052,6 +1085,45 @@ html {
     justify-content: space-between;
     align-items: center;
     padding: 80px 0;
+}
+
+.site-footer {
+    height: 200px;
+    padding: 0;
+    border-top: none;
+    position: relative;
+    background: transparent;
+}
+
+.site-footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--white-100);
+}
+
+.site-footer-inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: var(--text-light);
+    font-size: var(--font-size-base);
+    gap: 0;
+}
+
+.site-footer-inner p {
+    margin: 0;
+    flex: 1;
+    text-align: center;
+}
+
+.site-footer-inner .theme-toggle {
+    position: relative;
+    margin-left: auto;
 }
 
 .project-nav-link {
