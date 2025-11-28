@@ -457,6 +457,12 @@ body {
     transition: color 0.3s ease;
 }
 
+.nav-brand,
+.nav-brand:hover,
+.nav-brand:focus {
+    text-decoration: none;
+}
+
 /* Navigation Menu */
 .nav-menu-wrapper {
     display: flex;

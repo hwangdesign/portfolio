@@ -23,10 +23,14 @@ function renderSharedLayout() {
         return `<a href="${hrefValue}" class="nav-menu-item text-nav-menu">${section.charAt(0).toUpperCase() + section.slice(1)}</a>`;
     }).join('');
 
+    const brandHtml = isIndexPath
+        ? `<div class="nav-brand" id="navBrandAnimated">sweet home</div>`
+        : `<a class="nav-brand" id="navBrandAnimated" href="${baseHref || 'index.html'}">sweet home</a>`;
+
     navContainer.innerHTML = `
 <nav class="navbar">
     <div class="container">
-        <div class="nav-brand" id="navBrandAnimated">sweet home</div>
+        ${brandHtml}
         <div class="nav-menu-wrapper">
             ${navLinksHtml}
         </div>
