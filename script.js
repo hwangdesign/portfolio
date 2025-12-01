@@ -1056,13 +1056,78 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
         
-        // 클릭 이벤트 추가
+        // 모바일 터치 이벤트 추가 (모든 페이지)
+        let isTouching = false;
+        let touchHandled = false;
+        
+        navBrand.addEventListener('touchstart', (e) => {
+            isTouching = true;
+            touchHandled = false;
+            isHovering = true;
+            // 타이머 취소
+            if (navBrandTimer) {
+                clearTimeout(navBrandTimer);
+                navBrandTimer = null;
+            }
+            // 랜덤 모션으로 텍스트 변경
+            if (navBrand.dataset.animating !== 'true') {
+                animateToText(hoverText, navBrand, false, [], () => {
+                    navBrand.dataset.animating = 'false';
+                });
+            }
+        });
+        
+        navBrand.addEventListener('touchend', (e) => {
+            if (isTouching && !touchHandled) {
+                touchHandled = true;
+                isTouching = false;
+                isHovering = false;
+                
+                // 프로젝트 페이지인 경우 index.html로 이동
+                const isProjectPage = window.location.pathname.includes('/works/') || 
+                                     window.location.pathname.includes('/labs/');
+                if (isProjectPage) {
+                    const baseHref = window.location.pathname.includes('/works/') ? '../index.html' : '../index.html';
+                    window.location.href = baseHref;
+                } else {
+                    // 메인 페이지인 경우 페이지 새로고침
+                    window.location.reload();
+                }
+            }
+        });
+        
+        navBrand.addEventListener('touchcancel', () => {
+            isTouching = false;
+            isHovering = false;
+            // 랜덤 모션으로 원래 텍스트로 복원
+            if (navBrand.dataset.animating !== 'true') {
+                animateToText(navBrandTitles[0], navBrand, false, [], () => {
+                    navBrand.dataset.animating = 'false';
+                    // 애니메이션 재시작
+                    if (!isIndexPage) {
+                        navBrandTimer = setTimeout(() => {
+                            animateNavBrand();
+                        }, 30000);
+                    }
+                });
+            }
+        });
+        
+        // 클릭 이벤트 추가 (데스크톱용, 모바일에서는 touchHandled로 중복 방지)
         navBrand.style.cursor = 'pointer';
-        navBrand.addEventListener('click', () => {
+        navBrand.addEventListener('click', (e) => {
+            // 모바일 터치로 처리된 경우 클릭 이벤트 무시
+            if (touchHandled) {
+                e.preventDefault();
+                return;
+            }
+            
             // 프로젝트 페이지인 경우 index.html로 이동
-            const isProjectPage = window.location.pathname.includes('/works/');
+            const isProjectPage = window.location.pathname.includes('/works/') || 
+                                 window.location.pathname.includes('/labs/');
             if (isProjectPage) {
-                window.location.href = '../index.html';
+                const baseHref = window.location.pathname.includes('/works/') ? '../index.html' : '../index.html';
+                window.location.href = baseHref;
             } else {
                 // 메인 페이지인 경우 페이지 새로고침
                 window.location.reload();
