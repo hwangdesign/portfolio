@@ -668,6 +668,40 @@ body {
     color: var(--white-50);
 }
 
+/* Resume Button */
+.resume-btn {
+    display: inline-block;
+    margin-top: 32px;
+    padding: 12px 24px;
+    font-size: var(--font-size-base);
+    font-weight: 900;
+    font-family: var(--font-family-system);
+    color: var(--text-color);
+    background-color: transparent;
+    border: 1px solid var(--border-white-20);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.resume-btn:hover,
+.resume-btn:active {
+    background-color: var(--yellow-color);
+    color: #000000;
+    border-color: var(--yellow-color);
+}
+
+[data-theme="light"] .resume-btn {
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="light"] .resume-btn:hover,
+[data-theme="light"] .resume-btn:active {
+    background-color: #000000;
+    color: var(--yellow-color);
+    border-color: #000000;
+}
+
 /* Sections */
 .section {
     padding: 120px 0;
