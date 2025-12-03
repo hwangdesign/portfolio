@@ -672,6 +672,7 @@ body {
 .resume-btn {
     display: inline-block;
     margin-top: 32px;
+    margin-right: 8px;
     padding: 12px 24px;
     font-size: var(--font-size-base);
     font-weight: 900;
@@ -682,6 +683,10 @@ body {
     text-decoration: none;
     cursor: pointer;
     transition: all 0.3s ease;
+}
+
+.resume-btn:last-child {
+    margin-right: 0;
 }
 
 .resume-btn:hover,

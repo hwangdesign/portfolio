@@ -24,8 +24,8 @@ function renderSharedLayout() {
     }).join('');
 
     const brandHtml = isIndexPath
-        ? `<div class="nav-brand" id="navBrandAnimated">sweet home</div>`
-        : `<a class="nav-brand" id="navBrandAnimated" href="${baseHref || 'index.html'}">sweet home</a>`;
+        ? `<div class="nav-brand" id="navBrandAnimated">welcome to</div>`
+        : `<a class="nav-brand" id="navBrandAnimated" href="${baseHref || 'index.html'}">welcome to</a>`;
 
     navContainer.innerHTML = `
 <nav class="navbar">
@@ -999,7 +999,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // nav-brand 애니메이션
     const navBrand = document.getElementById('navBrandAnimated');
     if (navBrand) {
-        const navBrandTitles = ['sweet home'];
+        const navBrandTitles = ['welcome to'];
         const hoverText = '← go to home';
         let navBrandTimer = null;
         let isHovering = false;
