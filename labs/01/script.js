@@ -139,6 +139,9 @@
     isTouching = true;
     if (e.touches && e.touches.length > 0) {
       handlePointerMove(e);
+      mouseX = targetMouseX;
+      mouseY = targetMouseY;
+      scatterProgress = 1;
       updateTouchCursor(e.touches[0].clientX, e.touches[0].clientY);
     }
     if (isMobile) requestGyroPermission();
@@ -172,14 +175,14 @@
   }
 
   function updateMouse() {
-    const ease = 0.068;
-    mouseX += (targetMouseX - mouseX) * ease;
-    mouseY += (targetMouseY - mouseY) * ease;
-
     const cursorNear = Math.abs(targetMouseX) < 2 && Math.abs(targetMouseY) < 2;
+    const touchEase = isMobile && isTouching ? 0.45 : 0.068;
+    const scatterEase = isMobile && isTouching ? 0.35 : (cursorNear ? 0.032 : 0.058);
+    mouseX += (targetMouseX - mouseX) * touchEase;
+    mouseY += (targetMouseY - mouseY) * touchEase;
+
     const targetProgress = cursorNear ? 1 : 0;
-    const returnEase = cursorNear ? 0.032 : 0.058;
-    scatterProgress += (targetProgress - scatterProgress) * returnEase;
+    scatterProgress += (targetProgress - scatterProgress) * scatterEase;
   }
 
   // Deterministic random scatter direction per triangle (handId: 0=hour, 1=min, 2=sec)
@@ -254,7 +257,7 @@
   function drawHand(angle, lengthRatio, triangleCount, color, baseSize, handId, shape) {
     const centerX = size / 2;
     const centerY = size / 2;
-    const length = (size / 2) * lengthRatio * 0.92;
+    const length = (size / 2) * lengthRatio * 0.98;
     const baseAngle = (angle - 90) * (Math.PI / 180);
 
     ctx.fillStyle = color;
@@ -336,13 +339,13 @@
     const triColor = isDark ? 'rgba(255, 255, 255, 1)' : 'rgba(0, 0, 0, 1)';
 
     // Hour hand - triangles
-    drawHand(hourAngle, 0.35, 16, triColor, triBase, 0, 'triangle');
+    drawHand(hourAngle, 0.38, 16, triColor, triBase, 0, 'triangle');
 
     // Minute hand - triangles
-    drawHand(minuteAngle, 0.7, 24, triColor, triBase, 1, 'triangle');
+    drawHand(minuteAngle, 0.78, 24, triColor, triBase, 1, 'triangle');
 
     // Second hand - triangles
-    drawHand(secondAngle, 0.92, 32, triColor, triBase, 2, 'triangle');
+    drawHand(secondAngle, 0.98, 32, triColor, triBase, 2, 'triangle');
 
     // Center cap (fixed position)
     ctx.beginPath();
@@ -394,7 +397,33 @@
       'UTC': 'UTC'
     };
 
+    const hintTranslations = {
+      'Asia/Seoul': { pc: '시계에<br>커서를<br>가져다 보세요.', mobile: '시계를<br>손가락으로<br>터치해 보세요.' },
+      'Asia/Tokyo': { pc: '時計に<br>カーソルを<br>近づけてください。', mobile: '時計に<br>指を<br>近づけてください。' },
+      'Asia/Shanghai': { pc: '将光标<br>移至<br>表盘上。', mobile: '将手指<br>移至<br>表盘上。' },
+      'Asia/Singapore': { pc: 'Move the cursor<br>to the clock<br>please.', mobile: 'Place your finger<br>on the clock<br>please.' },
+      'Asia/Dubai': { pc: 'مرّر المؤشر<br>على الساعة<br>من فضلك.', mobile: 'ضع إصبعك<br>على الساعة<br>من فضلك.' },
+      'Europe/London': { pc: 'Move the cursor<br>to the clock<br>please.', mobile: 'Place your finger<br>on the clock<br>please.' },
+      'Europe/Paris': { pc: "Déplacez le curseur<br>sur l'horloge<br>s'il vous plaît.", mobile: "Placez votre doigt<br>sur l'horloge<br>s'il vous plaît." },
+      'Europe/Berlin': { pc: 'Bewegen Sie den Cursor<br>zur Uhr<br>bitte.', mobile: 'Legen Sie Ihren Finger<br>auf die Uhr<br>bitte.' },
+      'America/New_York': { pc: 'Move the cursor<br>to the clock<br>please.', mobile: 'Place your finger<br>on the clock<br>please.' },
+      'America/Chicago': { pc: 'Move the cursor<br>to the clock<br>please.', mobile: 'Place your finger<br>on the clock<br>please.' },
+      'America/Los_Angeles': { pc: 'Move the cursor<br>to the clock<br>please.', mobile: 'Place your finger<br>on the clock<br>please.' },
+      'America/Sao_Paulo': { pc: 'Mova o cursor<br>para o relógio<br>por favor.', mobile: 'Coloque o dedo<br>no relógio<br>por favor.' },
+      'Australia/Sydney': { pc: 'Move the cursor<br>to the clock<br>please.', mobile: 'Place your finger<br>on the clock<br>please.' },
+      'Pacific/Auckland': { pc: 'Move the cursor<br>to the clock<br>please.', mobile: 'Place your finger<br>on the clock<br>please.' },
+      'UTC': { pc: 'Move the cursor<br>to the clock<br>please.', mobile: 'Place your finger<br>on the clock<br>please.' }
+    };
+
     const availableZones = Object.keys(timezoneLabels);
+    const hintPc = document.getElementById('clockHintPc');
+    const hintMobile = document.getElementById('clockHintMobile');
+
+    function updateClockHint(timezone) {
+      const t = hintTranslations[timezone] || hintTranslations['UTC'];
+      if (hintPc) hintPc.innerHTML = t.pc;
+      if (hintMobile) hintMobile.innerHTML = t.mobile;
+    }
 
     function getLocalTimezoneMatch() {
       let localTz;
@@ -448,6 +477,7 @@
       });
       dropdown.setAttribute('aria-hidden', 'true');
       wrap.classList.remove('open');
+      updateClockHint(value);
     }
 
     setTimezone(getLocalTimezoneMatch());
@@ -618,4 +648,16 @@
   window.addEventListener('resize', resize);
   resize();
   tick();
+})();
+
+(function mobileTip() {
+  const tip = document.getElementById('mobileTip');
+  const mq = window.matchMedia('(hover: none) and (pointer: coarse)');
+  if (!tip || !mq.matches) return;
+  tip.classList.add('visible');
+  setTimeout(() => {
+    tip.classList.remove('visible');
+    tip.classList.add('hiding');
+    setTimeout(() => tip.remove(), 300);
+  }, 3000);
 })();

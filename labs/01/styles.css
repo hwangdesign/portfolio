@@ -7,7 +7,7 @@
   --text-primary: #f0ebe3;
   --text-muted: #8a8580;
   --clock-size: 60vmin;
-  --clock-size-mobile: clamp(220px, 60vmin, 90vmin);
+  --clock-size-mobile: clamp(330px, 90vmin, 100vmin);
   --transition: 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --safe-top: env(safe-area-inset-top, 0);
   --safe-bottom: env(safe-area-inset-bottom, 0);
@@ -18,7 +18,12 @@
   --font-size-base: 0.75rem;
   --font-size-small: 0.75rem;
   --font-size-subtitle: 1.5rem;
+  --font-size-title: 2.5rem;
+  --font-size-hint: 4rem;
   --font-size-tiny: 0.625rem;
+  --line-height-tight: 1;
+  --line-height-normal: 1.05;
+  --line-height-relaxed: 1.15;
 }
 
 * {
@@ -38,8 +43,9 @@ body {
   background: var(--bg-primary);
   color: #1a1a1a;
   min-height: 100vh;
+  touch-action: manipulation;
   min-height: 100dvh;
-  overflow-x: hidden;
+  overflow: hidden;
   position: relative;
   transition: background 0.4s ease, color 0.35s ease;
   padding-left: var(--safe-left);
@@ -84,6 +90,52 @@ body::before {
   inset: 0;
   z-index: 2;
   pointer-events: none;
+}
+
+.mobile-tip {
+  display: none;
+  position: fixed;
+  bottom: calc(max(var(--safe-bottom), clamp(1rem, 3vw, 2.5rem)) + clamp(44px, 12vw, 48px) + 1rem);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90vw;
+  max-width: 90%;
+  height: clamp(44px, 12vw, 48px);
+  z-index: 100;
+  padding: 0 1em;
+  background: #000000;
+  color: #ffffff;
+  font-size: var(--font-size-base);
+  font-family: var(--font-family-base);
+  line-height: var(--line-height-normal);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.mobile-tip.visible {
+  opacity: 1;
+}
+
+.mobile-tip.hiding {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .mobile-tip {
+    display: flex;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-tip {
+    display: none !important;
+  }
 }
 
 .touch-cursor {
@@ -139,7 +191,7 @@ html.dark-mode .touch-cursor {
   font-family: var(--font-family-base);
   color: #000000;
   letter-spacing: -0.02em;
-  line-height: 1.2;
+  line-height: var(--line-height-normal);
   transition: color 0.3s ease;
 }
 
@@ -273,10 +325,9 @@ html.dark-mode .timezone-option:hover {
 }
 
 .container {
-  position: relative;
+  position: fixed;
+  inset: 0;
   z-index: 3;
-  min-height: 100vh;
-  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -285,13 +336,55 @@ html.dark-mode .timezone-option:hover {
 }
 
 .clock-section {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+}
+
+.clock-hint {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90vw;
+  max-width: 90%;
+  z-index: 0;
+  color: #EEFF41;
+  font-size: var(--font-size-hint);
+  font-weight: 800;
+  font-family: var(--font-family-base);
+  text-align: center;
+  line-height: var(--line-height-tight);
+  pointer-events: none;
+}
+
+html.dark-mode .clock-hint {
+  color: rgba(255, 255, 255, 0.1);
+}
+
+.clock-hint-pc {
+  display: block;
+}
+
+.clock-hint-mobile {
+  display: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .clock-hint-pc {
+    display: none;
+  }
+
+  .clock-hint-mobile {
+    display: block;
+  }
 }
 
 .clock-wrapper {
   position: relative;
+  z-index: 1;
   width: var(--clock-size);
   height: var(--clock-size);
   max-width: 90vmin;
@@ -326,8 +419,8 @@ html.dark-mode .timezone-option:hover {
   }
   .clock-wrapper {
     margin: 0;
-    max-width: calc(100vw - 2rem);
-    max-height: calc(100dvh - 180px);
+    max-width: min(100vmin, calc(100vw - 2rem));
+    max-height: min(100vmin, calc(100dvh - 14rem));
   }
   .timezone-option {
     padding: 0.6rem 0.85rem;

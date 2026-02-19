@@ -26,6 +26,10 @@
     <div class="touch-cursor" aria-hidden="true"></div>
   </div>
 
+  <div class="mobile-tip" id="mobileTip" aria-live="polite">
+    데스크탑 접속을 권장해요
+  </div>
+
   <header class="page-header">
     <h1 class="page-title">Interactive Analog Clock</h1>
     <div class="timezone-select-wrap">
@@ -56,6 +60,8 @@
   <main class="container">
 
     <section class="clock-section">
+      <p class="clock-hint clock-hint-pc" id="clockHintPc" aria-hidden="true"></p>
+      <p class="clock-hint clock-hint-mobile" id="clockHintMobile" aria-hidden="true"></p>
       <div class="clock-wrapper">
         <canvas id="clockCanvas" width="400" height="400" aria-label="아날로그 시계"></canvas>
       </div>
