@@ -141,48 +141,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 
-// Fade in animation on scroll
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-        }
-    });
-}, observerOptions);
-
-// Observe all sections and cards
-document.addEventListener('DOMContentLoaded', () => {
-    const animatedElements = document.querySelectorAll(
-        '.experience-item, .competency-description p, .education-description p, .award-description p, .activity-description p, .military-description p, .vision-item'
-    );
-    
-    animatedElements.forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
-        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        observer.observe(el);
-    });
-});
-
-// Add active class to nav links
-const style = document.createElement('style');
-style.textContent = `
-    .nav-menu a.active {
-        color: ${COLORS.YELLOW};
-    }
-    .nav-menu a.active::after {
-        width: 100%;
-        background: ${COLORS.YELLOW};
-    }
-`;
-document.head.appendChild(style);
-
 // Scroll to top button (optional enhancement)
 let scrollTopBtn = document.createElement('button');
 scrollTopBtn.innerHTML = '↑';
@@ -788,14 +746,6 @@ document.addEventListener('DOMContentLoaded', () => {
             isResizing = false;
         }, 250); // 디바운싱을 위해 250ms 대기
     }, { passive: true });
-    
-    // experience-company-title 내의 "|"를 "."로 변경
-    const companyTitles = document.querySelectorAll('.experience-company-title');
-    companyTitles.forEach(title => {
-        if (title.textContent.includes('|')) {
-            title.textContent = title.textContent.replace(/\|/g, '.');
-        }
-    });
     
     // 배경 라인 요소들 생성 및 관리
     const backgroundLines = [];
