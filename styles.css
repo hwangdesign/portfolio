@@ -566,6 +566,9 @@ body {
     width: 100%;
     height: 20vh;
     background: var(--bg-color);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     padding: 0;
     margin-top: 0;
     position: relative;
@@ -670,7 +673,9 @@ body {
 
 /* Resume Button */
 .resume-btn {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     margin-top: 32px;
     margin-right: 8px;
     padding: 12px 24px;
@@ -683,6 +688,10 @@ body {
     text-decoration: none;
     cursor: pointer;
     transition: all 0.3s ease;
+}
+
+.resume-btn .material-icons {
+    font-size: 18px;
 }
 
 .resume-btn:last-child {
@@ -710,6 +719,17 @@ body {
 /* Sections */
 .section {
     padding: 120px 0;
+}
+
+/* Section body: 동일한 문단 간격을 모든 페이지에서 재사용 */
+.section-body {
+    margin-top: 1.25em;
+}
+.section-body p {
+    margin: 0;
+}
+.section-body p + p {
+    margin-top: 1.25em;
 }
 
 .divider {
@@ -1034,6 +1054,86 @@ html {
     display: none !important;
 }
 
+/* 프로젝트 상세 페이지: 타이틀 옆 이모티콘 비노출 */
+body.project-detail-page .section-title-box {
+    display: none !important;
+}
+
+/* 프로젝트 본문: Medium 블로그와 동일한 읽기 최적화 너비 (740px 콘텐츠, 좌측 정렬) */
+body.project-detail-page .main-content .section:not(.project-images-section):not(.project-details-section) .container {
+    max-width: 836px; /* 740px 콘텐츠 + 48px*2 패딩 */
+    margin-left: 0;
+    margin-right: auto;
+}
+
+@media (max-width: 768px) {
+    body.project-detail-page .main-content .section:not(.project-images-section):not(.project-details-section) .container {
+        max-width: 100%;
+    }
+}
+
+/* 프로젝트 디테일 이미지 (1080x607) - 화면 1080px 이상 시 컨테이너 최대 1080px */
+body.project-detail-page .project-images-section .container,
+body.project-detail-page .project-details-section .container {
+    max-width: 1176px; /* 1080px 이미지 + 48px*2 패딩 */
+    width: 100%;
+    margin-left: 0;
+    margin-right: auto;
+    box-sizing: border-box;
+}
+
+.project-images,
+.project-details-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 1.25em;
+}
+
+.project-details-content .section-body {
+    margin-top: 0;
+    max-width: 836px; /* Medium 블로그와 동일 (740px 콘텐츠 + 48px*2 패딩) */
+    text-align: left;
+}
+
+.project-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    max-width: 100%;
+}
+
+.project-image-thumbnail {
+    max-width: 360px;
+}
+
+/* 1080x607 디테일 이미지: 스크린 너비 100% → 비율 유지하며 축소 */
+.project-image-detail {
+    width: 100%;
+    max-width: 1080px;
+    height: auto;
+}
+
+@media (max-width: 768px) {
+    .project-images-section .container,
+    .project-details-section .container {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+    .project-images,
+    .project-details-content {
+        gap: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .project-images-section .container,
+    .project-details-section .container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+}
+
 /* TEXT 모드 스타일 */
 .portfolio-grid.text-view {
     display: flex;
@@ -1137,6 +1237,12 @@ html {
 .project-navigation-wrapper {
     border-top: 1px solid #ffffff;
     background-color: var(--bg-color);
+    width: 100%;
+}
+
+.project-navigation-wrapper .container {
+    max-width: none;
+    width: 100%;
 }
 
 [data-theme="light"] .project-navigation-wrapper {
