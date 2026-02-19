@@ -1187,42 +1187,65 @@ document.addEventListener('DOMContentLoaded', () => {
     const savedView = localStorage.getItem('portfolioView') || 'grid';
     applyViewMode(savedView);
     
-    // 플로팅 버튼 기능
-    if (portfolioViewToggle && portfolioHeader) {
-        // nav 높이 계산 및 CSS 변수 설정
+    // 플로팅 버튼 기능: Creative Director(About) 영역을 제외한 모든 영역에서 등장
+    const portfolioViewToggle = document.querySelector('.portfolio-view-toggle');
+    const aboutSection = document.getElementById('about');
+    
+    if (portfolioViewToggle && aboutSection) {
         const navbar = document.querySelector('.navbar');
-        if (navbar) {
-            const navHeight = navbar.offsetHeight;
-            document.documentElement.style.setProperty('--nav-height', `${navHeight}px`);
-        }
+        const navHeight = navbar ? navbar.offsetHeight : 80;
+        document.documentElement.style.setProperty('--nav-height', `${navHeight}px`);
         
-        const headerObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (!entry.isIntersecting) {
-                    // 헤더가 뷰포트에서 벗어났을 때 플로팅 클래스 추가 및 nav 숨김
-                    portfolioViewToggle.classList.add('floating');
-                    if (navbar) {
-                        navbar.classList.add('hidden');
-                        // nav가 숨겨졌으므로 플로팅 버튼 위치를 상단 10px로 조정
-                        document.documentElement.style.setProperty('--nav-height', '0px');
-                    }
+        let aboutSectionInView = false;
+        
+        const updateFloating = () => {
+            const isInPortfolioArea = !aboutSectionInView;
+            
+            if (isInPortfolioArea) {
+                portfolioViewToggle.classList.remove('floating-exit');
+                portfolioViewToggle.classList.add('floating');
+                document.body.classList.add('portfolio-floating-active');
+                document.body.classList.remove('portfolio-floating-inactive');
+            } else {
+                if (portfolioViewToggle.classList.contains('floating')) {
+                    portfolioViewToggle.classList.add('floating-exit');
+                    portfolioViewToggle.addEventListener('animationend', function onExitEnd() {
+                        portfolioViewToggle.classList.remove('floating', 'floating-exit');
+                        document.body.classList.remove('portfolio-floating-active');
+                        document.body.classList.add('portfolio-floating-inactive');
+                    }, { once: true });
                 } else {
-                    // 헤더가 뷰포트에 보일 때 플로팅 클래스 제거 및 nav 표시
-                    portfolioViewToggle.classList.remove('floating');
-                    if (navbar) {
-                        navbar.classList.remove('hidden');
-                        // nav가 표시되므로 플로팅 버튼 위치를 nav 아래 10px로 조정
-                        const navHeight = navbar.offsetHeight;
-                        document.documentElement.style.setProperty('--nav-height', `${navHeight}px`);
-                    }
+                    document.body.classList.remove('portfolio-floating-active');
+                    document.body.classList.add('portfolio-floating-inactive');
                 }
-            });
-        }, {
-            threshold: 0,
-            rootMargin: '0px'
-        });
+            }
+        };
         
-        headerObserver.observe(portfolioHeader);
+        const aboutObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                aboutSectionInView = entry.isIntersecting;
+            });
+            updateFloating();
+        }, { threshold: 0, rootMargin: '0px' });
+        
+        aboutObserver.observe(aboutSection);
+        
+        const checkInitial = () => {
+            const r = aboutSection.getBoundingClientRect();
+            aboutSectionInView = r.bottom > 0 && r.top < window.innerHeight;
+            updateFloating();
+        };
+        setTimeout(checkInitial, 100);
+        
+        // 모바일 회전/리사이즈 시 navHeight 재계산
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                const nh = navbar ? navbar.offsetHeight : 80;
+                document.documentElement.style.setProperty('--nav-height', `${nh}px`);
+            }, 150);
+        });
     }
 });
 

@@ -866,13 +866,53 @@ html {
 
 .portfolio-view-toggle.floating {
     position: fixed;
-    top: calc(var(--nav-height, 0px) + 10px);
+    top: calc(var(--nav-height, 0px) + 10px + env(safe-area-inset-top, 0px));
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, 0);
     z-index: 999;
     background: var(--bg-color);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border: 1px solid var(--yellow-20);
+    animation: floatDropIn 0.35s ease-out forwards;
+}
+
+/* 등장: GNB 영역에서 아래로 떨어지는 효과 */
+@keyframes floatDropIn {
+    from {
+        transform: translate(-50%, calc(-100% - var(--nav-height, 80px)));
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, 0);
+        opacity: 1;
+    }
+}
+
+/* 퇴장: GNB 영역으로 올라가며 사라지는 효과 */
+.portfolio-view-toggle.floating-exit {
+    animation: floatSlideUp 0.3s ease-in forwards;
+}
+
+@keyframes floatSlideUp {
+    from {
+        transform: translate(-50%, 0);
+        opacity: 1;
+    }
+    to {
+        transform: translate(-50%, calc(-100% - var(--nav-height, 80px)));
+        opacity: 0;
+    }
+}
+
+/* Works·Labs 영역에서만 플로팅 토글 표시, 헤더 내 토글은 숨김 */
+body.portfolio-floating-active .portfolio-view-toggle:not(.floating) {
+    visibility: hidden;
+}
+
+/* Works·Labs 영역을 벗어나면 모든 토글 숨김 */
+body.portfolio-floating-inactive .portfolio-view-toggle {
+    visibility: hidden;
+    pointer-events: none;
 }
 
 [data-theme="light"] .portfolio-view-toggle.floating {
@@ -887,11 +927,44 @@ html {
     font-family: var(--font-family-system);
     color: var(--text-color);
     cursor: pointer;
-    padding: 10px;
+    padding: 10px 14px;
     transition: background-color 0.3s ease, color 0.3s ease;
     opacity: 0.5;
     flex: 1;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+}
+
+.view-toggle-btn .material-icons {
+    font-size: 20px;
+}
+
+/* 모바일: 터치 최적화 및 플로팅 토글 크기 조정 */
+@media (max-width: 768px) {
+    .view-toggle-btn {
+        padding: 12px 16px;
+        min-width: 48px;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+    }
+    .view-toggle-btn .material-icons {
+        font-size: 22px;
+    }
+    .portfolio-view-toggle.floating {
+        top: calc(var(--nav-height, 0px) + 8px + env(safe-area-inset-top, 0px));
+    }
+}
+
+@media (max-width: 480px) {
+    .view-toggle-btn {
+        padding: 10px 12px;
+        min-width: 44px;
+    }
+    .view-toggle-btn .material-icons {
+        font-size: 20px;
+    }
 }
 
 .view-toggle-btn:hover {
@@ -1082,11 +1155,19 @@ body.project-detail-page .project-details-section .container {
     box-sizing: border-box;
 }
 
+/* 본문 페이지 이미지+텍스트 영역 최하위 레이어 */
+body.project-detail-page .hero-content-section,
+body.project-detail-page .project-images-section,
+body.project-detail-page .project-details-section {
+    position: relative;
+    z-index: 0;
+}
+
 .project-images,
 .project-details-content {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 48px;
     margin-top: 1.25em;
 }
 
@@ -1122,7 +1203,7 @@ body.project-detail-page .project-details-section .container {
     }
     .project-images,
     .project-details-content {
-        gap: 16px;
+        gap: 32px;
     }
 }
 
@@ -1142,7 +1223,7 @@ body.project-detail-page .project-details-section .container {
 }
 
 .portfolio-grid.text-view .portfolio-item {
-    width: 100%;
+    width: fit-content;
     position: relative;
     padding-bottom: 0;
 }
@@ -1206,6 +1287,13 @@ body.project-detail-page .project-details-section .container {
 }
 
 
+/* 텍스트뷰 768px 이하 타이틀 크기 */
+@media (max-width: 768px) {
+    .portfolio-grid.text-view .portfolio-title {
+        font-size: 40px;
+    }
+}
+
 /* 반응형 그리드 조정 */
 @media (max-width: 480px) {
     .portfolio-grid {
@@ -1226,6 +1314,12 @@ body.project-detail-page .project-details-section .container {
     
     .portfolio-grid.text-view .portfolio-title {
         font-size: 32px;
+        max-width: 100%;
+        word-break: keep-all;
+        overflow-wrap: break-word;
+    }
+    .portfolio-grid.text-view .portfolio-item {
+        max-width: 100%;
     }
     
     .portfolio-section {
