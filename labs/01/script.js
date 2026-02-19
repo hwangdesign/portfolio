@@ -77,7 +77,7 @@
   let scatterProgress = 0;
 
   function handleDeviceOrientation(e) {
-    if (!gyroEnabled) return;
+    if (!gyroEnabled || isTouching) return;
     const gamma = e.gamma != null ? e.gamma : 0;
     const beta = e.beta != null ? e.beta : 0;
     targetMouseX = Math.max(-1, Math.min(1, (gamma / 30) * GYRO_SENSITIVITY));
@@ -117,13 +117,44 @@
     targetMouseY = rect.height > 0 ? Math.max(-1, Math.min(1, (clientY - centerY) / (rect.height / 2))) : 0;
   }
 
+  const touchCursor = document.querySelector('.touch-cursor');
+
+  function updateTouchCursor(x, y) {
+    if (!touchCursor || !isMobile) return;
+    touchCursor.style.left = x + 'px';
+    touchCursor.style.top = y + 'px';
+    touchCursor.classList.add('active');
+  }
+
+  function hideTouchCursor() {
+    if (touchCursor) touchCursor.classList.remove('active');
+  }
+
   document.addEventListener('mousemove', handlePointerMove);
-  document.addEventListener('touchmove', handlePointerMove, { passive: true });
+  document.addEventListener('touchmove', (e) => {
+    handlePointerMove(e);
+    if (e.touches && e.touches.length > 0) updateTouchCursor(e.touches[0].clientX, e.touches[0].clientY);
+  }, { passive: true });
   document.addEventListener('touchstart', (e) => {
     isTouching = true;
+    if (e.touches && e.touches.length > 0) {
+      handlePointerMove(e);
+      updateTouchCursor(e.touches[0].clientX, e.touches[0].clientY);
+    }
     if (isMobile) requestGyroPermission();
   });
-  document.addEventListener('touchend', () => { isTouching = false; });
+  document.addEventListener('touchend', () => {
+    isTouching = false;
+    targetMouseX = 999;
+    targetMouseY = 999;
+    hideTouchCursor();
+  });
+  document.addEventListener('touchcancel', () => {
+    isTouching = false;
+    targetMouseX = 999;
+    targetMouseY = 999;
+    hideTouchCursor();
+  });
   document.addEventListener('mouseleave', () => {
     if (!isTouching) {
       targetMouseX = 999;
@@ -137,6 +168,7 @@
       gyroEnabled = true;
       window.addEventListener('deviceorientation', handleDeviceOrientation);
     }
+    document.addEventListener('contextmenu', (e) => e.preventDefault());
   }
 
   function updateMouse() {
@@ -506,8 +538,7 @@
     const positions = [];
     const centerX = width / 2;
     let x = centerX;
-    const intervalVw = width <= 480 ? 35 : 30;
-    const step = width * (intervalVw / 100);
+    const step = width * 0.3;
     for (let i = 0; i < 20; i++) {
       positions.push(x);
       x += step;
