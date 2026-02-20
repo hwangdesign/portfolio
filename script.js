@@ -713,8 +713,8 @@ document.addEventListener('DOMContentLoaded', () => {
         lines.length = 0;
     }
     
-    // 배경 세로 라인 생성 헬퍼 함수
-    function createVerticalLine(left) {
+    // 배경 세로 라인 생성 헬퍼 함수 (index: 0=1번째, 1=2번째, ... 짝수번째는 투명도 0%)
+    function createVerticalLine(left, index) {
         const line = document.createElement('div');
         line.className = 'background-line';
         
@@ -722,15 +722,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
         const lineColor = currentTheme === 'light' ? '#000000' : COLORS.YELLOW;
         
+        // 짝수번째(2,4,6...) 그려지는 구분선: 투명도 10%
+        const lineOpacity = '0.1';
+        
         Object.assign(line.style, {
             left: `${left}px`,
             top: '0',
             height: '100vh',
             background: lineColor,
-            opacity: '0.1',
+            opacity: lineOpacity,
             position: 'fixed',
             width: '1px',
-            zIndex: '1',
+            zIndex: '9999',
             pointerEvents: 'none',
             transition: 'opacity 0.1s ease-out, left 0.1s ease-out'
         });
@@ -830,54 +833,43 @@ document.addEventListener('DOMContentLoaded', () => {
             const secondLineLeft = windowWidth / 2;
             const calculatedSpacing = secondLineLeft - firstLineLeft;
             
+            let lineIndex = 0;
             // 첫 번째 라인 생성
-            backgroundLines.push(createVerticalLine(firstLineLeft));
+            backgroundLines.push(createVerticalLine(firstLineLeft, lineIndex++));
             
             // 두 번째 라인 생성 (정가운데)
-            backgroundLines.push(createVerticalLine(secondLineLeft));
+            backgroundLines.push(createVerticalLine(secondLineLeft, lineIndex++));
             
             // 오른쪽으로 라인 생성 (두 번째 라인부터 동일한 간격으로)
             for (let left = secondLineLeft + calculatedSpacing; left < windowWidth; left += calculatedSpacing) {
-                backgroundLines.push(createVerticalLine(left));
+                backgroundLines.push(createVerticalLine(left, lineIndex++));
             }
             
             // 왼쪽으로 라인 생성 (첫 번째 라인부터 동일한 간격으로)
             for (let left = firstLineLeft - calculatedSpacing; left >= 0; left -= calculatedSpacing) {
-                backgroundLines.push(createVerticalLine(left));
+                backgroundLines.push(createVerticalLine(left, lineIndex++));
             }
             
-            // 랜덤 짧은 라인 생성 (모든 배경 라인 위치에서)
-            backgroundLines.forEach(line => {
-                const lineLeft = parseFloat(line.style.left);
-                const usedPositions = [];
-                const numLines = Math.floor(Math.random() * (shortLineConfig.maxCount - shortLineConfig.minCount + 1)) + shortLineConfig.minCount;
-                
-                for (let i = 0; i < numLines; i++) {
-                    createRandomShortLine(lineLeft, usedPositions);
-                }
-            });
+            /* 떨어지는 세로 구분선 모션 비활성 */
         } else {
-            // PC: 기존 로직 유지
+            // PC: 스크린 처음부터 끝까지 세로 라인 생성
             const currentLineSpacing = lineSpacing;
             const currentShortLineSpacing = shortLineSpacing;
             
-            // 배경 세로 라인 생성
+            let lineIndex = 0;
+            // 오른쪽으로 라인 생성 (firstLineLeft ~ windowWidth)
             for (let left = firstLineLeft; left < windowWidth; left += currentLineSpacing) {
-                backgroundLines.push(createVerticalLine(left));
+                backgroundLines.push(createVerticalLine(left, lineIndex++));
+            }
+            // 왼쪽으로 라인 생성 (0 ~ firstLineLeft)
+            for (let left = firstLineLeft - currentLineSpacing; left >= 0; left -= currentLineSpacing) {
+                backgroundLines.push(createVerticalLine(left, lineIndex++));
             }
             
-            // 랜덤 짧은 라인 생성
-            for (let shortLineLeft = firstLineLeft; shortLineLeft < windowWidth; shortLineLeft += currentShortLineSpacing) {
-                const usedPositions = [];
-                const numLines = Math.floor(Math.random() * (shortLineConfig.maxCount - shortLineConfig.minCount + 1)) + shortLineConfig.minCount;
-                
-                for (let i = 0; i < numLines; i++) {
-                    createRandomShortLine(shortLineLeft, usedPositions);
-                }
-            }
+            /* 떨어지는 세로 구분선 모션 비활성 */
         }
         
-        animateShortLines();
+        /* animateShortLines(); 비활성 */
     }
     
     // 초기 실행

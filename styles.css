@@ -333,7 +333,7 @@ body {
     width: 1px;
     height: 100vh;
     background: var(--yellow-color);
-    z-index: 1;
+    z-index: 9999;
     pointer-events: none;
     opacity: 0.1;
     transition: opacity 0.1s ease-out, left 0.1s ease-out;
@@ -1529,8 +1529,14 @@ body.project-detail-page .project-details-section {
 }
 
 /* 프로젝트 본문: 이전글 다음글 영역 배경 */
+/* 다크모드: 화이트 투명도 5% */
 body.project-detail-page .project-navigation-wrapper {
-    background-color: #f4f4f4;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* 라이트모드: 블랙 투명도 5% */
+[data-theme="light"] body.project-detail-page .project-navigation-wrapper {
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
 .project-navigation-wrapper .container {
