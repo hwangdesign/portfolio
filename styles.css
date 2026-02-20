@@ -1133,27 +1133,34 @@ body.project-detail-page .section-title-box {
     display: none !important;
 }
 
-/* 프로젝트 본문: Medium 블로그와 동일한 읽기 최적화 너비 (740px 콘텐츠, 좌측 정렬) */
+/* 데스크탑: 본문 텍스트 영역만 미디엄 블로그와 동일한 너비 (740px 콘텐츠 + 48px*2 패딩) */
 body.project-detail-page .main-content .section:not(.project-images-section):not(.project-details-section) .container {
-    max-width: 836px; /* 740px 콘텐츠 + 48px*2 패딩 */
+    max-width: 836px;
     margin-left: 0;
     margin-right: auto;
 }
 
+body.project-detail-page .project-details-content .section-body {
+    max-width: 740px;
+}
+
+/* 프로젝트 이미지·디테일 섹션 컨테이너 */
+body.project-detail-page .project-images-section .container,
+body.project-detail-page .project-details-section .container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+}
+
+/* 모바일: 본문 전체(텍스트·이미지) hero-content와 동일한 너비 */
 @media (max-width: 768px) {
     body.project-detail-page .main-content .section:not(.project-images-section):not(.project-details-section) .container {
         max-width: 100%;
     }
-}
-
-/* 프로젝트 디테일 이미지 (1080x607) - 화면 1080px 이상 시 컨테이너 최대 1080px */
-body.project-detail-page .project-images-section .container,
-body.project-detail-page .project-details-section .container {
-    max-width: 1176px; /* 1080px 이미지 + 48px*2 패딩 */
-    width: 100%;
-    margin-left: 0;
-    margin-right: auto;
-    box-sizing: border-box;
+    body.project-detail-page .project-details-content .section-body {
+        max-width: 100%;
+    }
 }
 
 /* 본문 페이지 이미지+텍스트 영역 최하위 레이어 */
@@ -1174,7 +1181,6 @@ body.project-detail-page .project-details-section {
 
 .project-details-content .section-body {
     margin-top: 0;
-    max-width: 836px; /* Medium 블로그와 동일 (740px 콘텐츠 + 48px*2 패딩) */
     text-align: left;
 }
 
@@ -1197,10 +1203,14 @@ body.project-detail-page .project-details-section {
 }
 
 @media (max-width: 768px) {
-    .project-images-section .container,
-    .project-details-section .container {
+    .project-images-section .container {
         padding-left: 24px;
         padding-right: 24px;
+    }
+    /* project-details-content 너비 = hero-info-description과 동일 (hero .container 패딩) */
+    .project-details-section .container {
+        padding-left: 48px;
+        padding-right: 48px;
     }
     .project-images,
     .project-details-content {
@@ -1209,10 +1219,14 @@ body.project-detail-page .project-details-section {
 }
 
 @media (max-width: 480px) {
-    .project-images-section .container,
-    .project-details-section .container {
+    .project-images-section .container {
         padding-left: 16px;
         padding-right: 16px;
+    }
+    /* project-details-content 너비 = hero-info-description과 동일 (480px에서 .container 24px) */
+    .project-details-section .container {
+        padding-left: 24px;
+        padding-right: 24px;
     }
 }
 
