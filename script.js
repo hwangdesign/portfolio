@@ -282,8 +282,12 @@ function animateToText(targetText, element, isLooping = false, loopTitles = [], 
             element.textContent = currentText;
             iterations++;
         } else {
-            // 최종 텍스트로 정착
-            element.textContent = targetText;
+            // 최종 텍스트로 정착 (위첨자 표기 필요한 경우 innerHTML 사용)
+            if (targetText === '11Kitties (Season 2)') {
+                element.innerHTML = '11Kitties <sup>(Season 2)</sup>';
+            } else {
+                element.textContent = targetText;
+            }
             // 높이 고정 해제 (자동 높이로 복원)
             element.style.height = '';
             element.style.minHeight = '';
@@ -385,6 +389,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (entry.isIntersecting) {
                     // 영역에 들어올 때 한 번만 애니메이션 실행
                     entry.target.dataset.animated = 'true';
+                    
+                    // (Season 2) 등 위첨자 표기가 필요한 타이틀은 애니메이션 없이 즉시 표기
+                    if (targetText === '11Kitties (Season 2)') {
+                        entry.target.innerHTML = '11Kitties <sup>(Season 2)</sup>';
+                        entry.target.style.height = '';
+                        entry.target.style.minHeight = '';
+                        return;
+                    }
                     
                     // 최종 텍스트의 높이를 미리 계산하여 고정
                     const tempHeight = entry.target.style.height;
@@ -682,7 +694,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // 텍스트를 즉시 표시 (애니메이션 없이)
             const targetText = title.dataset.title || title.textContent;
             if (targetText) {
-                title.textContent = targetText;
+                if (targetText === '11Kitties (Season 2)') {
+                    title.innerHTML = '11Kitties <sup>(Season 2)</sup>';
+                } else {
+                    title.textContent = targetText;
+                }
             }
             return;
         }
