@@ -1184,6 +1184,7 @@ body.project-detail-page .project-details-content .section-body {
 
 /* 프로젝트 본문: hero-info-description 너비 = 이미지 너비(1080px) */
 body.project-detail-page .hero-info-description {
+    width: 100%;
     max-width: 1080px;
 }
 

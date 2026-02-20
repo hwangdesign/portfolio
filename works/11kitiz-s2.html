@@ -28,7 +28,10 @@
                     <div class="hero-info-description">
                         <p><span class="prefix-char">/</span> 11Kitties <sup>(Season 2)</sup> 는 고객 피드백을 반영해 선택·성장·보상 경험을 강화한 참여형 게임 프로젝트예요.<br><span class="prefix-char">/</span> AI 기반 비주얼 제작과 보상 구조 개선을 통해 더 빠르고 몰입감 있는 ‘랜선 집사’ 경험을 설계했어요.</p>
                     </div>
-                    <div id="hero-lottie-cat-heart" class="hero-lottie" aria-hidden="true"></div>
+                    <a href="https://brunch.co.kr/@11design/31" target="_blank" rel="noopener noreferrer" class="resume-btn">
+                        <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 19H5V5h7V3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+                        <span>Brunch</span>
+                    </a>
                 </div>
             </div>
         </section>
@@ -82,7 +85,6 @@
     <script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js" crossorigin="anonymous"></script>
     <script src="../script.js"></script>
     <script>
-        var catHeartUrl = 'https://s-ui-m.011st.com/MW/img/webgame/kitiz2/cat/cat_heart.json';
             function initDetail4Lottie() {
                 var lottieLib = window.lottie || window.bodymovin;
                 if (!lottieLib) {
@@ -108,19 +110,6 @@
                     .catch(function(e) { console.warn('Detail4 Lottie load failed:', e); });
             }
             document.addEventListener('DOMContentLoaded', function() {
-                var lottieLib = window.lottie || window.bodymovin;
-                if (lottieLib) {
-                    var heroEl = document.getElementById('hero-lottie-cat-heart');
-                    if (heroEl) {
-                        lottieLib.loadAnimation({
-                            container: heroEl,
-                            renderer: 'svg',
-                            loop: true,
-                            autoplay: true,
-                            path: catHeartUrl
-                        });
-                    }
-                }
                 var bgImg = document.getElementById('detail4-bg-img');
                 if (bgImg && bgImg.complete) {
                     setTimeout(initDetail4Lottie, 0);
