@@ -10,12 +10,6 @@ html, body {
     max-width: 100vw;
 }
 
-/* 텍스트 드래그 스타일 */
-::selection,::-moz-selection {
-    background-color: var(--yellow-color);
-    color: var(--black-color);
-}
-
 :root {
     /* Primary Colors */
     --primary-color: #ffffff;
@@ -61,6 +55,10 @@ html, body {
     --font-family-system: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, 'Segoe UI', sans-serif;
     --font-family-emoji: 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', 'Android Emoji', 'EmojiSymbols', 'EmojiOne Mozilla', 'Twemoji Mozilla', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
     
+    /* Selection (텍스트 드래그 시 키컬러) */
+    --selection-bg: #FFFF00;
+    --selection-color: #000000;
+    
     /* Font Sizes - 내림차순 */
     --font-size-emoji: 100px;
     --font-size-emoji-mobile: 70px;
@@ -74,6 +72,10 @@ html, body {
 
 /* 라이트 테마 변수 */
 [data-theme="light"] {
+    /* Selection (라이트 테마) */
+    --selection-bg: #FFFF00;
+    --selection-color: #000000;
+    
     /* Primary Colors */
     --primary-color: #000000;
     --yellow-color: #FFFF00;
@@ -109,6 +111,18 @@ html, body {
     /* Shadow Colors */
     --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     --shadow-emoji: 0 10px 30px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* 텍스트 드래그 스타일 - 모든 페이지 키컬러 적용 (Chrome 134+ 호환) */
+::selection,
+:root::selection {
+    background-color: var(--selection-bg);
+    color: var(--selection-color);
+}
+::-moz-selection,
+:root::-moz-selection {
+    background-color: var(--selection-bg);
+    color: var(--selection-color);
 }
 
 /* ============================================
@@ -339,10 +353,6 @@ body {
     background: var(--text-tertiary-color);
 }
 
-[data-theme="light"] ::selection,[data-theme="light"] ::-moz-selection {
-    background-color: var(--yellow-color);
-    color: #000000;
-}
 
 /* Scroll to Top Button */
 .scroll-top-btn {
@@ -1162,7 +1172,7 @@ body.project-detail-page .section-title-box {
 }
 
 /* 데스크탑: 본문 텍스트 영역만 미디엄 블로그와 동일한 너비 (740px 콘텐츠 + 48px*2 패딩) */
-body.project-detail-page .main-content .section:not(.project-images-section):not(.project-details-section) .container {
+body.project-detail-page .main-content .section:not(.project-images-section):not(.project-details-section):not(.hero-content-section) .container {
     max-width: 836px;
     margin-left: 0;
     margin-right: auto;
@@ -1172,7 +1182,13 @@ body.project-detail-page .project-details-content .section-body {
     max-width: 740px;
 }
 
+/* 프로젝트 본문: hero-info-description 너비 = 이미지 너비(1080px) */
+body.project-detail-page .hero-info-description {
+    max-width: 1080px;
+}
+
 /* 프로젝트 이미지·디테일 섹션 컨테이너 */
+body.project-detail-page .hero-content-section .container,
 body.project-detail-page .project-images-section .container,
 body.project-detail-page .project-details-section .container {
     width: 100%;
