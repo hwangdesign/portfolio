@@ -595,7 +595,8 @@ body {
 }
 
 .section-title sup,
-.animated-section-title sup {
+.animated-section-title sup,
+.project-nav-title sup {
     font-size: 0.6em;
     vertical-align: super;
     line-height: 0;
