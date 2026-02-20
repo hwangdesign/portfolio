@@ -1182,6 +1182,8 @@ body.project-detail-page .project-details-section {
 .project-details-content .section-body {
     margin-top: 0;
     text-align: left;
+    word-break: keep-all;      /* 줄바꿈 시 단어 단위로 (한글 단어 유지) */
+    overflow-wrap: break-word; /* 너무 긴 단어만 필요 시에만 중간 줄바꿈 */
 }
 
 .project-image {
