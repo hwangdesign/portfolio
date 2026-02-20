@@ -40,7 +40,7 @@ function renderSharedLayout() {
     footerContainer.innerHTML = `
 <footer class="site-footer">
     <div class="container site-footer-inner">
-        <p>© Hwangdesign — sweet home</p>
+        <p>© hwangdesign — sweet home</p>
         <button class="theme-toggle" aria-label="테마 전환" id="themeToggle">
             <span class="theme-icon-dark">🌙</span>
             <span class="theme-icon-light">☀️</span>
@@ -283,8 +283,8 @@ function animateToText(targetText, element, isLooping = false, loopTitles = [], 
             iterations++;
         } else {
             // 최종 텍스트로 정착 (위첨자 표기 필요한 경우 innerHTML 사용)
-            if (targetText === '11Kitties (Season 2)') {
-                element.innerHTML = '11Kitties <sup>(Season 2)</sup>';
+            if (targetText === '11KittiesSeason 2') {
+                element.innerHTML = '11Kitties<sup>Season 2</sup>';
             } else if (targetText === 'MartPlus') {
                 element.innerHTML = 'Mart<sup>Plus</sup>';
             } else {
@@ -393,8 +393,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     entry.target.dataset.animated = 'true';
                     
                     // (Season 2), Plus 등 위첨자 표기가 필요한 타이틀은 애니메이션 없이 즉시 표기
-                    if (targetText === '11Kitties (Season 2)') {
-                        entry.target.innerHTML = '11Kitties <sup>(Season 2)</sup>';
+                    if (targetText === '11KittiesSeason 2') {
+                        entry.target.innerHTML = '11Kitties<sup>Season 2</sup>';
                         entry.target.style.height = '';
                         entry.target.style.minHeight = '';
                         return;
@@ -508,7 +508,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     '#OOTD Fashion': '🎨',
                     'OOAh Luxury': '🎨',
                     'OOAh': '🎨',
-                    '11Kitties (Season 2)': '🎨',
+                    '11KittiesSeason 2': '🎨',
                     'Amazon Global Store': '🎨'
                 };
                 
@@ -633,7 +633,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 '#OOTD Fashion': '🎨',
                 'OOAh Luxury': '🎨',
                 'OOAh': '🎨',
-                '11Kitties (Season 2)': '🎨',
+                '11KittiesSeason 2': '🎨',
                 'Amazon Global Store': '🎨'
             };
             
@@ -702,8 +702,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // 텍스트를 즉시 표시 (애니메이션 없이)
             const targetText = title.dataset.title || title.textContent;
             if (targetText) {
-                if (targetText === '11Kitties (Season 2)') {
-                    title.innerHTML = '11Kitties <sup>(Season 2)</sup>';
+                if (targetText === '11KittiesSeason 2') {
+                    title.innerHTML = '11Kitties<sup>Season 2</sup>';
                 } else if (targetText === 'MartPlus') {
                     title.innerHTML = 'Mart<sup>Plus</sup>';
                 } else {

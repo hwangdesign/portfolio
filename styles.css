@@ -1510,6 +1510,11 @@ body.project-detail-page .project-details-section {
     width: 100%;
 }
 
+/* 프로젝트 본문: 이전글 다음글 영역 배경 */
+body.project-detail-page .project-navigation-wrapper {
+    background-color: #f4f4f4;
+}
+
 .project-navigation-wrapper .container {
     max-width: none;
     width: 100%;
@@ -1541,7 +1546,7 @@ body.project-detail-page .project-details-section {
     left: 0;
     right: 0;
     height: 1px;
-    background: var(--white-100);
+    background: rgba(0, 0, 0, 0.2);
 }
 
 .site-footer-inner {
