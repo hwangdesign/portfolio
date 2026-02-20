@@ -429,12 +429,6 @@ body {
     transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
 }
 
-.navbar.hidden {
-    opacity: 0;
-    transform: translateY(-100%);
-    visibility: hidden;
-}
-
 .navbar .container {
     display: flex;
     justify-content: space-between;
@@ -1025,11 +1019,6 @@ body.portfolio-floating-inactive .portfolio-view-toggle {
     color: var(--yellow-color);
 }
 
-.view-toggle-separator {
-    opacity: 0.5;
-    color: var(--text-color);
-}
-
 .portfolio-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, 600px);
@@ -1140,15 +1129,6 @@ body.portfolio-floating-inactive .portfolio-view-toggle {
     width: auto;
 }
 
-.portfolio-category {
-    font-size: var(--font-size-subtitle);
-    font-weight: 100;
-    font-family: var(--font-family-system);
-    color: var(--text-color);
-    margin-left: 12px;
-    display: inline-block;
-}
-
 .portfolio-title:hover {
     color: var(--yellow-color);
 }
@@ -1236,10 +1216,6 @@ body.project-detail-page .project-details-section {
     height: auto;
     display: block;
     max-width: 100%;
-}
-
-.project-image-thumbnail {
-    max-width: 360px;
 }
 
 /* 1080x607 디테일 이미지: 스크린 너비 100% → 비율 유지하며 축소 */

@@ -312,69 +312,31 @@ function animateToText(targetText, element, isLooping = false, loopTitles = [], 
     }, 50); // 50ms마다 업데이트
 }
 
-// 각 줄을 한 번만 애니메이션하는 함수
-function animateLineOnce(element, targetText, delay = 0) {
-    // 초기 빈 텍스트로 시작
-    element.textContent = '';
-    
-    // 지연 후 애니메이션 시작
-    setTimeout(() => {
-        const targetByteLength = getByteLength(targetText);
-        let currentText = '';
-        let iterations = 0;
-        const maxIterations = 20;
-        let revealedLength = 0;
-        
-        const interval = setInterval(() => {
-            if (iterations < maxIterations) {
-                // 순차적으로 앞글자부터 노출
-                const revealProgress = Math.min(1, iterations / maxIterations);
-                revealedLength = Math.floor(targetText.length * revealProgress);
-                
-                currentText = '';
-                let currentByteLength = 0;
-                
-                for (let i = 0; i < targetText.length; i++) {
-                    const char = targetText[i];
-                    const charByteLength = getByteLength(char);
-                    
-                    if (i < revealedLength) {
-                        // 이미 노출된 문자는 실제 문자 사용
-                        currentText += char;
-                        currentByteLength += charByteLength;
-                    } else {
-                        // 아직 노출되지 않은 문자는 랜덤 문자로
-                        if (currentByteLength + charByteLength <= targetByteLength) {
-                            // 바이트 수를 맞추기 위해 랜덤 문자 추가
-                            if (charByteLength === 1) {
-                                currentText += getRandomChar();
-                                currentByteLength += 1;
-                            } else if (charByteLength === 2) {
-                                currentText += getRandomChar() + getRandomChar();
-                                currentByteLength += 2;
-                            } else {
-                                currentText += getRandomChar() + getRandomChar() + getRandomChar();
-                                currentByteLength += 3;
-                            }
-                        }
-                    }
-                }
-                
-                // 바이트 수가 부족하면 랜덤 문자로 채우기
-                while (currentByteLength < targetByteLength) {
-                    currentText += getRandomChar();
-                    currentByteLength += 1;
-                }
-                
-                element.textContent = currentText;
-                iterations++;
-            } else {
-                element.textContent = targetText;
-                clearInterval(interval);
-            }
-        }, 50);
-    }, delay);
-}
+// 섹션별 이모티콘 매핑 (모든 OS 호환성 고려)
+const EMOJI_MAP = {
+    'Creative Director': '🥳',
+    'Creative Director Hwang Seonyoon': '🥳',
+    'Core Competencies': '🖋️',
+    'Career Experience': '💡',
+    'Education': '🎒',
+    'Awards': '🪅',
+    'Activities': '🪄',
+    'Cover Letter': '🦄',
+    'Works': '💎',
+    'Labs': '🧪',
+    'About': '😎',
+    'MartPlus': '🎨',
+    'Design System': '🎨',
+    'PDP UX': '🎨',
+    '11Kitties': '🎨',
+    '#OOTD Fashion': '🎨',
+    'OOAh Luxury': '🎨',
+    'OOAh': '🎨',
+    '11STREET Design eXperience': '🎨',
+    '11KittiesSeason 2': '🎨',
+    '#ootd': '🎨',
+    'Amazon Global Store': '🎨'
+};
 
 // 페이지 로드 시 메인 타이틀 및 섹션 제목 애니메이션을 위한 Intersection Observer
 document.addEventListener('DOMContentLoaded', () => {
@@ -489,33 +451,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 
                 // 섹션별 이모티콘 매핑
-                const emojiMap = {
-                    'Creative Director': '🥳',
-                    'Creative Director Hwang Seonyoon': '🥳',
-                    'Core Competencies': '🖋️',
-                    'Career Experience': '💡',
-                    'Education': '🎒',
-                    'Awards': '🪅',
-                    'Activities': '🪄',
-                    'Cover Letter': '🦄',
-                    'Works': '💎',
-                    'Labs': '🧪',
-                    'About': '😎',
-                    'MartPlus': '🎨',
-                    'Design System': '🎨',
-                    'PDP UX': '🎨',
-                    '11Kitties': '🎨',
-                    '#OOTD Fashion': '🎨',
-                    'OOAh Luxury': '🎨',
-                    'OOAh': '🎨',
-                    '11STREET Design eXperience': '🎨',
-                    '11KittiesSeason 2': '🎨',
-                    '#ootd': '🎨',
-                    'Amazon Global Store': '🎨'
-                };
-                
                 const sectionTitle = title.dataset.title || text;
-                const emoji = emojiMap[sectionTitle] || '';
+                const emoji = EMOJI_MAP[sectionTitle] || '';
                 
                 if (emoji) {
                     const emojiElement = document.createElement('span');
@@ -615,34 +552,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 title.dataset.boxRotation = rotation.toString();
             }
             
-            // 섹션별 이모티콘 매핑 (모든 OS 호환성 고려)
-            const emojiMap = {
-                'Creative Director': '🥳',
-                'Creative Director Hwang Seonyoon': '🥳',
-                'Core Competencies': '🖋️',
-                'Career Experience': '💡',
-                'Education': '🎒',
-                'Awards': '🪅',
-                'Activities': '🪄',
-                'Cover Letter': '🦄',
-                'Works': '💎',
-                'Labs': '🧪',
-                'About': '😎',
-                'MartPlus': '🎨',
-                'Design System': '🎨',
-                'PDP UX': '🎨',
-                '11Kitties': '🎨',
-                '#OOTD Fashion': '🎨',
-                'OOAh Luxury': '🎨',
-                'OOAh': '🎨',
-                '11STREET Design eXperience': '🎨',
-                '11KittiesSeason 2': '🎨',
-                '#ootd': '🎨',
-                'Amazon Global Store': '🎨'
-            };
-            
             const sectionTitle = title.dataset.title || text;
-            const emoji = emojiMap[sectionTitle] || '';
+            const emoji = EMOJI_MAP[sectionTitle] || '';
             
             // 이모티콘 요소 생성
             if (emoji) {
