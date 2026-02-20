@@ -488,6 +488,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     '#OOTD Fashion': '🎨',
                     'OOAh Luxury': '🎨',
                     'OOAh': '🎨',
+                    '11Kitties (Season 2)': '🎨',
                     'Amazon Global Store': '🎨'
                 };
                 
@@ -612,6 +613,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 '#OOTD Fashion': '🎨',
                 'OOAh Luxury': '🎨',
                 'OOAh': '🎨',
+                '11Kitties (Season 2)': '🎨',
                 'Amazon Global Store': '🎨'
             };
             

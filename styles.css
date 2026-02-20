@@ -660,6 +660,18 @@ body {
     color: var(--white-50);
 }
 
+/* Hero 버튼 그룹 (Brunch, 서비스 바로가기 등) */
+.hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 32px;
+}
+
+.hero-buttons .resume-btn {
+    margin-top: 0;
+}
+
 /* Resume Button */
 .resume-btn {
     display: inline-flex;
@@ -1202,6 +1214,83 @@ body.project-detail-page .project-details-section {
     width: 100%;
     max-width: 1080px;
     height: auto;
+}
+
+/* OOAh Details04 영역: 좌우 절반, 각 중앙에 64x64 GIF */
+.project-image-ooah-split {
+    display: flex;
+    aspect-ratio: 1080 / 607;
+    min-height: 200px;
+    background-color: #f4f4f4;
+    position: relative;
+}
+/* 세로 점선: 영역 정가운데 1px #0F0FD9 */
+.project-image-ooah-split::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    border-left: 1px dashed #0F0FD9;
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+.project-image-ooah-split-left,
+.project-image-ooah-split-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+/* 좌·우 영역 GIF: 100×100 흰색 원형 배경 위에 64×64 표시 */
+.project-image-ooah-split-left::before,
+.project-image-ooah-split-right::before {
+    content: "";
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-color: #fff;
+    border-radius: 50%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.project-image-ooah-split-left img,
+.project-image-ooah-split-right img {
+    position: relative;
+    z-index: 1;
+    width: 64px;
+    height: 64px;
+    display: block;
+    object-fit: contain;
+}
+
+/* 모바일: 좌우 GIF+원형 배경 영역 축소 */
+@media (max-width: 768px) {
+    .project-image-ooah-split-left::before,
+    .project-image-ooah-split-right::before {
+        width: 80px;
+        height: 80px;
+    }
+    .project-image-ooah-split-left img,
+    .project-image-ooah-split-right img {
+        width: 52px;
+        height: 52px;
+    }
+}
+@media (max-width: 480px) {
+    .project-image-ooah-split-left::before,
+    .project-image-ooah-split-right::before {
+        width: 64px;
+        height: 64px;
+    }
+    .project-image-ooah-split-left img,
+    .project-image-ooah-split-right img {
+        width: 40px;
+        height: 40px;
+    }
 }
 
 @media (max-width: 768px) {
