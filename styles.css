@@ -1235,6 +1235,7 @@ body.project-detail-page .project-details-section {
 .project-details-content .project-detail-lottie-wrap {
     position: relative;
     display: block;
+    max-width: 1080px;
 }
 
 .project-detail-lottie-bg {
@@ -1255,7 +1256,7 @@ body.project-detail-page .project-details-section {
     align-items: center;
     justify-content: center;
     pointer-events: none;
-    overflow: visible;
+    overflow: hidden;
 }
 
 .project-detail-lottie-layer svg {
