@@ -508,6 +508,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     '#OOTD Fashion': '🎨',
                     'OOAh Luxury': '🎨',
                     'OOAh': '🎨',
+                    '11STREET Design eXperience': '🎨',
                     '11KittiesSeason 2': '🎨',
                     '#ootd': '🎨',
                     'Amazon Global Store': '🎨'
@@ -634,6 +635,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 '#OOTD Fashion': '🎨',
                 'OOAh Luxury': '🎨',
                 'OOAh': '🎨',
+                '11STREET Design eXperience': '🎨',
                 '11KittiesSeason 2': '🎨',
                 '#ootd': '🎨',
                 'Amazon Global Store': '🎨'

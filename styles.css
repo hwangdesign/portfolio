@@ -1286,6 +1286,35 @@ body.project-detail-page .project-details-section {
     margin: auto;
 }
 
+/* 프로젝트 PDF 미리보기 */
+.project-pdf-preview {
+    width: 100%;
+    max-width: 1080px;
+    margin-top: 0;
+}
+.project-pdf-link {
+    display: inline-block;
+    font-size: var(--font-size-base);
+    font-weight: 500;
+    color: var(--yellow-color);
+    background-color: #000000;
+    padding: 12px 20px;
+    text-decoration: none;
+    margin-bottom: 16px;
+    transition: opacity 0.2s ease;
+}
+.project-pdf-link:hover {
+    opacity: 0.9;
+}
+.project-pdf-embed {
+    width: 100%;
+    max-width: 1080px;
+    height: 80vh;
+    min-height: 500px;
+    border: 1px solid var(--border-white-20);
+    border-radius: 4px;
+}
+
 /* OOAh Details04 영역: 좌우 절반, 각 중앙에 64x64 GIF */
 .project-image-ooah-split {
     display: flex;
