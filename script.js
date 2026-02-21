@@ -246,9 +246,12 @@ function applyProjectPageBackground(theme) {
     if (!imgSrc) return;
     
     const img = new Image();
-    if (!location.protocol.startsWith('file')) {
-        img.crossOrigin = 'anonymous';
-    }
+    try {
+        const imgOrigin = new URL(imgSrc, location.href).origin;
+        if (imgOrigin !== location.origin) {
+            img.crossOrigin = 'anonymous';
+        }
+    } catch (_) {}
     img.onload = function() {
         try {
             const { sampleSize, brightnessMin, brightnessMax, alphaMin, quantizeStep, saturateBoost, lightnessReduce, fallbackColor } = PROJECT_BG_EXTRACT;
