@@ -67,14 +67,11 @@ renderSharedLayout();
     const savedTheme = localStorage.getItem('theme') || getSystemTheme();
     document.documentElement.setAttribute('data-theme', savedTheme);
     
-    // 모바일 상태바(theme-color) 업데이트 함수
+    // 모바일 상태바(theme-color) 항상 블랙 고정
     function updateThemeColor(theme, projectBgColor) {
         const themeColorMeta = document.getElementById('themeColorMeta');
-        if (!themeColorMeta) return;
-        if (projectBgColor) {
-            themeColorMeta.setAttribute('content', projectBgColor);
-        } else {
-            themeColorMeta.setAttribute('content', theme === 'dark' ? '#111111' : '#fafafa');
+        if (themeColorMeta) {
+            themeColorMeta.setAttribute('content', '#000000');
         }
         let colorSchemeMeta = document.querySelector('meta[name="color-scheme"]');
         if (!colorSchemeMeta) {
@@ -255,7 +252,7 @@ function getProjectBgImageElement() {
 
 function setThemeColorForProject(color) {
     const m = document.getElementById('themeColorMeta');
-    if (m) m.setAttribute('content', color);
+    if (m) m.setAttribute('content', '#000000');
 }
 
 function applyProjectPageBackground(theme) {
