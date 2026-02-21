@@ -69,7 +69,18 @@ html, body {
     --font-size-base: 12px;
     --font-size-small: 12px;
     --font-size-tiny: 10px;
+    --font-size-grid-title: 32px;
 }
+
+/* 폰트 사이즈 유틸리티 클래스 */
+.font-emoji { font-size: var(--font-size-emoji); }
+.font-title { font-size: var(--font-size-title); }
+.font-title-mobile { font-size: var(--font-size-title-mobile); }
+.font-grid-title { font-size: var(--font-size-grid-title); }
+.font-subtitle { font-size: var(--font-size-subtitle); }
+.font-base { font-size: var(--font-size-base); }
+.font-small { font-size: var(--font-size-small); }
+.font-tiny { font-size: var(--font-size-tiny); }
 
 /* 라이트 테마 변수 */
 [data-theme="light"] {
@@ -613,8 +624,15 @@ body {
     font-size: 0.6em;
     vertical-align: super;
     line-height: 0;
-    color: #999;
+    color: rgba(255, 255, 255, 0.2);
 }
+
+[data-theme="light"] .section-title sup,
+[data-theme="light"] .animated-section-title sup,
+[data-theme="light"] .project-nav-title sup {
+    color: rgba(0, 0, 0, 0.2);
+}
+
 
 .section-title-box {
     position: absolute;
@@ -641,17 +659,21 @@ body {
     }
 }
 
-/* 프로젝트 날짜 스타일 */
+/* 프로젝트 날짜 스타일 (인덱스 페이지 portfolio-date와 동일) */
 .project-date {
     font-size: 14px;
     font-weight: 500;
     font-family: var(--font-family-base);
-    color: var(--text-color);
+    color: rgba(255, 255, 255, 0.2);
     padding: 0;
     display: inline-block;
     width: 100%;
     margin-bottom: 4px;
     text-align: left;
+}
+
+[data-theme="light"] .project-date {
+    color: rgba(0, 0, 0, 0.2);
 }
 
 /* Description containers - 공통 스타일 */
@@ -1495,6 +1517,10 @@ body.project-detail-page .project-details-section {
     width: 100%;
 }
 
+.portfolio-grid:not(.text-view) .portfolio-title {
+    font-size: var(--font-size-grid-title);
+}
+
 .portfolio-grid:not(.text-view) .portfolio-date {
     display: inline;
     font-size: 16px;
@@ -1564,6 +1590,10 @@ body.project-detail-page .project-details-section {
 
 .portfolio-grid.text-view .portfolio-title:hover {
     color: #000000;
+}
+
+.portfolio-grid.text-view .portfolio-title:hover sup {
+    color: rgba(0, 0, 0, 0.2);
 }
 
 .portfolio-grid.text-view .portfolio-title:hover::before {

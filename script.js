@@ -67,11 +67,14 @@ renderSharedLayout();
     const savedTheme = localStorage.getItem('theme') || getSystemTheme();
     document.documentElement.setAttribute('data-theme', savedTheme);
     
-    // 모바일 상태바 색상 업데이트 함수
-    function updateThemeColor(theme) {
+    // 모바일 상태바(theme-color) 업데이트 함수
+    function updateThemeColor(theme, projectBgColor) {
         const themeColorMeta = document.getElementById('themeColorMeta');
-        if (themeColorMeta) {
-            themeColorMeta.setAttribute('content', theme === 'dark' ? '#111111' : '#ffffff');
+        if (!themeColorMeta) return;
+        if (projectBgColor) {
+            themeColorMeta.setAttribute('content', projectBgColor);
+        } else {
+            themeColorMeta.setAttribute('content', theme === 'dark' ? '#111111' : '#fafafa');
         }
         let colorSchemeMeta = document.querySelector('meta[name="color-scheme"]');
         if (!colorSchemeMeta) {
@@ -250,12 +253,18 @@ function getProjectBgImageElement() {
     return firstDetail && !firstDetail.src.startsWith('data:') ? firstDetail : null;
 }
 
+function setThemeColorForProject(color) {
+    const m = document.getElementById('themeColorMeta');
+    if (m) m.setAttribute('content', color);
+}
+
 function applyProjectPageBackground(theme) {
     if (!document.body.classList.contains('project-detail-page')) return;
     
     if (theme !== 'light') {
         document.body.style.removeProperty('--project-bg-color');
         document.body.style.removeProperty('background-color');
+        setThemeColorForProject('#111111');
         return;
     }
     
@@ -287,6 +296,7 @@ function applyProjectPageBackground(theme) {
             }
             if (!dominantKey) {
                 document.body.style.backgroundColor = fallbackColor;
+                setThemeColorForProject(fallbackColor);
                 return;
             }
             
@@ -298,8 +308,10 @@ function applyProjectPageBackground(theme) {
             const bgColor = findClosestMaterialColor(clampedR, clampedG, clampedB);
             document.body.style.setProperty('--project-bg-color', bgColor);
             document.body.style.backgroundColor = bgColor;
+            setThemeColorForProject(bgColor);
         } catch (e) {
             document.body.style.backgroundColor = fallbackColor;
+            setThemeColorForProject(fallbackColor);
         }
     }
     
@@ -307,21 +319,21 @@ function applyProjectPageBackground(theme) {
         const img = new Image();
         if (useCrossOrigin) img.crossOrigin = 'anonymous';
         img.onload = () => extractAndApply(img);
-        img.onerror = () => { document.body.style.backgroundColor = fallbackColor; };
+        img.onerror = () => { document.body.style.backgroundColor = fallbackColor; setThemeColorForProject(fallbackColor); };
         img.src = src;
     }
     
     const domImg = getProjectBgImageElement();
     if (domImg && domImg.complete && domImg.naturalWidth > 0) {
-        try { extractAndApply(domImg); } catch (_) { document.body.style.backgroundColor = fallbackColor; }
+        try { extractAndApply(domImg); } catch (_) { document.body.style.backgroundColor = fallbackColor; setThemeColorForProject(fallbackColor); }
         return;
     }
     if (domImg) {
         domImg.addEventListener('load', function onLoad() {
             domImg.removeEventListener('load', onLoad);
-            try { extractAndApply(domImg); } catch (_) { document.body.style.backgroundColor = fallbackColor; }
+            try { extractAndApply(domImg); } catch (_) { document.body.style.backgroundColor = fallbackColor; setThemeColorForProject(fallbackColor); }
         });
-        domImg.addEventListener('error', () => { document.body.style.backgroundColor = fallbackColor; });
+        domImg.addEventListener('error', () => { document.body.style.backgroundColor = fallbackColor; setThemeColorForProject(fallbackColor); });
         return;
     }
     
