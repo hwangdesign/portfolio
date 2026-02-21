@@ -111,6 +111,11 @@ renderSharedLayout();
             if (typeof updateScrollTopBtnColor === 'function') {
                 updateScrollTopBtnColor(newTheme);
             }
+            
+            // 프로젝트 본문 배경 (라이트 모드 전용)
+            if (typeof applyProjectPageBackground === 'function') {
+                applyProjectPageBackground(newTheme);
+            }
         });
     }
     
@@ -120,6 +125,192 @@ renderSharedLayout();
         updateBackgroundLinesColor(savedTheme);
     }, 200);
 })();
+
+/**
+ * 프로젝트 배경컬러 추출 정의
+ * - 적용 조건: body.project-detail-page + data-theme="light"
+ * - 이미지 소스: PROJECT_BG_IMAGE_MAP(썸네일) 또는 data-bg-image, 없으면 첫 Details 이미지
+ * - 샘플링: 64×64 캔버스, 픽셀 밝기 30~240, 투명도 ≥128
+ * - 주조색: 20단위로 양자화된 RGB 중 빈도 최대
+ * - 밝기 낮추기 + 채도 높이기 후 구글 머티리얼 팔레트(가장 밝은 톤) 중 가장 가까운 색으로 매칭
+ * - 실패 시: #fff
+ */
+const MATERIAL_PALETTE_50 = [
+    '#FFEBEE', '#FCE4EC', '#F3E5F5', '#EDE7F6', '#E8EAF6', '#E3F2FD', '#E1F5FE', '#E0F7FA', '#E0F2F1', '#E8F5E9',
+    '#F1F8E9', '#F9FBE7', '#FFFDE7', '#FFF8E1', '#FFF3E0', '#FBE9E7', '#EFEBE9', '#FAFAFA', '#ECEFF1'
+];
+
+function rgbToHsl(r, g, b) {
+    r /= 255; g /= 255; b /= 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    let h, s, l = (max + min) / 2;
+    if (max === min) { h = s = 0; } else {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+        else if (max === g) h = ((b - r) / d + 2) / 6;
+        else h = ((r - g) / d + 4) / 6;
+    }
+    return [h * 360, s * 100, l * 100];
+}
+
+function hslToRgb(h, s, l) {
+    h /= 360; s /= 100; l /= 100;
+    let r, g, b;
+    if (s === 0) { r = g = b = l; } else {
+        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        const p = 2 * l - q;
+        const hue2rgb = (p, q, t) => {
+            if (t < 0) t += 1; if (t > 1) t -= 1;
+            if (t < 1/6) return p + (q - p) * 6 * t;
+            if (t < 1/2) return q;
+            if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+            return p;
+        };
+        r = hue2rgb(p, q, h + 1/3);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h - 1/3);
+    }
+    return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+}
+
+function adjustColorForMatching(r, g, b, saturateBoost, lightnessReduce) {
+    const [h, s, l] = rgbToHsl(r, g, b);
+    const newS = Math.min(100, s * saturateBoost);
+    const newL = Math.max(0, l - lightnessReduce);
+    return hslToRgb(h, newS, newL);
+}
+
+function findClosestMaterialColor(r, g, b) {
+    let minDist = Infinity;
+    let closest = MATERIAL_PALETTE_50[0];
+    for (const hex of MATERIAL_PALETTE_50) {
+        const m = hex.slice(1).match(/.{2}/g);
+        const pr = parseInt(m[0], 16), pg = parseInt(m[1], 16), pb = parseInt(m[2], 16);
+        const dist = (r - pr) ** 2 + (g - pg) ** 2 + (b - pb) ** 2;
+        if (dist < minDist) { minDist = dist; closest = hex; }
+    }
+    return closest;
+}
+const PROJECT_BG_EXTRACT = {
+    sampleSize: 64,
+    brightnessMin: 30,
+    brightnessMax: 240,
+    alphaMin: 128,
+    quantizeStep: 20,
+    saturateBoost: 2.5,
+    lightnessReduce: 15,
+    fallbackColor: '#fff'
+};
+
+const PROJECT_BG_IMAGE_MAP = {
+    'martplus.html': 'images/MartPlus/thumbnail.png',
+    '11kitiz-s2.html': 'images/11Kitties/thumbnail.png',
+    'ootd.html': 'images/ootd/thumbnail.png',
+    'design-system.html': 'images/DesignSystem/thumbnail.png',
+    'ooah.html': 'images/ooah/thumbnail.svg',
+    '11street-dx.html': 'images/eXperience/thumbnail.png',
+    'amazon-global-store.html': 'images/AmazonGlobalStore/thumbnail.png',
+    'lab-1.html': 'images/InteractiveAnalogClock/thumbnail.png',
+    'lab-2.html': 'images/Lab2/thumbnail.png',
+    'lab-3.html': 'images/Lab3/thumbnail.png',
+    'lab-4.html': 'images/Lab4/thumbnail.png'
+};
+
+function getProjectBgImageSrc() {
+    const dataBgImage = document.body.getAttribute('data-bg-image');
+    if (dataBgImage) {
+        return new URL(dataBgImage, location.href).href;
+    }
+    const pathname = location.pathname || location.href;
+    const filename = pathname.split('/').pop() || pathname.replace(/^.*\//, '');
+    const imgPath = PROJECT_BG_IMAGE_MAP[filename];
+    if (imgPath) {
+        return new URL(imgPath, location.href).href;
+    }
+    const imgEl = document.querySelector('.project-details-content img[src*="Details01"]') ||
+        document.querySelector('.project-details-content img[src*="Details"]');
+    return imgEl && !imgEl.src.startsWith('data:') ? imgEl.src : null;
+}
+
+function applyProjectPageBackground(theme) {
+    if (!document.body.classList.contains('project-detail-page')) return;
+    
+    if (theme !== 'light') {
+        document.body.style.removeProperty('--project-bg-color');
+        document.body.style.removeProperty('background-color');
+        return;
+    }
+    
+    const imgSrc = getProjectBgImageSrc();
+    if (!imgSrc) return;
+    
+    const img = new Image();
+    if (!location.protocol.startsWith('file')) {
+        img.crossOrigin = 'anonymous';
+    }
+    img.onload = function() {
+        try {
+            const { sampleSize, brightnessMin, brightnessMax, alphaMin, quantizeStep, saturateBoost, lightnessReduce, fallbackColor } = PROJECT_BG_EXTRACT;
+            const canvas = document.createElement('canvas');
+            canvas.width = sampleSize;
+            canvas.height = sampleSize;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, sampleSize, sampleSize);
+            const data = ctx.getImageData(0, 0, sampleSize, sampleSize).data;
+            
+            const colorCounts = {};
+            const step = 4;
+            for (let i = 0; i < data.length; i += step) {
+                const r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
+                if (a < alphaMin) continue;
+                const brightness = (r + g + b) / 3;
+                if (brightness < brightnessMin || brightness > brightnessMax) continue;
+                const key = `${Math.round(r / quantizeStep) * quantizeStep},${Math.round(g / quantizeStep) * quantizeStep},${Math.round(b / quantizeStep) * quantizeStep}`;
+                colorCounts[key] = (colorCounts[key] || 0) + 1;
+            }
+            
+            let maxCount = 0, dominantKey = null;
+            for (const k in colorCounts) {
+                if (colorCounts[k] > maxCount) { maxCount = colorCounts[k]; dominantKey = k; }
+            }
+            if (!dominantKey) {
+                document.body.style.backgroundColor = fallbackColor;
+                return;
+            }
+            
+            const [r, g, b] = dominantKey.split(',').map(Number);
+            const [adjR, adjG, adjB] = adjustColorForMatching(r, g, b, saturateBoost ?? 2.5, lightnessReduce ?? 15);
+            const clampedR = Math.min(255, Math.max(0, adjR));
+            const clampedG = Math.min(255, Math.max(0, adjG));
+            const clampedB = Math.min(255, Math.max(0, adjB));
+            const bgColor = findClosestMaterialColor(clampedR, clampedG, clampedB);
+            document.body.style.setProperty('--project-bg-color', bgColor);
+            document.body.style.backgroundColor = bgColor;
+        } catch (e) {}
+    };
+    img.onerror = function() {
+        if (imgSrc !== img.src) return;
+        const fallbackImg = document.querySelector('.project-details-content img[src*="Details"]');
+        if (fallbackImg && fallbackImg.src && !fallbackImg.src.startsWith('data:')) {
+            img.onerror = function() {};
+            img.src = fallbackImg.src;
+        }
+    };
+    img.src = imgSrc;
+}
+
+function initProjectPageBackground() {
+    const theme = document.documentElement.getAttribute('data-theme');
+    if (theme === 'light' && document.body.classList.contains('project-detail-page')) {
+        setTimeout(() => applyProjectPageBackground('light'), 300);
+    }
+}
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initProjectPageBackground);
+} else {
+    initProjectPageBackground();
+}
 
 // Nav brand click 이벤트는 nav-brand 애니메이션 부분에서 처리됨
 

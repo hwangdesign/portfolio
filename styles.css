@@ -419,7 +419,7 @@ body {
     left: 0;
     right: 0;
     width: 100%;
-    background: var(--dark-30);
+    background: transparent;
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     border-bottom: 1px solid var(--border-white);
@@ -427,6 +427,13 @@ body {
     padding: 32px 0;
     overflow: hidden;
     transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+}
+
+/* 프로젝트 본문 라이트모드: GNB 글라스 효과 유지 */
+[data-theme="light"] body.project-detail-page .navbar {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
 }
 
 .navbar .container {
@@ -558,7 +565,7 @@ body {
 .hero {
     width: 100%;
     height: 20vh;
-    background: var(--bg-color);
+    background: transparent;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -1197,6 +1204,7 @@ body.project-detail-page .project-images-section,
 body.project-detail-page .project-details-section {
     position: relative;
     z-index: 0;
+    background: transparent;
 }
 
 .project-images,
@@ -1205,6 +1213,7 @@ body.project-detail-page .project-details-section {
     flex-direction: column;
     gap: 48px;
     margin-top: 1.25em;
+    background: transparent;
 }
 
 .project-details-content .section-body {
@@ -1219,6 +1228,7 @@ body.project-detail-page .project-details-section {
     height: auto;
     display: block;
     max-width: 100%;
+    background: transparent;
 }
 
 /* 1080x607 디테일 이미지: 스크린 너비 100% → 비율 유지하며 축소 */
@@ -1228,16 +1238,27 @@ body.project-detail-page .project-details-section {
     height: auto;
 }
 
-/* GIF 노출 영역: 기존 디테일 이미지와 동일 크기, 비율 유지 */
+/* GIF 노출 영역: 기존 디테일 이미지와 동일 크기, 비율 유지, PNG 투명도 유지 */
 .project-image-gif-wrap {
     aspect-ratio: 1080 / 607;
     overflow: hidden;
-    background: var(--bg-color);
+    background: transparent;
 }
 .project-image-gif-wrap img {
     width: 100%;
     height: 100%;
     object-fit: contain;
+    display: block;
+}
+
+/* 11KittiesSeason 2 디테일 3: 배경 투명 */
+.project-image-11kitties-d3 {
+    background: transparent;
+}
+.project-image-11kitties-d3 img {
+    width: 100%;
+    max-width: 1080px;
+    height: auto;
     display: block;
 }
 
