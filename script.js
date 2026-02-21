@@ -71,9 +71,15 @@ renderSharedLayout();
     function updateThemeColor(theme) {
         const themeColorMeta = document.getElementById('themeColorMeta');
         if (themeColorMeta) {
-            // 다크 모드: #111111, 라이트 모드: #ffffff
             themeColorMeta.setAttribute('content', theme === 'dark' ? '#111111' : '#ffffff');
         }
+        let colorSchemeMeta = document.querySelector('meta[name="color-scheme"]');
+        if (!colorSchemeMeta) {
+            colorSchemeMeta = document.createElement('meta');
+            colorSchemeMeta.name = 'color-scheme';
+            document.head.appendChild(colorSchemeMeta);
+        }
+        colorSchemeMeta.setAttribute('content', theme === 'light' ? 'light' : 'dark');
     }
     
     // 배경 라인 색상 업데이트 함수
@@ -129,7 +135,7 @@ renderSharedLayout();
 /**
  * 프로젝트 배경컬러 추출 정의
  * - 적용 조건: body.project-detail-page + data-theme="light"
- * - 이미지 소스: PROJECT_BG_IMAGE_MAP(썸네일) 또는 data-bg-image, 없으면 첫 Details 이미지
+ * - 이미지 소스: 페이지 내 첫 Details 이미지(DOM, 웹 호환) → 없으면 PROJECT_BG_IMAGE_MAP(썸네일) 또는 data-bg-image
  * - 샘플링: 64×64 캔버스, 픽셀 밝기 30~240, 투명도 ≥128
  * - 주조색: 20단위로 양자화된 RGB 중 빈도 최대
  * - 밝기 낮추기 + 채도 높이기 후 구글 머티리얼 팔레트(가장 밝은 톤) 중 가장 가까운 색으로 매칭
@@ -233,6 +239,17 @@ function getProjectBgImageSrc() {
     return imgEl && !imgEl.src.startsWith('data:') ? imgEl.src : null;
 }
 
+function getProjectBgImageElement() {
+    const dataBgImage = document.body.getAttribute('data-bg-image');
+    if (dataBgImage) return null;
+    const pathname = location.pathname || location.href;
+    const filename = pathname.split('/').pop() || pathname.replace(/^.*\//, '');
+    if (!PROJECT_BG_IMAGE_MAP[filename]) return null;
+    const firstDetail = document.querySelector('.project-details-content img[src*="Details01"]') ||
+        document.querySelector('.project-details-content img[src*="Details"]');
+    return firstDetail && !firstDetail.src.startsWith('data:') ? firstDetail : null;
+}
+
 function applyProjectPageBackground(theme) {
     if (!document.body.classList.contains('project-detail-page')) return;
     
@@ -241,9 +258,6 @@ function applyProjectPageBackground(theme) {
         document.body.style.removeProperty('background-color');
         return;
     }
-    
-    const imgSrc = getProjectBgImageSrc();
-    if (!imgSrc) return;
     
     const { sampleSize, brightnessMin, brightnessMax, alphaMin, quantizeStep, saturateBoost, lightnessReduce, fallbackColor } = PROJECT_BG_EXTRACT;
     
@@ -293,17 +307,26 @@ function applyProjectPageBackground(theme) {
         const img = new Image();
         if (useCrossOrigin) img.crossOrigin = 'anonymous';
         img.onload = () => extractAndApply(img);
-        img.onerror = function() {
-            const fallbackImg = document.querySelector('.project-details-content img[src*="Details"]');
-            if (fallbackImg && fallbackImg.src && !fallbackImg.src.startsWith('data:')) {
-                img.onerror = function() { document.body.style.backgroundColor = fallbackColor; };
-                img.src = fallbackImg.src;
-            } else {
-                document.body.style.backgroundColor = fallbackColor;
-            }
-        };
+        img.onerror = () => { document.body.style.backgroundColor = fallbackColor; };
         img.src = src;
     }
+    
+    const domImg = getProjectBgImageElement();
+    if (domImg && domImg.complete && domImg.naturalWidth > 0) {
+        try { extractAndApply(domImg); } catch (_) { document.body.style.backgroundColor = fallbackColor; }
+        return;
+    }
+    if (domImg) {
+        domImg.addEventListener('load', function onLoad() {
+            domImg.removeEventListener('load', onLoad);
+            try { extractAndApply(domImg); } catch (_) { document.body.style.backgroundColor = fallbackColor; }
+        });
+        domImg.addEventListener('error', () => { document.body.style.backgroundColor = fallbackColor; });
+        return;
+    }
+    
+    const imgSrc = getProjectBgImageSrc();
+    if (!imgSrc) return;
     
     if (location.protocol === 'file:') {
         loadViaImage(imgSrc, false);

@@ -11,6 +11,7 @@ html, body {
 }
 
 :root {
+    color-scheme: dark light;
     /* Primary Colors */
     --primary-color: #ffffff;
     --yellow-color: #FFFF00;
@@ -72,6 +73,7 @@ html, body {
 
 /* 라이트 테마 변수 */
 [data-theme="light"] {
+    color-scheme: light;
     /* Selection (라이트 테마) */
     --selection-bg: #FFFF00;
     --selection-color: #000000;
@@ -1251,15 +1253,18 @@ body.project-detail-page .project-details-section {
     display: block;
 }
 
-/* 11KittiesSeason 2 디테일 3: 배경 투명 */
+/* 11KittiesSeason 2 디테일 3: 배경 투명 (웹/Chrome 투명도 렌더링 보정) */
 .project-image-11kitties-d3 {
     background: transparent;
+    isolation: isolate;
 }
 .project-image-11kitties-d3 img {
     width: 100%;
     max-width: 1080px;
     height: auto;
     display: block;
+    vertical-align: top;
+    image-rendering: auto;
 }
 
 /* 프로젝트 디테일 4: 배경 이미지 + Lottie (높이 100%) (11Kitties) */
