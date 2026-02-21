@@ -964,7 +964,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 배경 세로 라인 생성 헬퍼 함수 (index: 0=1번째, 1=2번째, ... 짝수번째는 투명도 0%)
     function createVerticalLine(left, index) {
         const line = document.createElement('div');
-        line.className = 'background-line';
+        line.className = index === 1 ? 'background-line background-line-second' : 'background-line';
         
         // 현재 테마에 따라 배경색 설정
         const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
@@ -972,16 +972,20 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // 짝수번째(2,4,6...) 그려지는 구분선: 투명도 10%
         const lineOpacity = '0.1';
+        const isProjectDetailPage = document.body.classList.contains('project-detail-page');
+        const lineZIndex = (index === 1 && isProjectDetailPage) ? '-1' : '9999';
+        const navbar = document.querySelector('.navbar');
+        const navHeight = navbar ? navbar.offsetHeight : 80;
         
         Object.assign(line.style, {
             left: `${left}px`,
-            top: '0',
-            height: '100vh',
+            top: `${navHeight}px`,
+            height: `calc(100vh - ${navHeight}px)`,
             background: lineColor,
             opacity: lineOpacity,
             position: 'fixed',
             width: '1px',
-            zIndex: '9999',
+            zIndex: lineZIndex,
             pointerEvents: 'none',
             transition: 'opacity 0.1s ease-out, left 0.1s ease-out'
         });
@@ -1377,6 +1381,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.documentElement.style.setProperty('--nav-height', `${nh}px`);
             }, 150);
         });
+    }
+
+    // Design System Details01: 3색 포인트 랜덤 자리 이동
+    if (window.location.pathname.includes('design-system')) {
+        const gradientBg = document.querySelector('.project-image-detail-gradient-wrap .gradient-bg');
+        if (gradientBg) {
+            const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+            const move = () => {
+                gradientBg.style.setProperty('--pos1-x', rand(15, 85) + '%');
+                gradientBg.style.setProperty('--pos1-y', rand(15, 85) + '%');
+                gradientBg.style.setProperty('--pos2-x', rand(15, 85) + '%');
+                gradientBg.style.setProperty('--pos2-y', rand(15, 85) + '%');
+                gradientBg.style.setProperty('--pos3-x', rand(15, 85) + '%');
+                gradientBg.style.setProperty('--pos3-y', rand(15, 85) + '%');
+            };
+            move();
+            setInterval(move, 2000);
+        }
     }
 });
 
