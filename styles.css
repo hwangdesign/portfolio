@@ -1333,6 +1333,25 @@ body.project-detail-page .project-details-section {
     border-radius: 4px;
 }
 
+/* Design System 디테일 3·4: project-image-ooah-split과 동일한 배경 영역 */
+.project-image-design-system-bg {
+    aspect-ratio: 1080 / 607;
+    min-height: 200px;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.8);
+    box-sizing: border-box;
+    position: relative;
+}
+[data-theme="light"] .project-image-design-system-bg {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+.project-image-design-system-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
 /* OOAh Details04 영역: 좌우 절반, 각 중앙에 64x64 GIF */
 .project-image-ooah-split {
     display: flex;
