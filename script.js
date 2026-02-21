@@ -133,7 +133,7 @@ renderSharedLayout();
  * - 샘플링: 64×64 캔버스, 픽셀 밝기 30~240, 투명도 ≥128
  * - 주조색: 20단위로 양자화된 RGB 중 빈도 최대
  * - 밝기 낮추기 + 채도 높이기 후 구글 머티리얼 팔레트(가장 밝은 톤) 중 가장 가까운 색으로 매칭
- * - 실패 시: #fff
+ * - 실패 시: #fafafa
  */
 const MATERIAL_PALETTE_50 = [
     '#FFEBEE', '#FCE4EC', '#F3E5F5', '#EDE7F6', '#E8EAF6', '#E3F2FD', '#E1F5FE', '#E0F7FA', '#E0F2F1', '#E8F5E9',
@@ -200,7 +200,7 @@ const PROJECT_BG_EXTRACT = {
     quantizeStep: 20,
     saturateBoost: 2.5,
     lightnessReduce: 15,
-    fallbackColor: '#fff'
+    fallbackColor: '#fafafa'
 };
 
 const PROJECT_BG_IMAGE_MAP = {
@@ -245,16 +245,10 @@ function applyProjectPageBackground(theme) {
     const imgSrc = getProjectBgImageSrc();
     if (!imgSrc) return;
     
-    const img = new Image();
-    try {
-        const imgOrigin = new URL(imgSrc, location.href).origin;
-        if (imgOrigin !== location.origin) {
-            img.crossOrigin = 'anonymous';
-        }
-    } catch (_) {}
-    img.onload = function() {
+    const { sampleSize, brightnessMin, brightnessMax, alphaMin, quantizeStep, saturateBoost, lightnessReduce, fallbackColor } = PROJECT_BG_EXTRACT;
+    
+    function extractAndApply(img) {
         try {
-            const { sampleSize, brightnessMin, brightnessMax, alphaMin, quantizeStep, saturateBoost, lightnessReduce, fallbackColor } = PROJECT_BG_EXTRACT;
             const canvas = document.createElement('canvas');
             canvas.width = sampleSize;
             canvas.height = sampleSize;
@@ -290,17 +284,45 @@ function applyProjectPageBackground(theme) {
             const bgColor = findClosestMaterialColor(clampedR, clampedG, clampedB);
             document.body.style.setProperty('--project-bg-color', bgColor);
             document.body.style.backgroundColor = bgColor;
-        } catch (e) {}
-    };
-    img.onerror = function() {
-        if (imgSrc !== img.src) return;
-        const fallbackImg = document.querySelector('.project-details-content img[src*="Details"]');
-        if (fallbackImg && fallbackImg.src && !fallbackImg.src.startsWith('data:')) {
-            img.onerror = function() {};
-            img.src = fallbackImg.src;
+        } catch (e) {
+            document.body.style.backgroundColor = fallbackColor;
         }
-    };
-    img.src = imgSrc;
+    }
+    
+    function loadViaImage(src, useCrossOrigin) {
+        const img = new Image();
+        if (useCrossOrigin) img.crossOrigin = 'anonymous';
+        img.onload = () => extractAndApply(img);
+        img.onerror = function() {
+            const fallbackImg = document.querySelector('.project-details-content img[src*="Details"]');
+            if (fallbackImg && fallbackImg.src && !fallbackImg.src.startsWith('data:')) {
+                img.onerror = function() { document.body.style.backgroundColor = fallbackColor; };
+                img.src = fallbackImg.src;
+            } else {
+                document.body.style.backgroundColor = fallbackColor;
+            }
+        };
+        img.src = src;
+    }
+    
+    if (location.protocol === 'file:') {
+        loadViaImage(imgSrc, false);
+        return;
+    }
+    
+    fetch(imgSrc).then(r => r.ok ? r.blob() : Promise.reject()).then(blob => {
+        const url = URL.createObjectURL(blob);
+        const img = new Image();
+        img.onload = function() {
+            extractAndApply(img);
+            URL.revokeObjectURL(url);
+        };
+        img.onerror = function() {
+            URL.revokeObjectURL(url);
+            loadViaImage(imgSrc, false);
+        };
+        img.src = url;
+    }).catch(() => loadViaImage(imgSrc, true));
 }
 
 function initProjectPageBackground() {
