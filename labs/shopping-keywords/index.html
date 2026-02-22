@@ -1,149 +1,200 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="쇼핑 인기 키워드 - Google Trends · 네이버쇼핑">
-    <meta name="theme-color" content="#111111" id="themeColorMeta">
-    <title>쇼핑 인기 키워드 | Google Trends · 네이버쇼핑</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
-    <link rel="stylesheet" href="../../styles.css">
-    <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
-    <style>
-        /* 쇼핑 키워드 전용 오버라이드 */
-        .keyword-section .container { max-width: 720px; }
-        .tabs-wrap { display: flex; justify-content: flex-start; margin-bottom: 32px; }
-        .tabs { display: flex; gap: 16px; flex-wrap: wrap; }
-        .tab {
-            padding: 12px 24px;
-            background: transparent;
-            border: 1px solid var(--border-white-50);
-            color: var(--text-color);
-            cursor: pointer;
-            font-size: var(--font-size-base);
-            font-weight: 700;
-            font-family: var(--font-family-system);
-            transition: var(--transition);
-        }
-        .tab:hover { background: var(--yellow-20); color: var(--text-color); border-color: var(--yellow-color); }
-        .tab.active { background: var(--yellow-color); color: var(--black-color); border-color: var(--yellow-color); }
-        .chart-list { margin: 0; }
-        .keyword-item {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-            padding: 16px 0;
-            border-bottom: 1px solid var(--border-white-20);
-            transition: background 0.15s;
-            text-decoration: none;
-            color: inherit;
-        }
-        .keyword-item:last-child { border-bottom: none; }
-        .keyword-item:hover { background: var(--yellow-20); }
-        .keyword-item .rank {
-            font-weight: 700;
-            width: 40px;
-            font-size: var(--font-size-subtitle);
-            font-family: var(--font-family-system);
-            color: var(--white-50);
-            text-align: right;
-        }
-        .keyword-item .rank.top3 { color: var(--yellow-color); }
-        .keyword-item .keyword {
-            flex: 1;
-            font-size: var(--font-size-base);
-            font-weight: 500;
-            font-family: var(--font-family-base);
-            color: var(--text-color);
-        }
-        .keyword-item .badges { display: flex; gap: 8px; font-size: var(--font-size-tiny); }
-        .keyword-item .badge {
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-weight: 700;
-            font-family: var(--font-family-system);
-        }
-        .keyword-item .badge.google { background: #4285f4; color: #fff; }
-        .keyword-item .badge.naver { background: #03c75a; color: #fff; }
-        .my-chart-desc {
-            font-size: var(--font-size-small);
-            color: var(--white-50);
-            margin-bottom: 32px;
-        }
-        .my-chart-desc p { margin-bottom: 8px; }
-        .loading, .error {
-            text-align: left;
-            padding: 48px 0;
-            font-size: var(--font-size-base);
-            color: var(--white-50);
-        }
-        .error { color: #ff453a; }
-        .keyword-back { margin-bottom: 24px; }
-        .keyword-back a {
-            color: var(--white-50);
-            text-decoration: none;
-            font-size: var(--font-size-base);
-            font-weight: 500;
-            transition: var(--transition);
-        }
-        .keyword-back a:hover { color: var(--yellow-color); }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Trending Searches - Google Trends · 네이버쇼핑">
+  <title>Trending Searches | Google Trends · 네이버쇼핑</title>
+  <script>
+    (function() {
+      var stored = localStorage.getItem('lab-keywords-dark-mode');
+      var dark = stored === '1' || (stored !== '0' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      if (dark) document.documentElement.classList.add('dark-mode');
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 </head>
 <body>
-    <div id="shared-nav"></div>
-    <header class="hero"></header>
+  <div class="area-title-group">
+  <section class="area-title">
+    <div class="area-title-scaler">
+    <div class="area-title-content">
+      <span class="page-title">Trending Searches</span>
+      <span class="title-meta title-location"><span id="locationCity">—</span><sup>(<span id="locationCountry">—</span>)</sup></span>
+      <span class="title-meta" id="todayDate">—</span>
+      <span class="title-meta" id="currentTime">—</span>
+    </div>
+    </div>
+  </section>
 
-    <main class="main-content">
-        <div class="divider"></div>
-        <section class="section hero-content-section">
-            <div class="container">
-                <div class="keyword-back">
-                    <a href="../lab-2.html">← Lab 2로 돌아가기</a>
-                </div>
-                <div class="hero-content">
-                    <h1 class="section-title animated-section-title" data-title="쇼핑 인기 키워드">쇼핑 인기 키워드</h1>
-                    <div class="hero-info-description">
-                        <p><span class="prefix-char">ㄴ</span> Google Trends와 네이버쇼핑 인기 검색어를 종합한 랭킹이에요.</p>
-                        <p><span class="prefix-char">ㄴ</span> 매일 업데이트됩니다.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <div class="area-between">
+    <div class="area-between-side area-between-side--left"></div>
+    <div class="area-between-box area-between-box--left">
+      <div class="area-between-circle"></div>
+    </div>
+    <div class="area-between-box area-between-box--right">
+      <div class="area-between-circle"></div>
+    </div>
+    <div class="area-between-side area-between-side--right"></div>
+  </div>
+  <div class="area-lines-overlay">
+    <div class="falling-lines" id="fallingLines"></div>
+  </div>
+  <div class="area-center-line"></div>
+  <div class="falling-lines falling-lines--center" id="fallingLinesCenter"></div>
+  </div>
 
-        <div class="divider"></div>
-        <section class="section keyword-section">
-            <div class="container">
-                <div class="tabs-wrap">
-                    <div class="tabs">
-                        <button class="tab active" data-chart="my">종합 랭킹</button>
-                        <button class="tab" data-chart="google">Google Trends</button>
-                        <button class="tab" data-chart="naver">네이버쇼핑</button>
-                    </div>
-                </div>
-                <div id="chartContainer">
-                    <div class="loading">로딩 중...</div>
-                </div>
-            </div>
-        </section>
-    </main>
+  <section class="area-rank-list">
+    <div id="chartContainer">
+      <div class="loading lang-ko">로딩 중...</div>
+    </div>
+  </section>
 
-    <div id="shared-footer"></div>
-    <script src="../../script.js"></script>
-    <script>
-        document.documentElement.setAttribute('data-theme', 'light');
-        localStorage.setItem('theme', 'light');
-    </script>
-    <script>
-        const SOURCES = {
-            google: 'google/google_trends_sample.json',
+  <div class="area-3">
+    <div class="area-between">
+      <div class="area-between-side area-between-side--left"></div>
+      <div class="area-between-box area-between-box--left">
+        <div class="area-between-circle"></div>
+      </div>
+      <div class="area-between-box area-between-box--right">
+        <div class="area-between-circle"></div>
+      </div>
+      <div class="area-between-side area-between-side--right"></div>
+    </div>
+  </div>
+
+  <div class="area-title-group area-title-group--copy">
+    <section class="area-title">
+      <div class="area-title-scaler">
+        <div class="area-title-content">
+          <span class="page-title">Trending Searches</span>
+          <span class="title-meta title-location"><span id="locationCity2">—</span><sup>(<span id="locationCountry2">—</span>)</sup></span>
+          <span class="title-meta" id="todayDate2">—</span>
+          <span class="title-meta" id="currentTime2">—</span>
+        </div>
+      </div>
+    </section>
+    <div class="area-lines-overlay">
+      <div class="falling-lines" id="fallingLines2"></div>
+    </div>
+    <div class="falling-lines falling-lines--center" id="fallingLinesCenter2"></div>
+  </div>
+
+  <script>
+    (function initFallingLines() {
+      const positionsAll = ['calc(50% - 44vw)', 'calc(50% - 22vw)', '50%', 'calc(50% + 22vw)', 'calc(50% + 44vw)'];
+      const positionsMobile = ['calc(50% - 33vw)', '50%', 'calc(50% + 33vw)'];
+      const containers = [
+        document.getElementById('fallingLines'),
+        document.getElementById('fallingLines2')
+      ].filter(Boolean);
+      const centerContainers = [
+        document.getElementById('fallingLinesCenter'),
+        document.getElementById('fallingLinesCenter2')
+      ].filter(Boolean);
+      if (containers.length === 0) return;
+      function getPositions() {
+        return window.matchMedia('(max-width: 768px)').matches ? positionsMobile : positionsAll;
+      }
+      function createLine(target, positions) {
+        const line = document.createElement('div');
+        line.className = 'falling-line';
+        const pos = positions[Math.floor(Math.random() * positions.length)];
+        const len = 20 + Math.random() * 80;
+        const delay = Math.random() * 8;
+        const dur = 4 + Math.random() * 6;
+        line.style.left = pos;
+        line.style.height = len + 'px';
+        line.style.animationDuration = dur + 's';
+        line.style.animationDelay = -delay + 's';
+        target.appendChild(line);
+        setTimeout(() => line.remove(), (dur + delay) * 1000);
+      }
+      function createCenterLine(centerContainer) {
+        if (!centerContainer || centerContainer.children.length > 0) return;
+        const line = document.createElement('div');
+        line.className = 'falling-line falling-line--center';
+        const len = 20 + Math.random() * 80;
+        const delay = Math.random() * 8;
+        const dur = 4 + Math.random() * 6;
+        line.style.left = '50%';
+        line.style.height = len + 'px';
+        line.style.animationDuration = dur + 's';
+        line.style.animationDelay = -delay + 's';
+        centerContainer.appendChild(line);
+        setTimeout(() => {
+          line.remove();
+          createCenterLine(centerContainer);
+        }, (dur + delay) * 1000);
+      }
+      containers.forEach(function(c) {
+        for (let i = 0; i < 12; i++) createLine(c, getPositions());
+        setInterval(() => createLine(c, getPositions()), 800);
+      });
+      centerContainers.forEach(function(cc) {
+        createCenterLine(cc);
+      });
+    })();
+
+    (function updateTitleMeta() {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const city = tz.split('/').pop().replace(/_/g, ' ');
+      const tzToCountry = { 'Asia/Seoul':'KOREA','Asia/Tokyo':'JAPAN','Asia/Shanghai':'CHINA','Asia/Singapore':'SINGAPORE','America/New_York':'USA','America/Los_Angeles':'USA','America/Chicago':'USA','Europe/London':'UK','Europe/Paris':'FRANCE','Europe/Berlin':'GERMANY','Australia/Sydney':'AUSTRALIA','Pacific/Auckland':'NEW ZEALAND','Asia/Hong_Kong':'HONG KONG','Asia/Dubai':'UAE','America/Sao_Paulo':'BRAZIL','America/Mexico_City':'MEXICO','Asia/Mumbai':'INDIA' };
+      const country = tzToCountry[tz] || tz.split('/')[0].replace(/_/g, ' ');
+      const locEl = document.getElementById('locationCity');
+      const countryEl = document.getElementById('locationCountry');
+      const dateEl = document.getElementById('todayDate');
+      const timeEl = document.getElementById('currentTime');
+      const locEl2 = document.getElementById('locationCity2');
+      const countryEl2 = document.getElementById('locationCountry2');
+      const dateEl2 = document.getElementById('todayDate2');
+      const timeEl2 = document.getElementById('currentTime2');
+      const setText = (el, text) => { if (el) el.textContent = text; };
+      setText(locEl, city.toUpperCase());
+      setText(countryEl, country.toUpperCase());
+      setText(locEl2, city.toUpperCase());
+      setText(countryEl2, country.toUpperCase());
+      const monthNames = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+      function tick() {
+        const now = new Date();
+        const dateStr = now.getDate() + ' ' + monthNames[now.getMonth()] + ' ' + now.getFullYear();
+        const onTheHour = new Date(now);
+        onTheHour.setMinutes(0, 0, 0);
+        const timeStr = onTheHour.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: tz }).replace(/\s/g, '');
+        setText(dateEl, dateStr);
+        setText(timeEl, timeStr);
+        setText(dateEl2, dateStr);
+        setText(timeEl2, timeStr);
+      }
+      tick();
+      setInterval(tick, 1000);
+    })();
+
+    (function() {
+      var raw = 'google/google_trends_sample.json';
+      try {
+        var h = location.hostname, p = location.pathname;
+        if (h.endsWith('.github.io') && p.indexOf('/') >= 0) {
+          var owner = h.split('.')[0];
+          var repo = p.split('/').filter(Boolean)[0] || 'portfolio';
+          raw = 'https://raw.githubusercontent.com/' + owner + '/' + repo + '/trends-data/labs/shopping-keywords/google/google_trends_sample.json';
+        }
+      } catch (_) {}
+      window.TRENDS_GOOGLE_URL = raw;
+    })();
+
+    const SOURCES = {
+            google: window.TRENDS_GOOGLE_URL || 'google/google_trends_sample.json',
             naver: 'naver/naver_shopping_sample.json'
         };
 
         const FALLBACK_DATA = {
-            google: [{"ranking":"1","keyword":"겨울 패딩"},{"ranking":"2","keyword":"노트북"},{"ranking":"3","keyword":"에어팟"},{"ranking":"4","keyword":"선크림"},{"ranking":"5","keyword":"아이패드"}],
+            google: [{"ranking":"1","keyword":"겨울 패딩"},{"ranking":"2","keyword":"노트북"},{"ranking":"3","keyword":"에어팟"},{"ranking":"4","keyword":"선크림"},{"ranking":"5","keyword":"아이패드"},{"ranking":"6","keyword":"스마트워치"},{"ranking":"7","keyword":"무선 이어폰"},{"ranking":"8","keyword":"가습기"},{"ranking":"9","keyword":"공기청정기"},{"ranking":"10","keyword":"전기담요"}],
             naver: [{"ranking":"1","keyword":"겨울 패딩"},{"ranking":"2","keyword":"선크림"},{"ranking":"3","keyword":"노트북"},{"ranking":"4","keyword":"에어팟"},{"ranking":"5","keyword":"무선 이어폰"}]
         };
 
@@ -159,15 +210,22 @@
 
         async function fetchOrFallback(url, key) {
             try {
-                const res = await fetch(url);
+                const opts = url.startsWith('http') ? { cache: 'no-store' } : {};
+                const res = await fetch(url, opts);
                 if (res.ok) return await res.json();
             } catch (_) {}
+            if (key === 'google' && url.startsWith('http')) {
+                try {
+                    const res = await fetch('google/google_trends_sample.json');
+                    if (res.ok) return await res.json();
+                } catch (_) {}
+            }
             return FALLBACK_DATA[key] || [];
         }
 
         async function buildMyChart() {
             const container = document.getElementById('chartContainer');
-            container.innerHTML = '<div class="loading">2개 소스 데이터 분석 중...</div>';
+            container.innerHTML = '<div class="loading lang-ko">2개 소스 데이터 분석 중...</div>';
             try {
                 const [google, naver] = await Promise.all([
                     fetchOrFallback(SOURCES.google, 'google'),
@@ -199,37 +257,32 @@
                     .sort((a, b) => b.score - a.score)
                     .map((item, i) => ({ ...item, myRank: i + 1 }));
 
-                const desc = '<div class="my-chart-desc"><p><span class="prefix-char">ㄴ</span> Google Trends · 네이버쇼핑 2개 소스를 종합 분석. 양쪽 모두에 등장한 키워드가 상위에 노출돼요.</p></div>';
-                container.innerHTML = desc + (renderChart(sorted, 'my') || '');
+                container.innerHTML = renderChart(sorted, 'my') || '';
             } catch (e) {
-                container.innerHTML = `<div class="error">분석 실패: ${e.message}</div>`;
+                container.innerHTML = `<div class="error lang-ko">분석 실패: ${e.message}</div>`;
             }
         }
 
         function renderChart(items, type) {
             const target = document.getElementById('chartContainer');
             if (!items || items.length === 0) {
-                const err = '<div class="error">데이터가 없습니다.</div>';
+                const err = '<div class="error lang-ko">데이터가 없습니다.</div>';
                 if (type !== 'my') target.innerHTML = err;
                 return err;
             }
-            const badgeLabel = k => ({ google: 'G', naver: 'N' }[k] || k[0]);
-            const html = items.map((item, i) => {
+            const top10 = items.slice(0, 10);
+            const html = top10.map((item, i) => {
                 const rank = item.myRank || item.ranking || item.rank || (i + 1);
                 const rankNum = parseInt(rank, 10) || (i + 1);
-                const rankClass = rankNum <= 3 ? ' rank top3' : '';
-                const badges = type === 'my' && item.charts
-                    ? Object.entries(item.charts).map(([k, r]) => `<span class="badge ${k}">${badgeLabel(k)} ${r}위</span>`).join('')
-                    : '';
+                const rankDisplay = String(rankNum);
                 const searchUrl = type === 'google'
                     ? `https://www.google.com/search?q=${encodeURIComponent(item.keyword)}`
                     : type === 'naver'
                     ? `https://search.shopping.naver.com/search/all?query=${encodeURIComponent(item.keyword)}`
                     : `https://www.google.com/search?q=${encodeURIComponent(item.keyword)}`;
+                const isKo = /[\uac00-\ud7a3]/.test(item.keyword);
                 return `<a href="${searchUrl}" target="_blank" rel="noopener" class="keyword-item">
-                    <span class="rank${rankClass}">${rank}</span>
-                    <span class="keyword">${item.keyword}</span>
-                    ${badges ? `<div class="badges">${badges}</div>` : ''}
+                    <span class="keyword keyword-flip${isKo ? ' lang-ko' : ''}"><sup>${rankDisplay}</sup>${item.keyword}</span>
                 </a>`;
             }).join('');
             const wrapped = `<div class="chart-list">${html}</div>`;
@@ -243,26 +296,46 @@
                 await buildMyChart();
                 return;
             }
-            container.innerHTML = '<div class="loading">로딩 중...</div>';
+            container.innerHTML = '<div class="loading lang-ko">로딩 중...</div>';
             const url = SOURCES[type];
             const key = type;
             try {
                 const data = await fetchOrFallback(url, key);
                 renderChart(data, type);
             } catch (e) {
-                container.innerHTML = `<div class="error">로드 실패: ${e.message}</div>`;
+                container.innerHTML = `<div class="error lang-ko">로드 실패: ${e.message}</div>`;
             }
         }
 
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                loadChart(tab.dataset.chart);
-            });
-        });
+        loadChart('google');
 
-        loadChart('my');
+        setInterval(function() {
+          loadChart('google');
+        }, 4 * 60 * 60 * 1000);
+
+        (function initTouchHover() {
+            const container = document.getElementById('chartContainer');
+            if (!container) return;
+            container.addEventListener('touchstart', function(e) {
+                const item = e.target.closest('.keyword-item');
+                if (item) {
+                    item.classList.add('touch-active');
+                    container.querySelectorAll('.keyword-item.touch-active').forEach(function(el) {
+                        if (el !== item) el.classList.remove('touch-active');
+                    });
+                }
+            }, { passive: true });
+            container.addEventListener('touchend', function() {
+                container.querySelectorAll('.keyword-item.touch-active').forEach(function(el) {
+                    el.classList.remove('touch-active');
+                });
+            }, { passive: true });
+            container.addEventListener('touchcancel', function() {
+                container.querySelectorAll('.keyword-item.touch-active').forEach(function(el) {
+                    el.classList.remove('touch-active');
+                });
+            }, { passive: true });
+        })();
     </script>
 </body>
 </html>

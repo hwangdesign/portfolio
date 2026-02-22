@@ -1,13 +1,12 @@
 /**
- * Google Trends - 한국 쇼핑 카테고리 인기 검색어 수집
- * @see https://trends.google.co.kr/trending
- * category: 2 = 쇼핑
+ * Google Trends - 한국 4시간 기준 실시간 인기 검색어 수집
+ * @see https://trends.google.com/trending?geo=KR&hours=4
  */
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
 
-const TRENDS_URL = 'https://trends.google.co.kr/trending?geo=KR&category=2'; // 쇼핑 카테고리
+const TRENDS_URL = 'https://trends.google.com/trending?geo=KR&hours=4';
 
 const now = new Date();
 const m = now.getMonth() + 1;
@@ -17,6 +16,7 @@ const currentDate = `${m}-${d}-${y}`;
 
 const folderPath = path.join(__dirname, 'google');
 const filename = path.join(folderPath, `google_trends_${currentDate}.json`);
+const samplePath = path.join(folderPath, 'google_trends_sample.json');
 
 if (!fs.existsSync(folderPath)) {
   fs.mkdirSync(folderPath, { recursive: true });
@@ -71,7 +71,8 @@ if (!fs.existsSync(folderPath)) {
 
     const result = data.length > 0 ? data : [];
     fs.writeFileSync(filename, JSON.stringify(result, null, 2), 'utf-8');
-    console.log(`✅ Google Trends (쇼핑) 저장 완료: ${filename} (${result.length}건)`);
+    fs.writeFileSync(samplePath, JSON.stringify(result, null, 2), 'utf-8');
+    console.log(`✅ Google Trends (4시간) 저장 완료: ${filename}, ${samplePath} (${result.length}건)`);
   } catch (err) {
     console.error('❌ Google Trends 수집 실패:', err.message);
   } finally {

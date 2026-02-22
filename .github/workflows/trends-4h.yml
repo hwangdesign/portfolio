@@ -1,0 +1,57 @@
+# 4시간마다 Google Trends 수집 → trends-data 브랜치에 푸시 (main 배포 트리거 없음)
+name: Google Trends 4h
+
+permissions:
+  contents: write
+
+on:
+  schedule:
+    - cron: '0 */4 * * *'  # 매 4시간 정각 (UTC)
+  workflow_dispatch:
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: labs/shopping-keywords
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Puppeteer Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgbm-dev
+          npx puppeteer browsers install chrome
+
+      - name: Run Google Trends (4h)
+        run: TZ='Asia/Seoul' node google-trends.js
+        continue-on-error: true
+
+      - name: Push to trends-data branch
+        working-directory: ${{ github.workspace }}
+        run: |
+          [ -f labs/shopping-keywords/google/google_trends_sample.json ] || exit 0
+          cp labs/shopping-keywords/google/google_trends_sample.json /tmp/
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git fetch origin trends-data 2>/dev/null || true
+          git checkout trends-data 2>/dev/null || git checkout -b trends-data
+          mkdir -p labs/shopping-keywords/google
+          cp /tmp/google_trends_sample.json labs/shopping-keywords/google/
+          git add labs/shopping-keywords/google/google_trends_sample.json
+          git diff --staged --quiet && echo "No changes" || {
+            git commit -m "chore: Google Trends 4h $(TZ='Asia/Seoul' date +'%Y-%m-%d %H:%M')"
+            git push -u origin trends-data
+          }
