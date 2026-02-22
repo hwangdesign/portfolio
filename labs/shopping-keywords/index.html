@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="쇼핑 인기 키워드 - Google Trends · 네이버쇼핑">
+    <meta name="theme-color" content="#111111" id="themeColorMeta">
+    <title>쇼핑 인기 키워드 | Google Trends · 네이버쇼핑</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+    <style>
+        /* 쇼핑 키워드 전용 오버라이드 */
+        .keyword-section .container { max-width: 720px; }
+        .tabs-wrap { display: flex; justify-content: flex-start; margin-bottom: 32px; }
+        .tabs { display: flex; gap: 16px; flex-wrap: wrap; }
+        .tab {
+            padding: 12px 24px;
+            background: transparent;
+            border: 1px solid var(--border-white-50);
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: var(--font-size-base);
+            font-weight: 700;
+            font-family: var(--font-family-system);
+            transition: var(--transition);
+        }
+        .tab:hover { background: var(--yellow-20); color: var(--text-color); border-color: var(--yellow-color); }
+        .tab.active { background: var(--yellow-color); color: var(--black-color); border-color: var(--yellow-color); }
+        .chart-list { margin: 0; }
+        .keyword-item {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-white-20);
+            transition: background 0.15s;
+            text-decoration: none;
+            color: inherit;
+        }
+        .keyword-item:last-child { border-bottom: none; }
+        .keyword-item:hover { background: var(--yellow-20); }
+        .keyword-item .rank {
+            font-weight: 700;
+            width: 40px;
+            font-size: var(--font-size-subtitle);
+            font-family: var(--font-family-system);
+            color: var(--white-50);
+            text-align: right;
+        }
+        .keyword-item .rank.top3 { color: var(--yellow-color); }
+        .keyword-item .keyword {
+            flex: 1;
+            font-size: var(--font-size-base);
+            font-weight: 500;
+            font-family: var(--font-family-base);
+            color: var(--text-color);
+        }
+        .keyword-item .badges { display: flex; gap: 8px; font-size: var(--font-size-tiny); }
+        .keyword-item .badge {
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-family: var(--font-family-system);
+        }
+        .keyword-item .badge.google { background: #4285f4; color: #fff; }
+        .keyword-item .badge.naver { background: #03c75a; color: #fff; }
+        .my-chart-desc {
+            font-size: var(--font-size-small);
+            color: var(--white-50);
+            margin-bottom: 32px;
+        }
+        .my-chart-desc p { margin-bottom: 8px; }
+        .loading, .error {
+            text-align: left;
+            padding: 48px 0;
+            font-size: var(--font-size-base);
+            color: var(--white-50);
+        }
+        .error { color: #ff453a; }
+        .keyword-back { margin-bottom: 24px; }
+        .keyword-back a {
+            color: var(--white-50);
+            text-decoration: none;
+            font-size: var(--font-size-base);
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        .keyword-back a:hover { color: var(--yellow-color); }
+    </style>
+</head>
+<body>
+    <div id="shared-nav"></div>
+    <header class="hero"></header>
+
+    <main class="main-content">
+        <div class="divider"></div>
+        <section class="section hero-content-section">
+            <div class="container">
+                <div class="keyword-back">
+                    <a href="../lab-2.html">← Lab 2로 돌아가기</a>
+                </div>
+                <div class="hero-content">
+                    <h1 class="section-title animated-section-title" data-title="쇼핑 인기 키워드">쇼핑 인기 키워드</h1>
+                    <div class="hero-info-description">
+                        <p><span class="prefix-char">ㄴ</span> Google Trends와 네이버쇼핑 인기 검색어를 종합한 랭킹이에요.</p>
+                        <p><span class="prefix-char">ㄴ</span> 매일 업데이트됩니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+        <section class="section keyword-section">
+            <div class="container">
+                <div class="tabs-wrap">
+                    <div class="tabs">
+                        <button class="tab active" data-chart="my">종합 랭킹</button>
+                        <button class="tab" data-chart="google">Google Trends</button>
+                        <button class="tab" data-chart="naver">네이버쇼핑</button>
+                    </div>
+                </div>
+                <div id="chartContainer">
+                    <div class="loading">로딩 중...</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="shared-footer"></div>
+    <script src="../../script.js"></script>
+    <script>
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+    </script>
+    <script>
+        const SOURCES = {
+            google: 'google/google_trends_sample.json',
+            naver: 'naver/naver_shopping_sample.json'
+        };
+
+        const FALLBACK_DATA = {
+            google: [{"ranking":"1","keyword":"겨울 패딩"},{"ranking":"2","keyword":"노트북"},{"ranking":"3","keyword":"에어팟"},{"ranking":"4","keyword":"선크림"},{"ranking":"5","keyword":"아이패드"}],
+            naver: [{"ranking":"1","keyword":"겨울 패딩"},{"ranking":"2","keyword":"선크림"},{"ranking":"3","keyword":"노트북"},{"ranking":"4","keyword":"에어팟"},{"ranking":"5","keyword":"무선 이어폰"}]
+        };
+
+        function normalize(str) {
+            if (!str || typeof str !== 'string') return '';
+            return str.trim().toLowerCase().replace(/\s+/g, ' ').replace(/[^\w\uac00-\ud7a3\s]/g, '');
+        }
+
+        function parseRank(item, fallback) {
+            const r = item.ranking || item.rank || fallback;
+            return Math.max(1, parseInt(r, 10) || fallback);
+        }
+
+        async function fetchOrFallback(url, key) {
+            try {
+                const res = await fetch(url);
+                if (res.ok) return await res.json();
+            } catch (_) {}
+            return FALLBACK_DATA[key] || [];
+        }
+
+        async function buildMyChart() {
+            const container = document.getElementById('chartContainer');
+            container.innerHTML = '<div class="loading">2개 소스 데이터 분석 중...</div>';
+            try {
+                const [google, naver] = await Promise.all([
+                    fetchOrFallback(SOURCES.google, 'google'),
+                    fetchOrFallback(SOURCES.naver, 'naver')
+                ]);
+
+                const map = new Map();
+
+                function add(source, list, label) {
+                    (list || []).forEach((item, i) => {
+                        const rank = parseRank(item, i + 1);
+                        const keyword = (item.keyword || '').trim();
+                        if (!keyword) return;
+                        const key = normalize(keyword);
+                        const pts = 101 - rank;
+                        if (!map.has(key)) {
+                            map.set(key, { keyword, score: 0, charts: {} });
+                        }
+                        const entry = map.get(key);
+                        entry.score += pts;
+                        entry.charts[label] = rank;
+                    });
+                }
+
+                add('google', google, 'google');
+                add('naver', naver, 'naver');
+
+                const sorted = Array.from(map.values())
+                    .sort((a, b) => b.score - a.score)
+                    .map((item, i) => ({ ...item, myRank: i + 1 }));
+
+                const desc = '<div class="my-chart-desc"><p><span class="prefix-char">ㄴ</span> Google Trends · 네이버쇼핑 2개 소스를 종합 분석. 양쪽 모두에 등장한 키워드가 상위에 노출돼요.</p></div>';
+                container.innerHTML = desc + (renderChart(sorted, 'my') || '');
+            } catch (e) {
+                container.innerHTML = `<div class="error">분석 실패: ${e.message}</div>`;
+            }
+        }
+
+        function renderChart(items, type) {
+            const target = document.getElementById('chartContainer');
+            if (!items || items.length === 0) {
+                const err = '<div class="error">데이터가 없습니다.</div>';
+                if (type !== 'my') target.innerHTML = err;
+                return err;
+            }
+            const badgeLabel = k => ({ google: 'G', naver: 'N' }[k] || k[0]);
+            const html = items.map((item, i) => {
+                const rank = item.myRank || item.ranking || item.rank || (i + 1);
+                const rankNum = parseInt(rank, 10) || (i + 1);
+                const rankClass = rankNum <= 3 ? ' rank top3' : '';
+                const badges = type === 'my' && item.charts
+                    ? Object.entries(item.charts).map(([k, r]) => `<span class="badge ${k}">${badgeLabel(k)} ${r}위</span>`).join('')
+                    : '';
+                const searchUrl = type === 'google'
+                    ? `https://www.google.com/search?q=${encodeURIComponent(item.keyword)}`
+                    : type === 'naver'
+                    ? `https://search.shopping.naver.com/search/all?query=${encodeURIComponent(item.keyword)}`
+                    : `https://www.google.com/search?q=${encodeURIComponent(item.keyword)}`;
+                return `<a href="${searchUrl}" target="_blank" rel="noopener" class="keyword-item">
+                    <span class="rank${rankClass}">${rank}</span>
+                    <span class="keyword">${item.keyword}</span>
+                    ${badges ? `<div class="badges">${badges}</div>` : ''}
+                </a>`;
+            }).join('');
+            const wrapped = `<div class="chart-list">${html}</div>`;
+            if (type !== 'my') target.innerHTML = wrapped;
+            return wrapped;
+        }
+
+        async function loadChart(type) {
+            const container = document.getElementById('chartContainer');
+            if (type === 'my') {
+                await buildMyChart();
+                return;
+            }
+            container.innerHTML = '<div class="loading">로딩 중...</div>';
+            const url = SOURCES[type];
+            const key = type;
+            try {
+                const data = await fetchOrFallback(url, key);
+                renderChart(data, type);
+            } catch (e) {
+                container.innerHTML = `<div class="error">로드 실패: ${e.message}</div>`;
+            }
+        }
+
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                loadChart(tab.dataset.chart);
+            });
+        });
+
+        loadChart('my');
+    </script>
+</body>
+</html>

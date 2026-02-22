@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Lab 2 - 황선윤 포트폴리오">
+    <meta name="description" content="Lab 2 - 쇼핑 인기 키워드 랭킹">
     <meta name="theme-color" content="#000000" id="themeColorMeta">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <title>Lab 2 | 황선윤 포트폴리오</title>
+    <title>Lab 2 - 쇼핑 인기 키워드 | 황선윤 포트폴리오</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -27,9 +27,10 @@
                     <div class="project-date">2025/02</div>
                     <h1 class="section-title animated-section-title" id="animatedTitle" data-title="Lab 2">Lab 2</h1>
                     <div class="hero-info-description">
-                        <p><span class="prefix-char">+</span> 데이터 시각화와 미세한 상호작용을 실험하는 프로젝트예요.</p>
-                        <p><span class="prefix-char">+</span> 차트·그래프와 모션으로 정보의 패턴을 전달해요.</p>
+                        <p><span class="prefix-char">+</span> Google Trends와 네이버쇼핑 인기 검색어를 종합한 쇼핑 키워드 랭킹이에요.</p>
+                        <p><span class="prefix-char">+</span> Puppeteer 크롤링·GitHub Actions로 매일 자동 수집해요.</p>
                     </div>
+                    <a href="shopping-keywords/index.html" target="_blank" rel="noopener noreferrer" class="resume-btn">SITE</a>
                 </div>
             </div>
         </section>
@@ -40,11 +41,11 @@
                 <div class="project-details-content">
                     <img src="./images/Lab2/Details01.svg" alt="Lab 2 디테일 1" class="project-image project-image-detail" onerror="this.onerror=null;this.src='https://via.placeholder.com/1080x607/111111/333333?text=Lab+2+01'">
                     <div class="section-body">
-                        <p><strong>데이터 시각화</strong> — 실시간·정적 데이터를 차트·그래프·맵 형태로 표현하는 방식을 탐구해요. D3.js·Canvas·SVG를 활용해 막대·선·원형 차트와 커스텀 시각화를 구현하고, 색상·크기·위치로 정보의 계층과 연관성을 전달해요. 데이터 업데이트 시 애니메이션 전환과 하이라이트로 변화를 부드럽게 표현해요.</p>
+                        <p><strong>Google Trends · 네이버쇼핑</strong> — <a href="https://trends.google.co.kr/trending?geo=KR&category=2" target="_blank" rel="noopener">Google Trends 쇼핑 카테고리</a>, <a href="https://datalab.naver.com/shoppingInsight/sCategory.naver" target="_blank" rel="noopener">네이버 쇼핑인사이트</a>를 참고해 Puppeteer로 인기 검색어를 수집해요. 두 소스를 종합해 점수(101-순위)를 합산하고, 양쪽 모두에 등장한 키워드가 상위에 노출돼요.</p>
                     </div>
                     <img src="./images/Lab2/Details02.svg" alt="Lab 2 디테일 2" class="project-image project-image-detail" onerror="this.onerror=null;this.src='https://via.placeholder.com/1080x607/111111/333333?text=Lab+2+02'">
                     <div class="section-body">
-                        <p><strong>인터랙션</strong> — 호버·클릭·드래그 등 미세한 제스처에 반응하는 피드백을 설계해요. 툴팁·하이라이트·필터 연동으로 사용자가 데이터를 탐색하며 인사이트를 얻을 수 있게 해요. 반응형 레이아웃과 터치 디바이스 지원을 고려해 다양한 환경에서 동작하도록 구성했어요.</p>
+                        <p><strong>JSON & 뷰어</strong> — <code>google_trends_M-D-YYYY.json</code>, <code>naver_shopping_M-D-YYYY.json</code> 형식으로 저장하고, fetch로 불러와 탭 전환(종합 랭킹 / Google Trends / 네이버쇼핑)으로 보여줘요. 키워드 클릭 시 검색 페이지로 연결돼요. <code>npm run collect</code>로 로컬 수집·테스트가 가능해요.</p>
                     </div>
                 </div>
             </div>

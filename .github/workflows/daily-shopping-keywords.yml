@@ -1,0 +1,59 @@
+name: Daily Shopping Keywords Collection
+
+permissions:
+  contents: write  # JSON 커밋 푸시용
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'labs/shopping-keywords/**'
+  schedule:
+    - cron: '0 22 * * *'  # UTC 22:00 = KST 오전 7:00
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: labs/shopping-keywords
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Puppeteer Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgbm-dev
+          npx puppeteer browsers install chrome
+
+      - name: Run Google Trends collection
+        run: TZ='Asia/Seoul' node google-trends.js
+        continue-on-error: true
+
+      - name: Run Naver Shopping collection
+        run: TZ='Asia/Seoul' node naver-shopping.js
+        continue-on-error: true
+
+      - name: Copy latest to sample (for viewer)
+        run: |
+          LATEST_GOOGLE=$(ls -t google/google_trends_*.json 2>/dev/null | grep -v sample | head -1)
+          LATEST_NAVER=$(ls -t naver/naver_shopping_*.json 2>/dev/null | grep -v sample | head -1)
+          [ -n "$LATEST_GOOGLE" ] && cp "$LATEST_GOOGLE" google/google_trends_sample.json || true
+          [ -n "$LATEST_NAVER" ] && cp "$LATEST_NAVER" naver/naver_shopping_sample.json || true
+
+      - name: Commit and push keyword data
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git add google/*.json naver/*.json
+          git diff --staged --quiet || git commit -m "chore(shopping-keywords): 키워드 데이터 수집 $(TZ='Asia/Seoul' date +'%Y-%m-%d %H:%M')"
+          git push

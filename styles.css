@@ -705,10 +705,6 @@ body.project-detail-page .background-line-second {
     transition: var(--transition);
 }
 
-.hero-info-description-break {
-    margin-top: 1.5em !important;
-}
-
 .prefix-char {
     color: var(--white-50);
 }
@@ -1313,7 +1309,7 @@ body.project-detail-page .project-details-section {
         radial-gradient(circle at var(--pos1-x) var(--pos1-y), #FF5A2E 0%, rgba(255,90,46,0.5) 35%, transparent 65%),
         radial-gradient(circle at var(--pos2-x) var(--pos2-y), #FF0038 0%, rgba(255,0,56,0.5) 35%, transparent 65%),
         radial-gradient(circle at var(--pos3-x) var(--pos3-y), #FF00EF 0%, rgba(255,0,239,0.5) 35%, transparent 65%),
-        #F50057;
+        #FF0038;
     transition: --pos1-x 2s ease, --pos1-y 2s ease, --pos2-x 2s ease, --pos2-y 2s ease, --pos3-x 2s ease, --pos3-y 2s ease;
 }
 .project-image-detail-gradient-wrap img {
