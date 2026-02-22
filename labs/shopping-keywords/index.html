@@ -20,15 +20,14 @@
   <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 </head>
 <body>
-  <div class="area-title-group">
+  <div class="area-1 area-title-group">
   <section class="area-title">
     <div class="area-title-scaler">
     <div class="area-title-content">
       <span class="page-title">Trending Searches</span>
-      <span class="title-meta title-location"><span id="locationCity">—</span><sup>(<span id="locationCountry">—</span>)</sup></span>
+      <span class="title-meta"><span id="locationCity">—</span><sup>(<span id="locationCountry">—</span>)</sup></span>
       <span class="title-meta" id="todayDate">—</span>
       <span class="title-meta" id="currentTime">—</span>
-      <span class="title-meta" id="updateTime"></span>
     </div>
     </div>
   </section>
@@ -50,7 +49,7 @@
   <div class="falling-lines falling-lines--center" id="fallingLinesCenter"></div>
   </div>
 
-  <section class="area-rank-list">
+  <section class="area-2 area-rank-list">
     <div id="chartContainer">
       <div class="loading lang-ko">로딩 중...</div>
     </div>
@@ -69,15 +68,14 @@
     </div>
   </div>
 
-  <div class="area-title-group area-title-group--copy">
+  <div class="area-3-title area-title-group">
     <section class="area-title">
       <div class="area-title-scaler">
         <div class="area-title-content">
-          <span class="page-title">Trending Searches</span>
-          <span class="title-meta title-location"><span id="locationCity2">—</span><sup>(<span id="locationCountry2">—</span>)</sup></span>
-          <span class="title-meta" id="todayDate2">—</span>
-          <span class="title-meta" id="currentTime2">—</span>
-          <span class="title-meta" id="updateTime2"></span>
+          <span class="page-title">____</span>
+          <span class="title-meta title-meta--spacer"></span>
+          <span class="title-meta"><span id="locationCity2">—</span><sup>(<span id="locationCountry2">—</span>)</sup></span>
+          <span class="title-meta" id="temperature2">—</span>
         </div>
       </div>
     </section>
@@ -152,29 +150,37 @@
       const countryEl = document.getElementById('locationCountry');
       const dateEl = document.getElementById('todayDate');
       const timeEl = document.getElementById('currentTime');
-      const locEl2 = document.getElementById('locationCity2');
-      const countryEl2 = document.getElementById('locationCountry2');
-      const dateEl2 = document.getElementById('todayDate2');
-      const timeEl2 = document.getElementById('currentTime2');
       const setText = (el, text) => { if (el) el.textContent = text; };
       setText(locEl, city.toUpperCase());
       setText(countryEl, country.toUpperCase());
-      setText(locEl2, city.toUpperCase());
-      setText(countryEl2, country.toUpperCase());
       const monthNames = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
       function tick() {
         const now = new Date();
         const dateStr = now.getDate() + ' ' + monthNames[now.getMonth()] + ' ' + now.getFullYear();
-        const onTheHour = new Date(now);
-        onTheHour.setMinutes(0, 0, 0);
-        const timeStr = onTheHour.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: tz }).replace(/\s/g, '');
+        const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true, timeZone: tz }).replace(/\s/g, '');
         setText(dateEl, dateStr);
         setText(timeEl, timeStr);
-        setText(dateEl2, dateStr);
-        setText(timeEl2, timeStr);
       }
       tick();
       setInterval(tick, 1000);
+
+      (function updateArea3Meta() {
+        const cityEl = document.getElementById('locationCity2');
+        const countryEl = document.getElementById('locationCountry2');
+        const tempEl = document.getElementById('temperature2');
+        if (cityEl) cityEl.textContent = city.toUpperCase();
+        if (countryEl) countryEl.textContent = country.toUpperCase();
+        const tzToCoords = { 'Asia/Seoul':[37.57,126.98], 'Asia/Tokyo':[35.68,139.69], 'Asia/Shanghai':[31.23,121.47], 'Asia/Singapore':[1.29,103.85], 'Asia/Hong_Kong':[22.28,114.16], 'Asia/Dubai':[25.20,55.27], 'America/New_York':[40.71,-74.01], 'America/Los_Angeles':[34.05,-118.24], 'America/Chicago':[41.88,-87.63], 'Europe/London':[51.51,-0.13], 'Europe/Paris':[48.85,2.35], 'Europe/Berlin':[52.52,13.41], 'Australia/Sydney':[-33.87,151.21], 'Pacific/Auckland':[-36.85,174.76] };
+        const coords = tzToCoords[tz] || [37.57, 126.98];
+        fetch('https://api.open-meteo.com/v1/forecast?latitude=' + coords[0] + '&longitude=' + coords[1] + '&current=temperature_2m')
+          .then(function(r) { return r.json(); })
+          .then(function(d) {
+            if (tempEl && d.current && d.current.temperature_2m != null) {
+              tempEl.textContent = Math.round(d.current.temperature_2m) + '\u00B0C';
+            }
+          })
+          .catch(function() { if (tempEl) tempEl.textContent = '—'; });
+      })();
     })();
 
     (function() {
@@ -269,14 +275,24 @@
                     .sort((a, b) => b.score - a.score)
                     .map((item, i) => ({ ...item, myRank: i + 1 }));
 
-                container.innerHTML = renderChart(sorted, 'my') || '';
-                if (typeof setUpdateTime === 'function') setUpdateTime(googleParsed.updatedAt);
+                container.innerHTML = renderChart(sorted, 'my', googleParsed.updatedAt) || '';
             } catch (e) {
                 container.innerHTML = `<div class="error lang-ko">분석 실패: ${e.message}</div>`;
             }
         }
 
-        function renderChart(items, type) {
+        function formatUpdateTime(updatedAt) {
+            if (!updatedAt) return '';
+            var d = new Date(updatedAt);
+            var h = d.getHours();
+            var m = d.getMinutes();
+            m = Math.floor(m / 30) * 30;
+            d.setHours(h, m, 0, 0);
+            var str = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+            return 'UPDATE ' + str;
+        }
+
+        function renderChart(items, type, updateTime) {
             const target = document.getElementById('chartContainer');
             if (!items || items.length === 0) {
                 const err = '<div class="error lang-ko">데이터가 없습니다.</div>';
@@ -298,22 +314,18 @@
                     <span class="keyword keyword-flip${isKo ? ' lang-ko' : ''}"><sup>${rankDisplay}</sup>${item.keyword}</span>
                 </a>`;
             }).join('');
-            const wrapped = `<div class="chart-list">${html}</div>`;
+            var displayTime = updateTime;
+            if ((type === 'google' || type === 'my') && !displayTime) {
+                displayTime = localStorage.getItem('lab-keywords-last-update') || new Date().toISOString();
+            }
+            if (updateTime) {
+                try { localStorage.setItem('lab-keywords-last-update', updateTime); } catch (_) {}
+            }
+            var updateHtml = (type === 'google' || type === 'my') && displayTime
+                ? '<div class="keyword-update-time">' + formatUpdateTime(displayTime) + '</div>' : '';
+            const wrapped = updateHtml + `<div class="chart-list">${html}</div>`;
             if (type !== 'my') target.innerHTML = wrapped;
             return wrapped;
-        }
-
-        function setUpdateTime(updatedAt) {
-            var label = '';
-            if (updatedAt) {
-                var d = new Date(updatedAt);
-                var str = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-                label = 'UPDATE ' + str;
-            }
-            ['updateTime', 'updateTime2'].forEach(function(id) {
-                var el = document.getElementById(id);
-                if (el) el.textContent = label;
-            });
         }
 
         async function loadChart(type) {
@@ -328,8 +340,7 @@
             try {
                 const raw = await fetchOrFallback(url, key);
                 const parsed = key === 'google' ? parseGoogleData(raw) : { items: raw, updatedAt: null };
-                renderChart(parsed.items, type);
-                if (key === 'google') setUpdateTime(parsed.updatedAt);
+                renderChart(parsed.items, type, key === 'google' ? parsed.updatedAt : null);
             } catch (e) {
                 container.innerHTML = `<div class="error lang-ko">로드 실패: ${e.message}</div>`;
             }

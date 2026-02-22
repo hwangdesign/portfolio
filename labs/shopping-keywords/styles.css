@@ -64,13 +64,19 @@ body {
 }
 
 
-/* 영역1 + 박스 그룹 */
+/* 영역1: 타이틀 + 박스 */
 .area-title-group {
   position: relative;
 }
 
-.area-title-group--copy {
-  position: relative;
+.area-3-title {
+  min-height: 50vh;
+  min-height: 50dvh;
+}
+
+.area-3-title .area-title {
+  min-height: 50vh;
+  min-height: 50dvh;
 }
 
 .area-lines-overlay {
@@ -223,6 +229,11 @@ body {
   line-height: 0;
 }
 
+.area-title-content .title-meta--spacer {
+  height: 1em;
+  line-height: 0.85;
+}
+
 /* 영역1·영역2 사이 박스 */
 .area-between {
   position: relative;
@@ -284,7 +295,7 @@ body {
   z-index: 1;
 }
 
-/* 영역3: 영역1 박스+원 재사용 */
+/* 영역3: 박스+원 */
 .area-3 {
   width: 100%;
 }
@@ -313,6 +324,18 @@ body {
   margin: 0 auto;
   padding: calc(2rem + 2vh) 0;
   text-transform: uppercase;
+}
+
+.keyword-update-time {
+  font-size: 20px;
+  font-weight: 900;
+  font-family: var(--font-family-display);
+  padding: 0.75rem 1rem;
+  text-align: center;
+  color: var(--accent);
+  text-decoration: underline;
+  letter-spacing: -0.04em;
+  line-height: 0.85;
 }
 
 .chart-list {
