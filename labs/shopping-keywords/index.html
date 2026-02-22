@@ -28,6 +28,7 @@
       <span class="title-meta title-location"><span id="locationCity">—</span><sup>(<span id="locationCountry">—</span>)</sup></span>
       <span class="title-meta" id="todayDate">—</span>
       <span class="title-meta" id="currentTime">—</span>
+      <span class="title-meta" id="updateTime"></span>
     </div>
     </div>
   </section>
@@ -76,6 +77,7 @@
           <span class="title-meta title-location"><span id="locationCity2">—</span><sup>(<span id="locationCountry2">—</span>)</sup></span>
           <span class="title-meta" id="todayDate2">—</span>
           <span class="title-meta" id="currentTime2">—</span>
+          <span class="title-meta" id="updateTime2"></span>
         </div>
       </div>
     </section>
@@ -226,14 +228,21 @@
             return FALLBACK_DATA[key] || [];
         }
 
+        function parseGoogleData(raw) {
+            if (Array.isArray(raw)) return { items: raw, updatedAt: null };
+            return { items: raw.items || raw.data || [], updatedAt: raw.updatedAt || null };
+        }
+
         async function buildMyChart() {
             const container = document.getElementById('chartContainer');
             container.innerHTML = '<div class="loading lang-ko">2개 소스 데이터 분석 중...</div>';
             try {
-                const [google, naver] = await Promise.all([
+                const [googleRaw, naver] = await Promise.all([
                     fetchOrFallback(SOURCES.google, 'google'),
                     fetchOrFallback(SOURCES.naver, 'naver')
                 ]);
+                const googleParsed = parseGoogleData(googleRaw);
+                const google = googleParsed.items;
 
                 const map = new Map();
 
@@ -261,6 +270,7 @@
                     .map((item, i) => ({ ...item, myRank: i + 1 }));
 
                 container.innerHTML = renderChart(sorted, 'my') || '';
+                if (typeof setUpdateTime === 'function') setUpdateTime(googleParsed.updatedAt);
             } catch (e) {
                 container.innerHTML = `<div class="error lang-ko">분석 실패: ${e.message}</div>`;
             }
@@ -293,6 +303,19 @@
             return wrapped;
         }
 
+        function setUpdateTime(updatedAt) {
+            var label = '';
+            if (updatedAt) {
+                var d = new Date(updatedAt);
+                var str = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+                label = 'UPDATE ' + str;
+            }
+            ['updateTime', 'updateTime2'].forEach(function(id) {
+                var el = document.getElementById(id);
+                if (el) el.textContent = label;
+            });
+        }
+
         async function loadChart(type) {
             const container = document.getElementById('chartContainer');
             if (type === 'my') {
@@ -303,8 +326,10 @@
             const url = SOURCES[type];
             const key = type;
             try {
-                const data = await fetchOrFallback(url, key);
-                renderChart(data, type);
+                const raw = await fetchOrFallback(url, key);
+                const parsed = key === 'google' ? parseGoogleData(raw) : { items: raw, updatedAt: null };
+                renderChart(parsed.items, type);
+                if (key === 'google') setUpdateTime(parsed.updatedAt);
             } catch (e) {
                 container.innerHTML = `<div class="error lang-ko">로드 실패: ${e.message}</div>`;
             }

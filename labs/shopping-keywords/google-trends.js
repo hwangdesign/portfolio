@@ -70,8 +70,12 @@ if (!fs.existsSync(folderPath)) {
     });
 
     const result = data.length > 0 ? data : [];
-    fs.writeFileSync(filename, JSON.stringify(result, null, 2), 'utf-8');
-    fs.writeFileSync(samplePath, JSON.stringify(result, null, 2), 'utf-8');
+    const output = {
+      updatedAt: new Date().toISOString(),
+      items: result
+    };
+    fs.writeFileSync(filename, JSON.stringify(output, null, 2), 'utf-8');
+    fs.writeFileSync(samplePath, JSON.stringify(output, null, 2), 'utf-8');
     console.log(`✅ Google Trends (4시간) 저장 완료: ${filename}, ${samplePath} (${result.length}건)`);
   } catch (err) {
     console.error('❌ Google Trends 수집 실패:', err.message);
