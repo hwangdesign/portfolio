@@ -217,7 +217,7 @@ const PROJECT_BG_IMAGE_MAP = {
     'ooah.html': 'images/ooah/thumbnail.svg',
     '11street-dx.html': 'images/eXperience/thumbnail.png',
     'amazon-global-store.html': 'images/AmazonGlobalStore/thumbnail.png',
-    'lab-1.html': 'images/InteractiveAnalogClock/thumbnail.png',
+    'InteractiveAnalogClock.html': 'images/InteractiveAnalogClock/thumbnail.png',
     'lab-2.html': 'images/Lab2/thumbnail.png',
     'lab-3.html': 'images/Lab3/thumbnail.png',
     'lab-4.html': 'images/Lab4/thumbnail.png'
