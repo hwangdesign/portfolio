@@ -51,6 +51,42 @@ function renderSharedLayout() {
 
 renderSharedLayout();
 
+/**
+ * 이전글/다음글 네비게이션 렌더 (project-nav-config.js 사용)
+ * - body.project-detail-page 에서만 동작
+ * - #project-nav-root 가 있으면 config 기준으로 nav 주입
+ */
+function renderProjectNav() {
+    if (!document.body.classList.contains('project-detail-page')) return;
+    const root = document.getElementById('project-nav-root');
+    if (!root || typeof window.PROJECT_NAV_CONFIG !== 'object') return;
+
+    const pathname = window.location.pathname || '';
+    const parts = pathname.split('/').filter(Boolean);
+    const worksIdx = parts.indexOf('works');
+    const labsIdx = parts.indexOf('labs');
+    let navKey = null;
+    if (worksIdx >= 0 && parts[worksIdx + 1]) navKey = 'works/' + parts[worksIdx + 1];
+    else if (labsIdx >= 0 && parts[labsIdx + 1]) navKey = 'labs/' + parts[labsIdx + 1];
+    if (!navKey || !window.PROJECT_NAV_CONFIG[navKey]) return;
+
+    const cfg = window.PROJECT_NAV_CONFIG[navKey];
+    const labelPrev = '←←';
+    const labelNext = '→→';
+    const emptyTitle = '-';
+
+    const prevHtml = cfg.prev
+        ? `<a href="${cfg.prev.href}" class="project-nav-link prev"><span class="project-nav-label">${labelPrev}</span><span class="project-nav-title">${cfg.prev.title}</span></a>`
+        : `<span class="project-nav-link disabled prev"><span class="project-nav-label">${labelPrev}</span><span class="project-nav-title">${emptyTitle}</span></span>`;
+    const nextHtml = cfg.next
+        ? `<a href="${cfg.next.href}" class="project-nav-link next"><span class="project-nav-label">${labelNext}</span><span class="project-nav-title">${cfg.next.title}</span></a>`
+        : `<span class="project-nav-link disabled next"><span class="project-nav-label">${labelNext}</span><span class="project-nav-title">${emptyTitle}</span></span>`;
+
+    root.innerHTML = `<div class="project-navigation-wrapper"><div class="container"><nav class="project-navigation">${prevHtml}${nextHtml}</nav></div></div>`;
+}
+
+renderProjectNav();
+
 // Theme Toggle 기능
 (function initTheme() {
     const themeToggle = document.getElementById('themeToggle');

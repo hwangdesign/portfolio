@@ -11,6 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
     <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
     <link rel="stylesheet" href="../styles.css">
     <link rel="icon" type="image/svg+xml" href="../favicon.svg">
@@ -31,9 +32,9 @@
                     <div class="hero-info-description">
                         <p><span class="prefix-char">+</span> OOAh luxe는 ‘우아한 취향’을 발견하는 과정을 디지털 안에서 구현한 럭셔리 플랫폼이에요<br><span class="prefix-char">+</span> 화면은 단순한 정보 나열이 아니라, 취향을 탐색하도록 설계된 공간이라는 관점에서 출발했어요</p>
                     </div>
-                    <div class="hero-buttons">
-                        <a href="https://m.11st.co.kr/page/luxury/home" target="_blank" rel="noopener noreferrer" class="resume-btn">SITE</a>
-                        <a href="https://brunch.co.kr/@11design/6" target="_blank" rel="noopener noreferrer" class="resume-btn">BRUNCH</a>
+                    <div class="hero__actions">
+                        <a href="https://m.11st.co.kr/page/luxury/home" target="_blank" rel="noopener noreferrer" class="btn-cta">SITE<span class="btn-cta__icon-wrap"><span class="material-symbols-outlined btn-cta__icon" aria-hidden="true">keyboard_arrow_right</span></span></a>
+                        <a href="https://brunch.co.kr/@11design/6" target="_blank" rel="noopener noreferrer" class="btn-cta">BRUNCH<span class="btn-cta__icon-wrap"><span class="material-symbols-outlined btn-cta__icon" aria-hidden="true">keyboard_arrow_right</span></span></a>
                     </div>
                 </div>
             </div>
@@ -71,23 +72,11 @@
         </section>
     </main>
 
-    <div class="project-navigation-wrapper">
-        <div class="container">
-            <nav class="project-navigation">
-                <a href="design-system.html" class="project-nav-link prev">
-                    <span class="project-nav-label">←←</span>
-                    <span class="project-nav-title">Design System</span>
-                </a>
-                <a href="11street-dx.html" class="project-nav-link next">
-                    <span class="project-nav-label">→→</span>
-                    <span class="project-nav-title">11STREET Design eXperience</span>
-                </a>
-            </nav>
-        </div>
-    </div>
+    <div id="project-nav-root"></div>
 
     <div id="shared-footer"></div>
 
+    <script src="../project-nav-config.js"></script>
     <script src="../script.js"></script>
 </body>
 </html>

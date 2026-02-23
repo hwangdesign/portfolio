@@ -11,6 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
     <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
     <link rel="stylesheet" href="../styles.css">
     <link rel="icon" type="image/svg+xml" href="../favicon.svg">
@@ -31,7 +32,7 @@
                     <div class="hero-info-description">
                         <p><span class="prefix-char">+</span> 아마존 글로벌 상품을 국내에 소개하는 크로스보더 쇼핑 서비스예요<br><span class="prefix-char">+</span> 배송·결제·언어 현지화와 상품 검색·필터 UX를 설계해요</p>
                     </div>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="resume-btn">SITE</a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="btn-cta">SITE<span class="btn-cta__icon-wrap"><span class="material-symbols-outlined btn-cta__icon" aria-hidden="true">keyboard_arrow_right</span></span></a>
                 </div>
             </div>
         </section>
@@ -53,23 +54,11 @@
         </section>
     </main>
 
-    <div class="project-navigation-wrapper">
-        <div class="container">
-            <nav class="project-navigation">
-                <a href="11street-dx.html" class="project-nav-link prev">
-                    <span class="project-nav-label">←←</span>
-                    <span class="project-nav-title">11STREET Design eXperience</span>
-                </a>
-                <span class="project-nav-link disabled next">
-                    <span class="project-nav-label">→→</span>
-                    <span class="project-nav-title">-</span>
-                </span>
-            </nav>
-        </div>
-    </div>
+    <div id="project-nav-root"></div>
 
     <div id="shared-footer"></div>
 
+    <script src="../project-nav-config.js"></script>
     <script src="../script.js"></script>
 </body>
 </html>

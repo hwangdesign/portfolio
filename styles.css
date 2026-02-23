@@ -716,23 +716,23 @@ body.project-detail-page .background-line-second {
     margin-top: 24px;
 }
 
-/* Hero 버튼 그룹 (Brunch, 서비스 바로가기 등) */
-.hero-buttons {
+/* Hero CTA 버튼 그룹 (Brunch, 서비스 바로가기 등) */
+.hero__actions {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
     margin-top: 32px;
 }
 
-.hero-buttons .resume-btn {
+.hero__actions .btn-cta {
     margin-top: 0;
 }
 
-/* Resume Button */
-.resume-btn {
+/* CTA Button - 다크모드 */
+.btn-cta {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
     margin-top: 32px;
     text-transform: uppercase;
     margin-right: 8px;
@@ -740,41 +740,67 @@ body.project-detail-page .background-line-second {
     font-size: var(--font-size-base);
     font-weight: 900;
     font-family: var(--font-family-system);
-    color: var(--text-color);
-    background-color: transparent;
-    border: 1px solid var(--border-white-20);
+    color: #000000;
+    background-color: var(--yellow-color);
+    border: 1px solid var(--yellow-color);
     text-decoration: none;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
-.resume-btn .icon-svg {
+.btn-cta .icon-svg {
     width: 18px;
     height: 18px;
 }
+
+.btn-cta .material-symbols-outlined.btn-cta__icon {
+    font-family: "Material Symbols Outlined";
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 1;
+    display: inline-block;
+    vertical-align: middle;
+    color: currentColor;
+}
+
+.btn-cta__icon-wrap {
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-cta .btn-cta__icon-wrap .material-symbols-outlined {
+    transition: transform 0.3s ease;
+}
+
+.btn-cta:hover .btn-cta__icon-wrap .material-symbols-outlined {
+    transform: translateX(4px);
+}
+
 .icon-svg {
     fill: currentColor;
     display: inline-block;
     flex-shrink: 0;
 }
 
-.resume-btn:last-child {
+.btn-cta:last-child {
     margin-right: 0;
 }
 
-.resume-btn:hover,
-.resume-btn:active {
+.btn-cta:hover,
+.btn-cta:active {
     background-color: var(--yellow-color);
     color: #000000;
     border-color: var(--yellow-color);
 }
 
-[data-theme="light"] .resume-btn {
-    border-color: rgba(0, 0, 0, 0.2);
+[data-theme="light"] .btn-cta {
+    color: #ffffff;
+    background-color: #000000;
+    border-color: #000000;
 }
 
-[data-theme="light"] .resume-btn:hover,
-[data-theme="light"] .resume-btn:active {
+[data-theme="light"] .btn-cta:hover,
+[data-theme="light"] .btn-cta:active {
     background-color: #000000;
     color: var(--yellow-color);
     border-color: #000000;
@@ -1581,6 +1607,7 @@ body.project-detail-page .project-details-section {
     display: flex;
     align-items: baseline;
     gap: 0;
+    padding-left: 2em;
 }
 
 .portfolio-grid.text-view .portfolio-date {

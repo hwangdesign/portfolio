@@ -11,6 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
     <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
     <link rel="stylesheet" href="../styles.css">
     <link rel="icon" type="image/svg+xml" href="../favicon.svg">
@@ -30,7 +31,7 @@
                         <p><span class="prefix-char">+</span> 실시간 타임존 시계로 삼각형 시침·분침·초침이 동작해요.</p>
                         <p><span class="prefix-char">+</span> 마우스·터치에 반응해 시침이 퍼지고 회전하는 인터랙티브 그래픽이에요.</p>
                     </div>
-                    <a href="InteractiveAnalogClock/index.html" target="_blank" rel="noopener noreferrer" class="resume-btn">SITE</a>
+                    <a href="InteractiveAnalogClock/index.html" target="_blank" rel="noopener noreferrer" class="btn-cta">SITE<span class="btn-cta__icon-wrap"><span class="material-symbols-outlined btn-cta__icon" aria-hidden="true">keyboard_arrow_right</span></span></a>
                 </div>
             </div>
         </section>
@@ -56,23 +57,11 @@
         </section>
     </main>
 
-    <div class="project-navigation-wrapper">
-        <div class="container">
-            <nav class="project-navigation">
-                <span class="project-nav-link disabled prev">
-                    <span class="project-nav-label">←←</span>
-                    <span class="project-nav-title">-</span>
-                </span>
-                <a href="TrendingSearches.html" class="project-nav-link next">
-                    <span class="project-nav-label">→→</span>
-                    <span class="project-nav-title">Trending Searches</span>
-                </a>
-            </nav>
-        </div>
-    </div>
+    <div id="project-nav-root"></div>
 
     <div id="shared-footer"></div>
 
+    <script src="../project-nav-config.js"></script>
     <script src="../script.js"></script>
 </body>
 </html>
