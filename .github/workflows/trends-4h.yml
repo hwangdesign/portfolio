@@ -7,7 +7,12 @@ permissions:
 on:
   schedule:
     - cron: '0 */4 * * *'  # 매 4시간 정각 (UTC)
-  workflow_dispatch:
+  workflow_dispatch: {}    # Actions 탭 → 왼쪽에서 워크플로 선택 → 오른쪽 "Run workflow"
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/trends-4h.yml'
+      - 'labs/TrendingSearches/naver-shopping-api.js'
 
 jobs:
   collect:
