@@ -228,6 +228,11 @@
                 const opts = url.startsWith('http') ? { cache: 'no-store' } : {};
                 const res = await fetch(url, opts);
                 if (res.ok) return await res.json();
+                if (key === 'naver' && url.indexOf('trends-data') !== -1) {
+                    var mainUrl = url.replace('/trends-data/', '/main/');
+                    var mainRes = await fetch(mainUrl, opts);
+                    if (mainRes.ok) return await mainRes.json();
+                }
             } catch (_) {}
             if (key === 'naver' && url.startsWith('http')) {
                 try {
