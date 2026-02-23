@@ -40,6 +40,8 @@ jobs:
           cp labs/TrendingSearches/naver/naver_shopping_sample.json /tmp/
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
+          git restore labs/TrendingSearches/naver/ 2>/dev/null || git checkout -- labs/TrendingSearches/naver/ 2>/dev/null || true
+          git clean -fd labs/TrendingSearches/naver/ 2>/dev/null || true
           git fetch origin trends-data 2>/dev/null || true
           if git rev-parse --verify origin/trends-data >/dev/null 2>&1; then
             git checkout -B trends-data origin/trends-data
