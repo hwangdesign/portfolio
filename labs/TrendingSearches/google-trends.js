@@ -37,36 +37,57 @@ if (!fs.existsSync(folderPath)) {
 
     const data = await page.evaluate(() => {
       const items = [];
-      // Google Trends DOM: feed-item, 또는 detail-list-item 등
-      const selectors = [
-        'div.feed-item',
-        'div[role="listitem"]',
-        'div.detail-list-item',
-        'div.trending-list-item',
-        'md-list-item'
-      ];
-      let elements = [];
-      for (const sel of selectors) {
-        elements = document.querySelectorAll(sel);
-        if (elements.length > 0) break;
+      const seen = new Set();
+      function add(ranking, keyword) {
+        const k = (keyword || '').trim().substring(0, 80);
+        if (!k || k.length < 2 || seen.has(k)) return;
+        seen.add(k);
+        items.push({ ranking: String(ranking), keyword: k });
       }
-      if (elements.length === 0) {
-        // 대안: 모든 링크에서 트렌드 제목 추출 시도
-        const links = document.querySelectorAll('a[href*="/trends/"]');
-        links.forEach((a, i) => {
-          const title = a.getAttribute('title') || a.textContent?.trim();
-          if (title && title.length > 1 && title.length < 100) {
-            items.push({ ranking: String(i + 1), keyword: title.trim() });
+
+      // 1) 테이블 행 (tr[role="row"]) - 트렌드 페이지 현재 구조
+      const rows = document.querySelectorAll('tr[role="row"]');
+      rows.forEach((row, i) => {
+        const cells = row.querySelectorAll('td');
+        const firstCell = cells[0];
+        if (firstCell) {
+          const link = firstCell.querySelector('a');
+          const text = (link?.getAttribute('title') || link?.textContent || firstCell.textContent || '').trim();
+          if (text) add(items.length + 1, text);
+        }
+      });
+
+      // 2) 리스트 아이템 / 피드
+      if (items.length === 0) {
+        const listSelectors = [
+          'div.feed-item',
+          'div[role="listitem"]',
+          'div.detail-list-item',
+          'md-list-item',
+          'li[role="option"]'
+        ];
+        for (const sel of listSelectors) {
+          const els = document.querySelectorAll(sel);
+          if (els.length > 0) {
+            els.forEach((el, i) => {
+              const titleEl = el.querySelector('.title a, .title, a[title], [role="heading"]');
+              const keyword = titleEl?.getAttribute('title') || titleEl?.textContent?.trim() || el.textContent?.trim();
+              if (keyword) add(items.length + 1, keyword);
+            });
+            break;
           }
-        });
-      } else {
-        elements.forEach((el, i) => {
-          const titleEl = el.querySelector('.title a, .title, a[title], [role="heading"]');
-          const keyword = titleEl?.getAttribute('title') || titleEl?.textContent?.trim() || el.textContent?.trim();
-          if (keyword) items.push({ ranking: String(i + 1), keyword: keyword.substring(0, 80) });
+        }
+      }
+
+      // 3) 트렌드 링크에서 제목 추출
+      if (items.length === 0) {
+        document.querySelectorAll('a[href*="/trends/"], a[href*="trending"]').forEach((a, i) => {
+          const title = a.getAttribute('title') || a.textContent?.trim();
+          if (title && title.length > 1 && title.length < 100) add(items.length + 1, title);
         });
       }
-      return items.length > 0 ? items : [];
+
+      return items;
     });
 
     const result = data.length > 0 ? data : [];
