@@ -193,11 +193,11 @@
       try {
         var h = location.hostname, p = location.pathname;
         if (customDomains[h]) {
-          raw = 'https://raw.githubusercontent.com/' + customDomains[h] + '/trends-data/labs/shopping-keywords/google/google_trends_sample.json';
+          raw = 'https://raw.githubusercontent.com/' + customDomains[h] + '/trends-data/labs/TrendingSearches/google/google_trends_sample.json';
         } else if (h.endsWith('.github.io') && p.indexOf('/') >= 0) {
           var owner = h.split('.')[0];
           var repo = p.split('/').filter(Boolean)[0] || 'portfolio';
-          raw = 'https://raw.githubusercontent.com/' + owner + '/' + repo + '/trends-data/labs/shopping-keywords/google/google_trends_sample.json';
+          raw = 'https://raw.githubusercontent.com/' + owner + '/' + repo + '/trends-data/labs/TrendingSearches/google/google_trends_sample.json';
         }
       } catch (_) {}
       window.TRENDS_GOOGLE_URL = raw;

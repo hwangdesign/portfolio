@@ -7,7 +7,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'labs/shopping-keywords/**'
+      - 'labs/TrendingSearches/**'
   schedule:
     - cron: '0 22 * * *'  # UTC 22:00 = KST 오전 7:00
 
@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: labs/shopping-keywords
+        working-directory: labs/TrendingSearches
 
     steps:
       - uses: actions/checkout@v4

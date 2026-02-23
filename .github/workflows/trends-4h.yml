@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: labs/shopping-keywords
+        working-directory: labs/TrendingSearches
 
     steps:
       - uses: actions/checkout@v4
@@ -42,15 +42,15 @@ jobs:
       - name: Push to trends-data branch
         working-directory: ${{ github.workspace }}
         run: |
-          [ -f labs/shopping-keywords/google/google_trends_sample.json ] || exit 0
-          cp labs/shopping-keywords/google/google_trends_sample.json /tmp/
+          [ -f labs/TrendingSearches/google/google_trends_sample.json ] || exit 0
+          cp labs/TrendingSearches/google/google_trends_sample.json /tmp/
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           git fetch origin trends-data 2>/dev/null || true
           git checkout trends-data 2>/dev/null || git checkout -b trends-data
-          mkdir -p labs/shopping-keywords/google
-          cp /tmp/google_trends_sample.json labs/shopping-keywords/google/
-          git add labs/shopping-keywords/google/google_trends_sample.json
+          mkdir -p labs/TrendingSearches/google
+          cp /tmp/google_trends_sample.json labs/TrendingSearches/google/
+          git add labs/TrendingSearches/google/google_trends_sample.json
           git diff --staged --quiet && echo "No changes" || {
             git commit -m "chore: Google Trends 4h $(TZ='Asia/Seoul' date +'%Y-%m-%d %H:%M')"
             git push -u origin trends-data
