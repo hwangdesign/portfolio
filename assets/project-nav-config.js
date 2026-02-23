@@ -9,7 +9,7 @@
  * 새 페이지 추가
  * - 1) PROJECT_NAV_CONFIG에 새 키 추가 (예: 'works/새페이지.html')
  * - 2) 이전/다음이 되는 페이지의 config에서 href를 새 페이지로 수정
- * - 3) 해당 HTML에 <div id="project-nav-root"></div>와 project-nav-config.js 스크립트 포함
+ * - 3) 해당 HTML에 <div id="project-nav-root"></div>와 assets/project-nav-config.js 스크립트 포함
  */
 window.PROJECT_NAV_CONFIG = {
   /* ========== Works ========== */

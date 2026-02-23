@@ -1419,21 +1419,105 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Design System Details01: 3색 포인트 랜덤 자리 이동
+    // Design System Details01: WebGL + Shader 그라데이션 (Hume AI 스타일 유기적 모션, 기존 3색)
     if (window.location.pathname.includes('design-system')) {
-        const gradientBg = document.querySelector('.project-image-detail-gradient-wrap .gradient-bg');
-        if (gradientBg) {
-            const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-            const move = () => {
-                gradientBg.style.setProperty('--pos1-x', rand(15, 85) + '%');
-                gradientBg.style.setProperty('--pos1-y', rand(15, 85) + '%');
-                gradientBg.style.setProperty('--pos2-x', rand(15, 85) + '%');
-                gradientBg.style.setProperty('--pos2-y', rand(15, 85) + '%');
-                gradientBg.style.setProperty('--pos3-x', rand(15, 85) + '%');
-                gradientBg.style.setProperty('--pos3-y', rand(15, 85) + '%');
-            };
-            move();
-            setInterval(move, 2000);
+        const wrap = document.querySelector('.project-image-detail-gradient-wrap');
+        const gradientBg = wrap && wrap.querySelector('.gradient-bg');
+        if (gradientBg && wrap) {
+            const vertexSource = `
+                attribute vec2 a_position;
+                varying vec2 v_uv;
+                void main() {
+                    v_uv = a_position * 0.5 + 0.5;
+                    gl_Position = vec4(a_position, 0.0, 1.0);
+                }
+            `;
+            const fragmentSource = `
+                precision highp float;
+                uniform vec2 u_resolution;
+                uniform float u_time;
+                varying vec2 v_uv;
+                void main() {
+                    vec2 uv = v_uv;
+                    vec3 color1 = vec3(1.0, 0.353, 0.18);
+                    vec3 color2 = vec3(1.0, 0.0, 0.22);
+                    vec3 color3 = vec3(1.0, 0.0, 0.937);
+                    float t = u_time * 0.4;
+                    vec2 p1 = vec2(0.35 + 0.28 * sin(t), 0.35 + 0.28 * cos(t * 0.73));
+                    vec2 p2 = vec2(0.5 + 0.32 * sin(t * 0.87 + 2.1), 0.62 + 0.28 * cos(t * 0.61 + 1.2));
+                    vec2 p3 = vec2(0.68 + 0.28 * sin(t * 0.91 + 4.2), 0.48 + 0.32 * cos(t * 0.53 + 2.5));
+                    float d1 = distance(uv, p1);
+                    float d2 = distance(uv, p2);
+                    float d3 = distance(uv, p3);
+                    float soft = 3.2;
+                    float c1 = exp(-d1 * d1 * soft);
+                    float c2 = exp(-d2 * d2 * soft);
+                    float c3 = exp(-d3 * d3 * soft) * 2.0;
+                    float sum = c1 + c2 + c3 + 0.001;
+                    vec3 col = (c1 * color1 + c2 * color2 + c3 * color3) / sum;
+                    gl_FragColor = vec4(col, 1.0);
+                }
+            `;
+            const canvas = document.createElement('canvas');
+            canvas.className = 'gradient-canvas';
+            canvas.setAttribute('aria-hidden', 'true');
+            gradientBg.style.background = 'transparent';
+            gradientBg.appendChild(canvas);
+            const gl = canvas.getContext('webgl', { alpha: false, antialias: true });
+            if (!gl) return;
+            const program = gl.createProgram();
+            const vs = gl.createShader(gl.VERTEX_SHADER);
+            gl.shaderSource(vs, vertexSource);
+            gl.compileShader(vs);
+            if (!gl.getShaderParameter(vs, gl.COMPILE_STATUS)) return;
+            const fs = gl.createShader(gl.FRAGMENT_SHADER);
+            gl.shaderSource(fs, fragmentSource);
+            gl.compileShader(fs);
+            if (!gl.getShaderParameter(fs, gl.COMPILE_STATUS)) return;
+            gl.attachShader(program, vs);
+            gl.attachShader(program, fs);
+            gl.linkProgram(program);
+            if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return;
+            gl.useProgram(program);
+            const buf = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW);
+            const locPos = gl.getAttribLocation(program, 'a_position');
+            gl.enableVertexAttribArray(locPos);
+            gl.vertexAttribPointer(locPos, 2, gl.FLOAT, false, 0, 0);
+            const locRes = gl.getUniformLocation(program, 'u_resolution');
+            const locTime = gl.getUniformLocation(program, 'u_time');
+            let rafId = 0;
+            function resize() {
+                const rect = wrap.getBoundingClientRect();
+                const dpr = Math.min(window.devicePixelRatio || 1, 2);
+                const w = Math.round(rect.width * dpr);
+                const h = Math.round(rect.height * dpr);
+                if (canvas.width !== w || canvas.height !== h) {
+                    canvas.width = w;
+                    canvas.height = h;
+                    canvas.style.width = rect.width + 'px';
+                    canvas.style.height = rect.height + 'px';
+                }
+            }
+            function draw() {
+                resize();
+                gl.viewport(0, 0, canvas.width, canvas.height);
+                gl.uniform2f(locRes, canvas.width, canvas.height);
+                gl.uniform1f(locTime, performance.now() * 0.001);
+                gl.clearColor(1, 0, 0.22, 1);
+                gl.clear(gl.COLOR_BUFFER_BIT);
+                gl.drawArrays(gl.TRIANGLES, 0, 6);
+                rafId = requestAnimationFrame(draw);
+            }
+            resize();
+            draw();
+            const ro = new ResizeObserver(() => { resize(); });
+            ro.observe(wrap);
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) cancelAnimationFrame(rafId);
+                else draw();
+            });
         }
     }
 });
