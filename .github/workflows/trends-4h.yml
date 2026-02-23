@@ -41,11 +41,16 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           git fetch origin trends-data 2>/dev/null || true
-          git checkout trends-data 2>/dev/null || git checkout -b trends-data
+          if git rev-parse --verify origin/trends-data >/dev/null 2>&1; then
+            git checkout -B trends-data origin/trends-data
+          else
+            git checkout -b trends-data
+          fi
           mkdir -p labs/TrendingSearches/naver
           cp /tmp/naver_shopping_sample.json labs/TrendingSearches/naver/
           git add labs/TrendingSearches/naver/naver_shopping_sample.json
           git diff --staged --quiet && echo "No changes" || {
             git commit -m "chore: Naver 쇼핑 인기 키워드 4h $(TZ='Asia/Seoul' date +'%Y-%m-%d %H:%M')"
+            git pull --rebase origin trends-data 2>/dev/null || true
             git push -u origin trends-data
           }
