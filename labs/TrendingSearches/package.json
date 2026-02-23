@@ -1,15 +1,11 @@
 {
   "name": "shopping-keywords-kr",
   "version": "1.0.0",
-  "description": "Google Trends · 네이버쇼핑 인기 검색어 종합 랭킹",
+  "description": "네이버 쇼핑 검색 API 인기 키워드 순위 (4시간 갱신)",
   "scripts": {
-    "google": "node google-trends.js",
-    "naver": "node naver-shopping.js",
-    "collect": "node google-trends.js && node naver-shopping.js"
+    "naver": "node naver-shopping-api.js",
+    "collect": "node naver-shopping-api.js"
   },
-  "keywords": ["shopping", "keywords", "trends", "naver", "google"],
-  "license": "MIT",
-  "dependencies": {
-    "puppeteer": "^24.6.1"
-  }
+  "keywords": ["shopping", "keywords", "naver", "search-api"],
+  "license": "MIT"
 }

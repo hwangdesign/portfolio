@@ -1,5 +1,5 @@
-# 4시간마다 Google Trends 수집 → trends-data 브랜치에 푸시 (main 배포 트리거 없음)
-name: Google Trends 4h
+# 4시간마다 네이버 쇼핑 검색 API로 인기 키워드 순위 수집 → trends-data 브랜치 푸시
+name: Naver Shopping Keywords 4h
 
 permissions:
   contents: write
@@ -26,32 +26,26 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Install Puppeteer Chrome
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libgbm-dev
-          npx puppeteer browsers install chrome
-
-      - name: Run Google Trends (4h)
-        run: TZ='Asia/Seoul' node google-trends.js
+      - name: Run Naver Shopping API (순위 키워드 매칭)
+        env:
+          NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
+          NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
+        run: node naver-shopping-api.js
         continue-on-error: true
 
       - name: Push to trends-data branch
         working-directory: ${{ github.workspace }}
         run: |
-          [ -f labs/TrendingSearches/google/google_trends_sample.json ] || exit 0
-          cp labs/TrendingSearches/google/google_trends_sample.json /tmp/
+          [ -f labs/TrendingSearches/naver/naver_shopping_sample.json ] || exit 0
+          cp labs/TrendingSearches/naver/naver_shopping_sample.json /tmp/
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           git fetch origin trends-data 2>/dev/null || true
           git checkout trends-data 2>/dev/null || git checkout -b trends-data
-          mkdir -p labs/TrendingSearches/google
-          cp /tmp/google_trends_sample.json labs/TrendingSearches/google/
-          git add labs/TrendingSearches/google/google_trends_sample.json
+          mkdir -p labs/TrendingSearches/naver
+          cp /tmp/naver_shopping_sample.json labs/TrendingSearches/naver/
+          git add labs/TrendingSearches/naver/naver_shopping_sample.json
           git diff --staged --quiet && echo "No changes" || {
-            git commit -m "chore: Google Trends 4h $(TZ='Asia/Seoul' date +'%Y-%m-%d %H:%M')"
+            git commit -m "chore: Naver 쇼핑 인기 키워드 4h $(TZ='Asia/Seoul' date +'%Y-%m-%d %H:%M')"
             git push -u origin trends-data
           }

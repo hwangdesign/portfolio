@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="description" content="Trending Searches - Google Trends · 네이버쇼핑">
-  <title>Trending Searches | Google Trends · 네이버쇼핑</title>
+  <meta name="description" content="Trending Searches - 네이버 쇼핑 인기 검색어">
+  <title>Trending Searches | 네이버 쇼핑 인기 검색어</title>
   <script>
     (function() {
       var stored = localStorage.getItem('lab-keywords-dark-mode');
@@ -188,33 +188,29 @@
     })();
 
     (function() {
-      var raw = 'google/google_trends_sample.json';
+      var raw = 'naver/naver_shopping_sample.json';
       var defaultRepo = 'hwangdesign/portfolio';
       var customDomains = { 'hwangdesign.pe.kr': 'a1700054/portfolio' };
       try {
         var h = location.hostname || '';
         var p = location.pathname || '';
         if (customDomains[h]) {
-          raw = 'https://raw.githubusercontent.com/' + customDomains[h] + '/trends-data/labs/TrendingSearches/google/google_trends_sample.json';
+          raw = 'https://raw.githubusercontent.com/' + customDomains[h] + '/trends-data/labs/TrendingSearches/naver/naver_shopping_sample.json';
         } else if (h.endsWith('.github.io') && p.indexOf('/') >= 0) {
           var owner = h.split('.')[0];
           var repo = p.split('/').filter(Boolean)[0] || 'portfolio';
-          raw = 'https://raw.githubusercontent.com/' + owner + '/' + repo + '/trends-data/labs/TrendingSearches/google/google_trends_sample.json';
+          raw = 'https://raw.githubusercontent.com/' + owner + '/' + repo + '/trends-data/labs/TrendingSearches/naver/naver_shopping_sample.json';
         } else if (!h || h === 'localhost' || location.protocol === 'file:') {
-          raw = 'https://raw.githubusercontent.com/' + defaultRepo + '/trends-data/labs/TrendingSearches/google/google_trends_sample.json';
+          raw = 'https://raw.githubusercontent.com/' + defaultRepo + '/trends-data/labs/TrendingSearches/naver/naver_shopping_sample.json';
         }
       } catch (_) {}
-      window.TRENDS_GOOGLE_URL = raw;
+      window.TRENDS_NAVER_URL = raw;
     })();
 
-    const SOURCES = {
-            google: window.TRENDS_GOOGLE_URL || 'google/google_trends_sample.json',
-            naver: 'naver/naver_shopping_sample.json'
-        };
+    const SOURCES = { naver: window.TRENDS_NAVER_URL || 'naver/naver_shopping_sample.json' };
 
         const FALLBACK_DATA = {
-            google: [{"ranking":"1","keyword":"겨울 패딩"},{"ranking":"2","keyword":"노트북"},{"ranking":"3","keyword":"에어팟"},{"ranking":"4","keyword":"선크림"},{"ranking":"5","keyword":"아이패드"},{"ranking":"6","keyword":"스마트워치"},{"ranking":"7","keyword":"무선 이어폰"},{"ranking":"8","keyword":"가습기"},{"ranking":"9","keyword":"공기청정기"},{"ranking":"10","keyword":"전기담요"}],
-            naver: [{"ranking":"1","keyword":"겨울 패딩"},{"ranking":"2","keyword":"선크림"},{"ranking":"3","keyword":"노트북"},{"ranking":"4","keyword":"에어팟"},{"ranking":"5","keyword":"무선 이어폰"}]
+            naver: [{"ranking":"1","keyword":"겨울 패딩"},{"ranking":"2","keyword":"선크림"},{"ranking":"3","keyword":"노트북"},{"ranking":"4","keyword":"에어팟"},{"ranking":"5","keyword":"무선 이어폰"},{"ranking":"6","keyword":"아이패드"},{"ranking":"7","keyword":"스마트워치"},{"ranking":"8","keyword":"가습기"},{"ranking":"9","keyword":"공기청정기"},{"ranking":"10","keyword":"전기담요"}]
         };
 
         function normalize(str) {
@@ -233,60 +229,18 @@
                 const res = await fetch(url, opts);
                 if (res.ok) return await res.json();
             } catch (_) {}
-            if (key === 'google' && url.startsWith('http')) {
+            if (key === 'naver' && url.startsWith('http')) {
                 try {
-                    const res = await fetch('google/google_trends_sample.json');
+                    const res = await fetch('naver/naver_shopping_sample.json');
                     if (res.ok) return await res.json();
                 } catch (_) {}
             }
-            return FALLBACK_DATA[key] || [];
+            return FALLBACK_DATA[key] || { items: [], updatedAt: null };
         }
 
-        function parseGoogleData(raw) {
+        function parseNaverData(raw) {
             if (Array.isArray(raw)) return { items: raw, updatedAt: null };
             return { items: raw.items || raw.data || [], updatedAt: raw.updatedAt || null };
-        }
-
-        async function buildMyChart() {
-            const container = document.getElementById('chartContainer');
-            container.innerHTML = '<div class="loading lang-ko">2개 소스 데이터 분석 중...</div>';
-            try {
-                const [googleRaw, naver] = await Promise.all([
-                    fetchOrFallback(SOURCES.google, 'google'),
-                    fetchOrFallback(SOURCES.naver, 'naver')
-                ]);
-                const googleParsed = parseGoogleData(googleRaw);
-                const google = googleParsed.items;
-
-                const map = new Map();
-
-                function add(source, list, label) {
-                    (list || []).forEach((item, i) => {
-                        const rank = parseRank(item, i + 1);
-                        const keyword = (item.keyword || '').trim();
-                        if (!keyword) return;
-                        const key = normalize(keyword);
-                        const pts = 101 - rank;
-                        if (!map.has(key)) {
-                            map.set(key, { keyword, score: 0, charts: {} });
-                        }
-                        const entry = map.get(key);
-                        entry.score += pts;
-                        entry.charts[label] = rank;
-                    });
-                }
-
-                add('google', google, 'google');
-                add('naver', naver, 'naver');
-
-                const sorted = Array.from(map.values())
-                    .sort((a, b) => b.score - a.score)
-                    .map((item, i) => ({ ...item, myRank: i + 1 }));
-
-                container.innerHTML = renderChart(sorted, 'my', googleParsed.updatedAt) || '';
-            } catch (e) {
-                container.innerHTML = `<div class="error lang-ko">분석 실패: ${e.message}</div>`;
-            }
         }
 
         function formatUpdateTime(updatedAt) {
@@ -307,61 +261,47 @@
             const target = document.getElementById('chartContainer');
             if (!items || items.length === 0) {
                 const err = '<div class="error lang-ko">데이터가 없습니다.</div>';
-                if (type !== 'my') target.innerHTML = err;
+                target.innerHTML = err;
                 return err;
             }
             const top10 = items.slice(0, 10);
+            const searchUrlBase = 'https://search.shopping.naver.com/search/all?query=';
             const html = top10.map((item, i) => {
-                const rank = item.myRank || item.ranking || item.rank || (i + 1);
+                const rank = item.ranking || item.rank || (i + 1);
                 const rankNum = parseInt(rank, 10) || (i + 1);
                 const rankDisplay = String(rankNum);
-                const searchUrl = type === 'google'
-                    ? `https://www.google.com/search?q=${encodeURIComponent(item.keyword)}`
-                    : type === 'naver'
-                    ? `https://search.shopping.naver.com/search/all?query=${encodeURIComponent(item.keyword)}`
-                    : `https://www.google.com/search?q=${encodeURIComponent(item.keyword)}`;
+                const searchUrl = searchUrlBase + encodeURIComponent(item.keyword || '');
                 const isKo = /[\uac00-\ud7a3]/.test(item.keyword);
                 return `<a href="${searchUrl}" target="_blank" rel="noopener" class="keyword-item">
                     <span class="keyword keyword-flip${isKo ? ' lang-ko' : ''}"><sup>${rankDisplay}</sup>${item.keyword}</span>
                 </a>`;
             }).join('');
-            var displayTime = updateTime;
-            if ((type === 'google' || type === 'my') && !displayTime) {
-                displayTime = localStorage.getItem('lab-keywords-last-update') || new Date().toISOString();
-            }
+            var displayTime = updateTime || localStorage.getItem('lab-keywords-last-update') || new Date().toISOString();
             if (updateTime) {
                 try { localStorage.setItem('lab-keywords-last-update', updateTime); } catch (_) {}
             }
-            var updateHtml = (type === 'google' || type === 'my') && displayTime
-                ? '<div class="keyword-update-time">' + formatUpdateTime(displayTime) + '</div>' : '';
+            var updateHtml = displayTime ? '<div class="keyword-update-time">' + formatUpdateTime(displayTime) + '</div>' : '';
             const wrapped = updateHtml + `<div class="chart-list">${html}</div>`;
-            if (type !== 'my') target.innerHTML = wrapped;
+            target.innerHTML = wrapped;
             return wrapped;
         }
 
-        async function loadChart(type) {
+        async function loadChart() {
             const container = document.getElementById('chartContainer');
-            if (type === 'my') {
-                await buildMyChart();
-                return;
-            }
             container.innerHTML = '<div class="loading lang-ko">로딩 중...</div>';
-            const url = SOURCES[type];
-            const key = type;
+            const url = SOURCES.naver;
             try {
-                const raw = await fetchOrFallback(url, key);
-                const parsed = key === 'google' ? parseGoogleData(raw) : { items: raw, updatedAt: null };
-                renderChart(parsed.items, type, key === 'google' ? parsed.updatedAt : null);
+                const raw = await fetchOrFallback(url, 'naver');
+                const parsed = parseNaverData(raw);
+                renderChart(parsed.items, 'naver', parsed.updatedAt);
             } catch (e) {
                 container.innerHTML = `<div class="error lang-ko">로드 실패: ${e.message}</div>`;
             }
         }
 
-        loadChart('google');
+        loadChart();
 
-        setInterval(function() {
-          loadChart('google');
-        }, 4 * 60 * 60 * 1000);
+        setInterval(loadChart, 4 * 60 * 60 * 1000);
 
         (function initTouchHover() {
             const container = document.getElementById('chartContainer');

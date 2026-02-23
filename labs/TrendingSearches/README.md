@@ -1,44 +1,41 @@
-# 🛒 Shopping Keywords KR
+# 🛒 Trending Searches (네이버 쇼핑 인기 검색어)
 
-Google Trends와 네이버쇼핑 인기 검색어를 종합한 쇼핑 키워드 랭킹 프로젝트입니다.
+네이버 쇼핑 검색 API로 후보 키워드별 검색 결과 수를 조회해, **검색량 순** 상위 10개를 4시간마다 순위로 매칭하는 랩입니다.
 
 ## 구조
 
 ```
-shopping-keywords/
-├── google-trends.js    # Google Trends (쇼핑 카테고리) 크롤러
-├── naver-shopping.js   # 네이버 쇼핑인사이트 크롤러
-├── google/             # Google Trends JSON 출력
-├── naver/              # 네이버쇼핑 JSON 출력
-├── index.html          # 뷰어 (종합 랭킹 / Google / 네이버 탭)
+labs/TrendingSearches/
+├── naver-shopping-api.js   # 네이버 검색 API 연동 (후보 키워드 → total 기준 순위)
+├── naver-shopping.js       # (선택) 네이버 쇼핑인사이트 크롤링
+├── naver/                  # naver_shopping_sample.json, naver_shopping_날짜.json
+├── index.html              # 뷰어 (네이버 쇼핑 인기 키워드만 표시)
 └── package.json
 ```
 
 ## 데이터 소스
 
-- **Google Trends**: [trends.google.co.kr/trending?geo=KR&category=2](https://trends.google.co.kr/trending?geo=KR&category=2) (쇼핑 카테고리)
-- **네이버쇼핑**: [datalab.naver.com/shoppingInsight](https://datalab.naver.com/shoppingInsight/sCategory.naver) (검색어 통계)
+- **네이버 검색 API (쇼핑)**: [검색 > 쇼핑](https://developers.naver.com/docs/serviceapi/search/shopping/shopping.md)  
+  - 후보 키워드 목록으로 `query` 요청 → `total` 기준 정렬 → 상위 10개를 인기 키워드로 저장
 
 ## 사용법
 
 ```bash
-cd labs/shopping-keywords
-npm install
-npm run collect   # Google + 네이버 수집
-npm run google    # Google Trends만
-npm run naver     # 네이버쇼핑만
+cd labs/TrendingSearches
+export NAVER_CLIENT_ID="발급받은 클라이언트 아이디"
+export NAVER_CLIENT_SECRET="발급받은 클라이언트 시크릿"
+node naver-shopping-api.js
 ```
+
+- `naver/naver_shopping_sample.json`: 뷰어가 로드하는 파일 (`updatedAt`, `items`)
+- 4시간마다 GitHub Actions에서 동일 스크립트 실행 후 `trends-data` 브랜치에 푸시
 
 ## 뷰어
 
-`index.html`을 브라우저에서 열거나 로컬 서버로 실행하세요.
-
-- **종합 랭킹**: 두 소스 점수 합산 (101-순위), 양쪽 모두 등장한 키워드가 상위
-- **Google Trends**: Google 쇼핑 트렌드만
-- **네이버쇼핑**: 네이버 쇼핑인사이트만
-
-키워드 클릭 시 Google 검색 또는 네이버쇼핑 검색으로 연결됩니다.
+`index.html`을 브라우저에서 열거나 로컬 서버로 실행하세요.  
+키워드 클릭 시 **네이버 쇼핑 검색**으로 연결되며, 4시간마다 데이터를 다시 불러옵니다.
 
 ## GitHub Actions
 
-`.github/workflows/daily-shopping-keywords.yml`이 매일 **KST 오전 7시**에 실행됩니다.
+- **trends-4h.yml**: 4시간마다 `naver-shopping-api.js` 실행 → `trends-data` 브랜치에 `naver/naver_shopping_sample.json` 푸시 (시크릿: `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET`)
+- **daily-shopping-keywords.yml**: main 푸시/일일 스케줄 시 동일 API 실행 → main에 naver JSON 커밋
