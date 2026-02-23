@@ -67,6 +67,7 @@ body {
 /* 영역1: 타이틀 + 박스 */
 .area-title-group {
   position: relative;
+  margin-bottom: 3rem;
 }
 
 .area-3-title {
@@ -322,7 +323,8 @@ body {
 .area-rank-list {
   width: 100%;
   margin: 0 auto;
-  padding: calc(2rem + 2vh) 0;
+  padding: 0;
+  padding-bottom: calc(3rem + 4vh);
   text-transform: uppercase;
 }
 
@@ -331,11 +333,17 @@ body {
   font-weight: 900;
   font-family: var(--font-family-display);
   padding: 0.75rem 1rem;
+  padding-bottom: 3rem;
   text-align: center;
-  color: var(--accent);
-  text-decoration: underline;
+  color: #000000;
   letter-spacing: -0.04em;
   line-height: 0.85;
+}
+
+@media (max-width: 768px) {
+  .keyword-update-time {
+    font-size: 14px;
+  }
 }
 
 .chart-list {

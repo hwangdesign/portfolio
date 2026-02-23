@@ -157,9 +157,13 @@
       function tick() {
         const now = new Date();
         const dateStr = now.getDate() + ' ' + monthNames[now.getMonth()] + ' ' + now.getFullYear();
-        const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true, timeZone: tz }).replace(/\s/g, '');
+        const rawTime = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true, timeZone: tz });
+        const match = rawTime.match(/^(.+?)\s*(AM|PM)$/i);
+        const timePart = match ? match[1].replace(/\s/g, '') : rawTime.replace(/\s/g, '');
+        const period = match ? match[2].toUpperCase() : '';
+        const timeStr = period ? '<sup>(' + period + ')</sup>' + timePart : timePart;
         setText(dateEl, dateStr);
-        setText(timeEl, timeStr);
+        if (timeEl) timeEl.innerHTML = timeStr;
       }
       tick();
       setInterval(tick, 1000);
@@ -289,7 +293,10 @@
             m = Math.floor(m / 30) * 30;
             d.setHours(h, m, 0, 0);
             var str = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-            return 'UPDATE ' + str;
+            var match = str.match(/^(.+?)\s*(AM|PM)$/i);
+            var timePart = match ? match[1].replace(/\s/g, '') : str.replace(/\s/g, '');
+            var period = match ? match[2].toUpperCase() : '';
+            return period ? '<sup>(' + period + ')</sup>' + timePart + ' UPDATED' : timePart + ' UPDATED';
         }
 
         function renderChart(items, type, updateTime) {
