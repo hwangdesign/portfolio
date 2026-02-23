@@ -38,4 +38,3 @@ node naver-shopping-api.js
 ## GitHub Actions
 
 - **trends-4h.yml**: 4시간마다 `naver-shopping-api.js` 실행 → `trends-data` 브랜치에 `naver/naver_shopping_sample.json` 푸시 (시크릿: `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET`)
-- **daily-shopping-keywords.yml**: main 푸시/일일 스케줄 시 동일 API 실행 → main에 naver JSON 커밋
