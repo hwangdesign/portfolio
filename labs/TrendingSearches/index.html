@@ -190,20 +190,24 @@
     (function() {
       var raw = 'naver/naver_shopping_sample.json';
       var defaultRepo = 'hwangdesign/portfolio';
+      var rawBase = 'https://raw.githubusercontent.com/' + defaultRepo + '/';
       try {
         var h = location.hostname || '';
         var p = location.pathname || '';
         if (h === 'hwangdesign.pe.kr') {
           raw = 'naver/naver_shopping_sample.json';
+          rawBase = 'https://raw.githubusercontent.com/' + defaultRepo + '/';
         } else if (h.endsWith('.github.io') && p.indexOf('/') >= 0) {
           var owner = h.split('.')[0];
           var repo = p.split('/').filter(Boolean)[0] || 'portfolio';
-          raw = 'https://raw.githubusercontent.com/' + owner + '/' + repo + '/trends-data/labs/TrendingSearches/naver/naver_shopping_sample.json';
+          rawBase = 'https://raw.githubusercontent.com/' + owner + '/' + repo + '/';
+          raw = rawBase + 'trends-data/labs/TrendingSearches/naver/naver_shopping_sample.json';
         } else if (!h || h === 'localhost' || location.protocol === 'file:') {
-          raw = 'https://raw.githubusercontent.com/' + defaultRepo + '/trends-data/labs/TrendingSearches/naver/naver_shopping_sample.json';
+          raw = rawBase + 'trends-data/labs/TrendingSearches/naver/naver_shopping_sample.json';
         }
       } catch (_) {}
       window.TRENDS_NAVER_URL = raw;
+      window.TRENDS_NAVER_RAW_BASE = rawBase;
     })();
 
     const SOURCES = { naver: window.TRENDS_NAVER_URL || 'naver/naver_shopping_sample.json' };
@@ -223,20 +227,23 @@
         }
 
         async function fetchOrFallback(url, key) {
+            var opts = { cache: 'no-store' };
             try {
-                const opts = url.startsWith('http') ? { cache: 'no-store' } : {};
-                const res = await fetch(url, opts);
+                var res = await fetch(url, url.startsWith('http') ? opts : {});
                 if (res.ok) return await res.json();
-                if (key === 'naver' && url.indexOf('trends-data') !== -1) {
-                    var mainUrl = url.replace('/trends-data/', '/main/');
-                    var mainRes = await fetch(mainUrl, opts);
-                    if (mainRes.ok) return await mainRes.json();
+                if (key === 'naver' && window.TRENDS_NAVER_RAW_BASE) {
+                    var base = window.TRENDS_NAVER_RAW_BASE;
+                    var path = 'labs/TrendingSearches/naver/naver_shopping_sample.json';
+                    res = await fetch(base + 'trends-data/' + path, opts);
+                    if (res.ok) return await res.json();
+                    res = await fetch(base + 'main/' + path, opts);
+                    if (res.ok) return await res.json();
                 }
             } catch (_) {}
-            if (key === 'naver' && url.startsWith('http')) {
+            if (key === 'naver') {
                 try {
-                    const res = await fetch('naver/naver_shopping_sample.json');
-                    if (res.ok) return await res.json();
+                    var rel = await fetch('naver/naver_shopping_sample.json');
+                    if (rel.ok) return await rel.json();
                 } catch (_) {}
             }
             return FALLBACK_DATA[key] || { items: [], updatedAt: null };
