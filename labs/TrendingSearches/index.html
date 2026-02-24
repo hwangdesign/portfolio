@@ -335,6 +335,45 @@
                 });
             }, { passive: true });
         })();
+
+        (function initAutoHoverCycle() {
+            var area2 = document.querySelector('.area-2.area-rank-list');
+            if (!area2) return;
+            var cycleInterval = null;
+            var currentIndex = 0;
+            var pauseMs = 1500;
+
+            function clearAllAutoHover() {
+                var items = area2.querySelectorAll('.keyword-item');
+                items.forEach(function(el) { el.classList.remove('auto-hover'); });
+            }
+
+            function tick() {
+                var items = area2.querySelectorAll('.chart-list .keyword-item');
+                if (items.length === 0) return;
+                items.forEach(function(el, i) { el.classList.toggle('auto-hover', i === currentIndex); });
+                currentIndex = (currentIndex + 1) % items.length;
+            }
+
+            var observer = new IntersectionObserver(function(entries) {
+                var ent = entries[0];
+                if (ent.isIntersecting) {
+                    if (!cycleInterval) {
+                        currentIndex = 0;
+                        tick();
+                        cycleInterval = setInterval(tick, pauseMs);
+                    }
+                } else {
+                    if (cycleInterval) {
+                        clearInterval(cycleInterval);
+                        cycleInterval = null;
+                    }
+                    clearAllAutoHover();
+                }
+            }, { rootMargin: '0px', threshold: 0.2 });
+
+            observer.observe(area2);
+        })();
     </script>
 </body>
 </html>
