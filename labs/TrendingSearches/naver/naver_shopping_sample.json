@@ -1,45 +1,45 @@
 {
-  "updatedAt": "2026-02-24T05:12:15.205Z",
+  "updatedAt": "2026-02-24T07:27:20.406Z",
   "items": [
     {
       "ranking": "1",
-      "keyword": "공구"
+      "keyword": "겨울 패딩"
     },
     {
       "ranking": "2",
-      "keyword": "인테리어"
+      "keyword": "선크림"
     },
     {
       "ranking": "3",
-      "keyword": "주방용품"
+      "keyword": "노트북"
     },
     {
       "ranking": "4",
-      "keyword": "가방"
+      "keyword": "에어팟"
     },
     {
       "ranking": "5",
-      "keyword": "문구"
+      "keyword": "무선 이어폰"
     },
     {
       "ranking": "6",
-      "keyword": "선물"
+      "keyword": "아이패드"
     },
     {
       "ranking": "7",
-      "keyword": "스마트폰"
+      "keyword": "가습기"
     },
     {
       "ranking": "8",
-      "keyword": "캠핑"
+      "keyword": "공기청정기"
     },
     {
       "ranking": "9",
-      "keyword": "화장품"
+      "keyword": "전기담요"
     },
     {
       "ranking": "10",
-      "keyword": "욕실용품"
+      "keyword": "스마트워치"
     }
   ]
 }
