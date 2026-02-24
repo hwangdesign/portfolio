@@ -6,7 +6,7 @@ permissions:
 
 on:
   schedule:
-    - cron: '0 */4 * * *'  # 매 4시간 정각 (UTC)
+    - cron: '0 23,3,7,11 * * *'  # KST 08:00, 12:00, 16:00, 20:00 (매일 8시~밤 10시 구간, 4시간마다)
   workflow_dispatch: {}    # Actions 탭 → 왼쪽에서 워크플로 선택 → 오른쪽 "Run workflow"
   push:
     branches: [main]

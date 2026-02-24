@@ -255,15 +255,12 @@
         function formatUpdateTime(updatedAt) {
             if (!updatedAt) return '';
             var d = new Date(updatedAt);
-            var h = d.getHours();
-            var m = d.getMinutes();
-            m = Math.floor(m / 30) * 30;
-            d.setHours(h, m, 0, 0);
-            var str = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-            var match = str.match(/^(.+?)\s*(AM|PM)$/i);
-            var timePart = match ? match[1].replace(/\s/g, '') : str.replace(/\s/g, '');
+            var rawTime = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true });
+            var match = rawTime.match(/^(.+?)\s*(AM|PM)$/i);
+            var timePart = match ? match[1].replace(/\s/g, '') : rawTime.replace(/\s/g, '');
             var period = match ? match[2].toUpperCase() : '';
-            return period ? '<sup>(' + period + ')</sup>' + timePart + ' UPDATED' : timePart + ' UPDATED';
+            var timeStr = period ? '<sup>(' + period + ')</sup>' + timePart : timePart;
+            return 'TODAY<br>' + timeStr + '<br>UPDATED';
         }
 
         function renderChart(items, type, updateTime) {
