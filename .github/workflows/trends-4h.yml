@@ -1,4 +1,4 @@
-# 4시간마다 네이버 쇼핑 검색 API로 인기 키워드 순위 수집 → trends-data 브랜치 푸시
+# 4시간마다 자동 실행 + 수동 실행 가능. 네이버 데이터랩 쇼핑인사이트 API로 인기 키워드 순위 수집 → trends-data 브랜치 푸시
 name: Naver Shopping Keywords 4h
 
 permissions:
@@ -6,8 +6,8 @@ permissions:
 
 on:
   schedule:
-    - cron: '0 23,3,7,11 * * *'  # KST 08:00, 12:00, 16:00, 20:00 (매일 8시~밤 10시 구간, 4시간마다)
-  workflow_dispatch: {}    # Actions 탭 → 왼쪽에서 워크플로 선택 → 오른쪽 "Run workflow"
+    - cron: '0 23,3,7,11 * * *'  # 4시간마다 자동: KST 08:00, 12:00, 16:00, 20:00
+  workflow_dispatch: {}  # 수동 실행: Actions 탭 → Naver Shopping Keywords 4h 선택 → Run workflow
   push:
     branches: [main]
     paths:
