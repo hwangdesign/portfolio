@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="description" content="Trending Searches - 네이버 쇼핑 인기 검색어">
-  <title>Trending Searches | 네이버 쇼핑 인기 검색어</title>
+  <meta name="description" content="Popular Shopping Keywords - 네이버 쇼핑 인기 검색어">
+  <title>Popular Shopping Keywords | 네이버 쇼핑 인기 검색어</title>
   <script>
     (function() {
       var stored = localStorage.getItem('lab-keywords-dark-mode');
@@ -24,7 +24,7 @@
   <section class="area-title">
     <div class="area-title-scaler">
     <div class="area-title-content">
-      <span class="page-title">Trending Searches</span>
+      <span class="page-title">Popular<br>Shopping Keywords</span>
       <span class="title-meta"><span id="locationCity">—</span><sup>(<span id="locationCountry">—</span>)</sup></span>
       <span class="title-meta" id="todayDate">—</span>
       <span class="title-meta" id="currentTime">—</span>
@@ -274,7 +274,7 @@
                 return err;
             }
             const top10 = items.slice(0, 10);
-            const searchUrlBase = 'https://search.shopping.naver.com/search/all?query=';
+            const searchUrlBase = 'https://search.shopping.naver.com/ns/search?query=';
             const html = top10.map((item, i) => {
                 const rank = item.ranking || item.rank || (i + 1);
                 const rankNum = parseInt(rank, 10) || (i + 1);
