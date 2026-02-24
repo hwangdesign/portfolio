@@ -43,13 +43,14 @@
 html {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
+  background: #000000;
 }
 
 body {
   font-family: var(--font-family-base);
   font-size: var(--font-size-base);
   letter-spacing: -0.04em;
-  background: var(--bg-primary);
+  background: #000000;
   color: #1a1a1a;
   min-height: 100vh;
   min-height: 100dvh;
@@ -70,9 +71,15 @@ body {
   margin-bottom: 3rem;
 }
 
+.area-1.area-title-group {
+  margin-bottom: 0;
+}
+
 .area-3-title {
   min-height: 50vh;
   min-height: 50dvh;
+  background: #000000;
+  margin-bottom: 0;
 }
 
 .area-3-title .area-title {
@@ -296,9 +303,10 @@ body {
   z-index: 1;
 }
 
-/* 영역3: 박스+원 */
+/* 영역3: 박스+원 (페이지 하단 블랙) */
 .area-3 {
   width: 100%;
+  background: #000000;
 }
 
 .area-3 .area-between-box--left .area-between-circle {
@@ -319,13 +327,15 @@ body {
   top: -8dvh;
 }
 
-/* 영역2: 순위 리스트 */
+/* 영역2: 순위 리스트 (화이트 유지, 상단 여백으로 area-1~2 사이 갭 화이트 처리) */
 .area-rank-list {
   width: 100%;
   margin: 0 auto;
   padding: 0;
+  padding-top: 3rem;
   padding-bottom: calc(3rem + 4vh);
   text-transform: uppercase;
+  background: #ffffff;
 }
 
 .keyword-update-time {
