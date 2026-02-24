@@ -61,3 +61,16 @@ jobs:
             git pull --rebase origin trends-data 2>/dev/null || true
             git push -u origin trends-data
           }
+
+      - name: Output top 10 keywords
+        working-directory: ${{ github.workspace }}
+        run: |
+          echo "## Top 10 Keywords" >> $GITHUB_STEP_SUMMARY
+          if [ -f labs/TrendingSearches/naver/naver_shopping_sample.json ]; then
+            jq -r '.items[]? | "\(.ranking). \(.keyword)"' labs/TrendingSearches/naver/naver_shopping_sample.json 2>/dev/null | head -10 | while read -r line; do
+              echo "$line" >> $GITHUB_STEP_SUMMARY
+              echo "$line"
+            done
+          else
+            echo "No data" >> $GITHUB_STEP_SUMMARY
+          fi
