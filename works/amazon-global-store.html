@@ -15,6 +15,10 @@
     <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
     <link rel="stylesheet" href="../assets/styles.css">
     <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <style>
+      .project-image-detail--centered { display: block; width: 500px; max-width: 100%; height: auto; margin-left: auto; margin-right: auto; aspect-ratio: 1/1; object-fit: contain; }
+      .project-image-detail-wrap--bg-white { width: 100%; max-width: 1080px; background: #fff; padding: 1.5rem; display: flex; align-items: center; justify-content: center; }
+    </style>
 </head>
 <body class="project-detail-page">
     <div id="shared-nav"></div>
@@ -30,9 +34,9 @@
                     <div class="project-date">2021</div>
                     <h1 class="section-title animated-section-title" id="animatedTitle" data-title="Amazon Global Store">Amazon Global Store</h1>
                     <div class="hero-info-description">
-                        <p><span class="prefix-char">+</span> 아마존 글로벌 상품을 국내에 소개하는 크로스보더 쇼핑 서비스예요<br><span class="prefix-char">+</span> 배송·결제·언어 현지화와 상품 검색·필터 UX를 설계해요</p>
+                        <p><span class="prefix-char">+</span> Amazon Global Store는 11번가 안에서 미국 아마존의 수천만 개 상품을 직접 구매할 수 있도록 연결한 글로벌 커머스 확장 프로젝트예요.<br><span class="prefix-char">+</span> 국내 고객이 익숙한 11번가 환경에서 해외 직구를 더 편리하고 안전하게 경험할 수 있도록 배송·혜택·UI를 통합 설계했어요.</p>
                     </div>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="btn-cta">SITE<span class="btn-cta__icon-wrap"><span class="material-symbols-outlined btn-cta__icon" aria-hidden="true">keyboard_arrow_right</span></span></a>
+                    <a id="amazon-site-link" href="https://www.11st.co.kr/amazon/main" target="_blank" rel="noopener noreferrer" class="btn-cta">SITE<span class="btn-cta__icon-wrap"><span class="material-symbols-outlined btn-cta__icon" aria-hidden="true">keyboard_arrow_right</span></span></a>
                 </div>
             </div>
         </section>
@@ -41,13 +45,23 @@
         <section class="section project-details-section">
             <div class="container">
                 <div class="project-details-content">
-                    <img src="images/AmazonGlobalStore/Details01.svg" alt="Amazon Global Store 디테일 1" class="project-image project-image-detail" onerror="this.onerror=null;this.src='https://via.placeholder.com/1080x607/111111/333333?text=Amazon+Global+Store+01'">
+                    <img src="images/amazon/Details01.png" alt="Global Access" class="project-image project-image-detail" onerror="this.onerror=null;this.src='https://via.placeholder.com/1080x607/111111/333333?text=Global+Access'">
                     <div class="section-body">
-                        <p><strong>배경</strong> — 11번가를 통해 아마존 USA·EU 등 해외 상품을 구매할 수 있는 통합 채널을 구축하는 프로젝트예요. 환율·관세·배송 기간·AS 정책 등 크로스보더 쇼핑 특유의 복잡성을 사용자에게 직관적으로 전달하고, 신뢰감을 높이는 UI·커뮤니케이션 전략이 필요했어요. 기존 11번가 경험과 아마존 브랜드 톤을 조화시키면서, 글로벌 상품의 가치를 부각하는 정보 구조를 설계했어요.</p>
+                        <p><strong>Global Access</strong> — 수천만 개 상품을 국내 UX 안으로 연결. PC, 패션, 가전, 주방용품, 장난감 등 30개 이상의 카테고리를 통해 국내 최대 수준의 해외 상품군을 제공해요. 특히 수백만 권의 도서를 직접 구매할 수 있도록 구성해 광범위한 북스토어 경험을 구현했어요. 해외 플랫폼을 별도로 이용하지 않아도 11번가 웹과 앱 안에서 자연스럽게 글로벌 쇼핑이 가능하도록 설계했어요.</p>
                     </div>
-                    <img src="images/AmazonGlobalStore/Details02.svg" alt="Amazon Global Store 디테일 2" class="project-image project-image-detail" onerror="this.onerror=null;this.src='https://via.placeholder.com/1080x607/111111/333333?text=Amazon+Global+Store+02'">
+                    <img src="images/amazon/Details02.png" alt="Seamless Shipping" class="project-image project-image-detail" onerror="this.onerror=null;this.src='https://via.placeholder.com/1080x607/111111/333333?text=Seamless+Shipping'">
                     <div class="section-body">
-                        <p><strong>UX 설계</strong> — <em>검색·필터</em>는 카테고리·브랜드·가격대·배송 옵션을 계층적으로 구성해 해외 상품 탐색을 용이하게 해요. <em>상품 상세</em>에서는 원화 환산 가격·예상 배송일·관세 정보를 명시하고, 리뷰·Q&A 등 신뢰 요소를 배치했어요. <em>결제·배송</em> 플로우는 수입 통관 정보 입력·배송 주소 검증·환불 정책 안내를 단계별로 안내해요. 다국어·다통화 지원과 접근성 지침을 반영해 글로벌 사용자 경험을 최적화했어요.</p>
+                        <p><strong>Seamless Shipping</strong> — 배송 장벽을 낮춘 구조 설계. 무료 국제 배송과 합리적인 배송 기간(평균 6~10영업일, 일부 상품 4~6영업일)을 통해 직구의 진입 장벽을 낮췄어요. 우주패스 가입 고객은 최소 구매 금액 제한 없이 무료 배송을 제공하고, 일반 고객도 일정 금액 이상 구매 시 무료 배송을 지원해 접근성을 높였어요. 글로벌 구매 경험을 ‘특별한 선택’이 아닌 ‘일상적 쇼핑’으로 전환하는 데 초점을 맞췄어요.</p>
+                    </div>
+                    <img src="images/amazon/Details03.png" alt="Customer Obsession" class="project-image project-image-detail" onerror="this.onerror=null;this.src='https://via.placeholder.com/1080x607/111111/333333?text=Customer+Obsession'">
+                    <div class="section-body">
+                        <p><strong>Customer Obsession</strong> — 공동 철학 기반의 경험 설계. 아마존과 11번가는 ‘고객제일주의’라는 공통 철학을 바탕으로 협업했어요. 아마존의 글로벌 리테일 경험과 11번가의 국내 시장 이해도를 결합해, 보다 편리하고 안전한 쇼핑 환경을 구현했어요. 기존 11번가 UI 안에서 글로벌 스토어를 통합해 고객 학습 비용을 최소화했어요.</p>
+                    </div>
+                    <div class="project-image-detail-wrap project-image-detail-wrap--bg-white">
+                        <img src="images/amazon/Details04.gif" alt="Launch Momentum" class="project-image project-image-detail project-image-detail--centered" onerror="this.onerror=null;this.src='https://via.placeholder.com/500x500/111111/333333?text=Launch+Momentum'" width="500" height="500">
+                    </div>
+                    <div class="section-body">
+                        <p><strong>Launch Momentum</strong> — 론칭 프로모션과 가격 경쟁력 강화. 론칭을 기념해 PC·패션·생활용품·아마존 전자기기 등 다양한 카테고리에서 최대 30~50% 할인 프로모션을 진행했어요. 수천 개의 딜을 통해 가격 경쟁력을 강조하며 초기 트래픽과 전환을 동시에 확보했어요. 단기 프로모션을 넘어, 향후 새로운 서비스와 상품 확장을 지속하는 글로벌 협업 구조를 마련했어요.</p>
                     </div>
                 </div>
             </div>
@@ -60,5 +74,13 @@
 
     <script src="../assets/project-nav-config.js"></script>
     <script src="../assets/script.js"></script>
+    <script>
+      (function() {
+        var link = document.getElementById('amazon-site-link');
+        if (link && window.matchMedia('(max-width: 768px)').matches) {
+          link.href = 'https://m.11st.co.kr/page/main/ahome';
+        }
+      })();
+    </script>
 </body>
 </html>
