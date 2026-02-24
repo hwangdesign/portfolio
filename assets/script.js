@@ -1439,9 +1439,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 varying vec2 v_uv;
                 void main() {
                     vec2 uv = v_uv;
-                    vec3 color1 = vec3(1.0, 0.353, 0.18);
-                    vec3 color2 = vec3(1.0, 0.0, 0.22);
-                    vec3 color3 = vec3(1.0, 0.0, 0.937);
+                    vec3 color1 = vec3(1.0, 0.25, 0.0);
+                    vec3 color2 = vec3(1.0, 0.0, 0.15);
+                    vec3 color3 = vec3(0.95, 0.0, 1.0);
                     float t = u_time * 0.4;
                     vec2 p1 = vec2(0.35 + 0.28 * sin(t), 0.35 + 0.28 * cos(t * 0.73));
                     vec2 p2 = vec2(0.5 + 0.32 * sin(t * 0.87 + 2.1), 0.62 + 0.28 * cos(t * 0.61 + 1.2));
@@ -1449,12 +1449,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     float d1 = distance(uv, p1);
                     float d2 = distance(uv, p2);
                     float d3 = distance(uv, p3);
-                    float soft = 3.2;
-                    float c1 = exp(-d1 * d1 * soft);
-                    float c2 = exp(-d2 * d2 * soft);
-                    float c3 = exp(-d3 * d3 * soft) * 2.0;
+                    float soft = 2.2;
+                    float c1 = exp(-d1 * d1 * soft) * 1.4;
+                    float c2 = exp(-d2 * d2 * soft) * 1.4;
+                    float c3 = exp(-d3 * d3 * soft) * 2.4;
                     float sum = c1 + c2 + c3 + 0.001;
                     vec3 col = (c1 * color1 + c2 * color2 + c3 * color3) / sum;
+                    col = pow(col, vec3(0.92));
                     gl_FragColor = vec4(col, 1.0);
                 }
             `;
