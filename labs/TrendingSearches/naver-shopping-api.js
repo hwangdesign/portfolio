@@ -1,6 +1,6 @@
 /**
- * 네이버 쇼핑 검색 API로 후보 키워드별 검색 결과 수 조회 → 순위 산출
- * @see https://developers.naver.com/docs/serviceapi/search/shopping/shopping.md
+ * 네이버 데이터랩 쇼핑인사이트 API로 후보 키워드별 트렌드(클릭 추이) 조회 → 순위 산출
+ * @see https://developers.naver.com/docs/serviceapi/datalab/shopping/shopping.md
  * 4시간마다 실행해 naver_shopping_sample.json 갱신
  */
 const https = require('https');
@@ -34,39 +34,76 @@ const CANDIDATE_KEYWORDS = [
   '책', '만화', '문구', '디자인문구', '인테리어', '침대', '소파', '책상', '의자'
 ];
 
-function fetchTotal(keyword) {
+/** 데이터랩 쇼핑 분야 코드 (네이버쇼핑 cat_id). 필요 시 변경 가능 */
+const DATALAB_CATEGORY = process.env.NAVER_DATALAB_CATEGORY || '50000000';
+
+/** 최대 5개 키워드씩 요청 (API 제한) */
+const KEYWORDS_PER_REQUEST = 5;
+
+function getDateString(date) {
+  const y = date.getFullYear();
+  const mo = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${y}-${mo}-${day}`;
+}
+
+/**
+ * 데이터랩 쇼핑인사이트 키워드별 트렌드 조회 (POST /v1/datalab/shopping/category/keywords)
+ * @param {string[]} keywords - 최대 5개
+ * @param {string} startDate - yyyy-mm-dd
+ * @param {string} endDate - yyyy-mm-dd
+ */
+function fetchKeywordTrend(keywords, startDate, endDate) {
   return new Promise((resolve, reject) => {
-    const q = encodeURIComponent(keyword);
+    const body = JSON.stringify({
+      startDate,
+      endDate,
+      timeUnit: 'date',
+      category: DATALAB_CATEGORY,
+      keyword: keywords.map(kw => ({ name: kw, param: [kw] }))
+    });
     const opts = {
       hostname: 'openapi.naver.com',
-      path: `/v1/search/shop.json?query=${q}&display=1&start=1`,
-      method: 'GET',
+      path: '/v1/datalab/shopping/category/keywords',
+      method: 'POST',
       headers: {
         'X-Naver-Client-Id': clientId,
-        'X-Naver-Client-Secret': clientSecret
+        'X-Naver-Client-Secret': clientSecret,
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(body, 'utf-8')
       }
     };
     const req = https.request(opts, (res) => {
-      let body = '';
-      res.on('data', (ch) => { body += ch; });
+      let data = '';
+      res.on('data', (ch) => { data += ch; });
       res.on('end', () => {
         try {
-          const json = JSON.parse(body);
-          if (json.errorCode) {
-            resolve({ keyword, total: 0 });
+          const json = JSON.parse(data);
+          if (json.errorMessage || json.errorCode) {
+            resolve([]);
             return;
           }
-          const total = typeof json.total === 'number' ? json.total : 0;
-          resolve({ keyword, total });
+          const results = Array.isArray(json.results) ? json.results : [];
+          resolve(results);
         } catch (_) {
-          resolve({ keyword, total: 0 });
+          resolve([]);
         }
       });
     });
-    req.on('error', () => resolve({ keyword, total: 0 }));
-    req.setTimeout(10000, () => { req.destroy(); resolve({ keyword, total: 0 }); });
-    req.end();
+    req.on('error', () => resolve([]));
+    req.setTimeout(15000, () => { req.destroy(); resolve([]); });
+    req.end(body);
   });
+}
+
+/**
+ * results 항목에서 키워드별 트렌드 점수 산출 (최근 구간 ratio 합계, 없으면 0)
+ */
+function scoreFromResult(result) {
+  const kw = Array.isArray(result.keyword) ? result.keyword[0] : (result.title || '');
+  const data = Array.isArray(result.data) ? result.data : [];
+  const sum = data.reduce((acc, d) => acc + (typeof d.ratio === 'number' ? d.ratio : 0), 0);
+  return { keyword: kw, score: sum };
 }
 
 (async () => {
@@ -79,18 +116,39 @@ function fetchTotal(keyword) {
     fs.mkdirSync(folderPath, { recursive: true });
   }
 
-  const results = [];
-  for (let i = 0; i < CANDIDATE_KEYWORDS.length; i++) {
-    const kw = CANDIDATE_KEYWORDS[i];
-    const r = await fetchTotal(kw);
-    results.push(r);
-    if ((i + 1) % 10 === 0) console.log(`진행: ${i + 1}/${CANDIDATE_KEYWORDS.length}`);
-    await new Promise((r) => setTimeout(r, 120));
+  const end = new Date();
+  const start = new Date(end);
+  start.setDate(start.getDate() - 7);
+  const startDate = getDateString(start);
+  const endDate = getDateString(end);
+
+  const scoreMap = new Map();
+  for (const kw of CANDIDATE_KEYWORDS) {
+    scoreMap.set(kw, 0);
   }
 
-  results.sort((a, b) => (b.total - a.total));
+  for (let i = 0; i < CANDIDATE_KEYWORDS.length; i += KEYWORDS_PER_REQUEST) {
+    const chunk = CANDIDATE_KEYWORDS.slice(i, i + KEYWORDS_PER_REQUEST);
+    const results = await fetchKeywordTrend(chunk, startDate, endDate);
+    for (const r of results) {
+      const { keyword, score } = scoreFromResult(r);
+      if (keyword && scoreMap.has(keyword)) {
+        scoreMap.set(keyword, score);
+      }
+    }
+    if (i + KEYWORDS_PER_REQUEST < CANDIDATE_KEYWORDS.length) {
+      await new Promise((r) => setTimeout(r, 250));
+    }
+    if ((i + KEYWORDS_PER_REQUEST) % 10 === 0 || i + KEYWORDS_PER_REQUEST >= CANDIDATE_KEYWORDS.length) {
+      console.log(`진행: ${Math.min(i + KEYWORDS_PER_REQUEST, CANDIDATE_KEYWORDS.length)}/${CANDIDATE_KEYWORDS.length}`);
+    }
+  }
 
-  const top10 = results.slice(0, 10).map((r, i) => ({
+  const sorted = [...scoreMap.entries()]
+    .map(([keyword, score]) => ({ keyword, score }))
+    .sort((a, b) => b.score - a.score);
+
+  const top10 = sorted.slice(0, 10).map((r, i) => ({
     ranking: String(i + 1),
     keyword: r.keyword
   }));
@@ -102,5 +160,5 @@ function fetchTotal(keyword) {
 
   fs.writeFileSync(samplePath, JSON.stringify(output, null, 2), 'utf-8');
   fs.writeFileSync(datedPath, JSON.stringify(output, null, 2), 'utf-8');
-  console.log(`✅ 네이버 쇼핑 검색 API 순위 저장: ${samplePath} (${top10.length}건)`);
+  console.log(`✅ 네이버 데이터랩 쇼핑인사이트 트렌드 순위 저장: ${samplePath} (${top10.length}건)`);
 })();

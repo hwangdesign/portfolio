@@ -193,12 +193,15 @@
       try {
         var h = location.hostname || '';
         var p = location.pathname || '';
-        if (h.endsWith('.github.io') && p.indexOf('/') >= 0) {
+        if (h === 'localhost' || h === '127.0.0.1') {
+          rawBase = '';
+          raw = 'naver/naver_shopping_sample.json';
+        } else if (h.endsWith('.github.io') && p.indexOf('/') >= 0) {
           var owner = h.split('.')[0];
           var repo = p.split('/').filter(Boolean)[0] || 'portfolio';
           rawBase = 'https://raw.githubusercontent.com/' + owner + '/' + repo + '/';
           raw = rawBase + 'trends-data/labs/TrendingSearches/naver/naver_shopping_sample.json';
-        } else if (h && h !== 'localhost' && h !== '127.0.0.1') {
+        } else if (h) {
           rawBase = 'https://raw.githubusercontent.com/hwangdesign/portfolio/';
           raw = rawBase + 'trends-data/labs/TrendingSearches/naver/naver_shopping_sample.json';
         }
