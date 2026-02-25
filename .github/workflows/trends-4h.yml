@@ -1,5 +1,6 @@
-# 데이터랩 후보 키워드 순위 계산: 매일 12시(KST) 1회 + 수동 실행. 네이버 데이터랩 쇼핑인사이트 API로 후보 키워드 트렌드 조회 후 순위 산출 → trends-data 브랜치 푸시
-name: Naver Datalab Keywords (후보 키워드 순위)
+# 네이버 개발자 센터 API 연동 — 리얼 트렌드 데이터로 인기 키워드 매일 갱신
+# Naver Developer Center 발급 Client ID/Secret → 데이터랩 쇼핑인사이트 API 호출 → 상위 10개 키워드를 trends-data 브랜치에 푸시
+name: Naver API 인기 키워드 매일 갱신
 
 permissions:
   contents: write
@@ -31,11 +32,17 @@ jobs:
         with:
           node-version: '20'
 
-      - name: 데이터랩 후보 키워드 순위 계산 (naver-shopping-api.js)
+      - name: 네이버 API 연동 — 리얼 데이터 인기 키워드 수집
         env:
           NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
           NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
-        run: node naver-shopping-api.js
+        run: |
+          if [ -z "$NAVER_CLIENT_ID" ] || [ -z "$NAVER_CLIENT_SECRET" ]; then
+            echo "::warning::네이버 개발자 센터 API 연동을 위해 Repository Secrets에 NAVER_CLIENT_ID, NAVER_CLIENT_SECRET을 설정하세요."
+            echo "설정 방법: README > API 연동 설정 참고"
+            exit 0
+          fi
+          node naver-shopping-api.js
         continue-on-error: true
 
       - name: Push to trends-data branch
@@ -57,7 +64,7 @@ jobs:
           cp /tmp/naver_shopping_sample.json labs/TrendingSearches/naver/
           git add labs/TrendingSearches/naver/naver_shopping_sample.json
           git diff --staged --quiet && echo "No changes" || {
-            git commit -m "chore: 데이터랩 후보 키워드 순위 $(TZ='Asia/Seoul' date +'%Y-%m-%d %H:%M')"
+            git commit -m "chore: 네이버 API 인기 키워드 갱신 $(TZ='Asia/Seoul' date +'%Y-%m-%d %H:%M')"
             git pull --rebase origin trends-data 2>/dev/null || true
             git push -u origin trends-data
           }
