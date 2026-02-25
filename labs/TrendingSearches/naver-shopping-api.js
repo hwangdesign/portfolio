@@ -126,6 +126,7 @@ function scoreFromResult(result) {
 }
 
 (async () => {
+  try {
   if (!clientId || !clientSecret) {
     console.error('❌ NAVER_CLIENT_ID, NAVER_CLIENT_SECRET 환경변수를 설정하세요.');
     process.exit(1);
@@ -168,7 +169,7 @@ function scoreFromResult(result) {
     .map(([keyword, score]) => ({ keyword, score }))
     .sort((a, b) => b.score - a.score);
 
-  const totalScore = sorted.reduce((acc, [, s]) => acc + s, 0);
+  const totalScore = sorted.reduce((acc, item) => acc + (Number(item.score) || 0), 0);
   const hasRealData = totalScore > 0;
 
   if (!hasRealData) {
@@ -192,4 +193,9 @@ function scoreFromResult(result) {
   fs.writeFileSync(samplePath, JSON.stringify(output, null, 2), 'utf-8');
   fs.writeFileSync(datedPath, JSON.stringify(output, null, 2), 'utf-8');
   console.log(`✅ 데이터랩 후보 키워드 순위 저장: ${samplePath} (${top10.length}건)`);
+  } catch (err) {
+    console.error('❌ 스크립트 오류:', err.message);
+    if (err.stack) console.error(err.stack);
+    process.exit(1);
+  }
 })();
