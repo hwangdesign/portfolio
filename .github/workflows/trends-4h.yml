@@ -1,5 +1,5 @@
-# 매일 12시(KST) 1회 실행 + 수동 실행 가능. 네이버 쇼핑 검색 API 인기 키워드 → trends-data 브랜치 푸시
-name: Naver Shopping Keywords Daily
+# 데이터랩 후보 키워드 순위 계산: 매일 12시(KST) 1회 + 수동 실행. 네이버 데이터랩 쇼핑인사이트 API로 후보 키워드 트렌드 조회 후 순위 산출 → trends-data 브랜치 푸시
+name: Naver Datalab Keywords (후보 키워드 순위)
 
 permissions:
   contents: write
@@ -7,7 +7,7 @@ permissions:
 on:
   schedule:
     - cron: '0 3 * * *'  # 매일 1회: KST 12:00 (UTC 03:00)
-  workflow_dispatch: {}  # 수동 실행: Actions 탭 → Naver Shopping Keywords 4h 선택 → Run workflow
+  workflow_dispatch: {}  # 수동 실행: Actions 탭에서 Run workflow
   push:
     branches: [main]
     paths:
@@ -31,7 +31,7 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Run Naver Shopping API (순위 키워드 매칭)
+      - name: 데이터랩 후보 키워드 순위 계산 (naver-shopping-api.js)
         env:
           NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
           NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
@@ -57,7 +57,7 @@ jobs:
           cp /tmp/naver_shopping_sample.json labs/TrendingSearches/naver/
           git add labs/TrendingSearches/naver/naver_shopping_sample.json
           git diff --staged --quiet && echo "No changes" || {
-            git commit -m "chore: Naver 쇼핑 인기 키워드 4h $(TZ='Asia/Seoul' date +'%Y-%m-%d %H:%M')"
+            git commit -m "chore: 데이터랩 후보 키워드 순위 $(TZ='Asia/Seoul' date +'%Y-%m-%d %H:%M')"
             git pull --rebase origin trends-data 2>/dev/null || true
             git push -u origin trends-data
           }

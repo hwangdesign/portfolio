@@ -1,7 +1,9 @@
 /**
- * 네이버 데이터랩 쇼핑인사이트 API로 후보 키워드별 트렌드(클릭 추이) 조회 → 순위 산출
+ * 데이터랩 후보 키워드 순위 계산
+ * - 네이버 데이터랩 쇼핑인사이트 API로 후보 키워드(CANDIDATE_KEYWORDS)별 트렌드(클릭 추이) 조회
+ * - 기간별 ratio 합계로 점수 산출 후 순위 정렬, 상위 10개를 naver_shopping_sample.json으로 저장
+ * - snxbest 등 베스트 키워드 목록을 공개 API로 제공하지 않으므로 이 방식 사용
  * @see https://developers.naver.com/docs/serviceapi/datalab/shopping/shopping.md
- * 4시간마다 실행해 naver_shopping_sample.json 갱신
  */
 const https = require('https');
 const fs = require('fs');
@@ -20,7 +22,7 @@ const y = now.getFullYear();
 const currentDate = `${m}-${d}-${y}`;
 const datedPath = path.join(folderPath, `naver_shopping_${currentDate}.json`);
 
-/** 순위 매칭용 후보 키워드 (쇼핑 인기 검색어 후보) */
+/** 순위 계산용 후보 키워드 (데이터랩 키워드별 트렌드 API에 전달, 점수 합계로 순위 산정) */
 const CANDIDATE_KEYWORDS = [
   '겨울 패딩', '선크림', '노트북', '에어팟', '무선 이어폰', '아이패드', '가습기', '공기청정기', '전기담요', '스마트워치',
   '겨울 코트', '패딩 조끼', '휴대폰 케이스', '블루투스 이어폰', '갤럭시', '아이폰', '맥북', '태블릿', '스마트폰',
@@ -160,5 +162,5 @@ function scoreFromResult(result) {
 
   fs.writeFileSync(samplePath, JSON.stringify(output, null, 2), 'utf-8');
   fs.writeFileSync(datedPath, JSON.stringify(output, null, 2), 'utf-8');
-  console.log(`✅ 네이버 데이터랩 쇼핑인사이트 트렌드 순위 저장: ${samplePath} (${top10.length}건)`);
+  console.log(`✅ 데이터랩 후보 키워드 순위 저장: ${samplePath} (${top10.length}건)`);
 })();
