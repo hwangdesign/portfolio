@@ -19,8 +19,8 @@ if [ -d "InteractiveAnalogClock" ]; then
   cd ..
 fi
 
-# Trending Searches, Lab 3, Lab 4 폴더명 변경
-for dir in "Trending Searches" "Lab 3" "Lab 4"; do
+# Trending Searches 폴더명 변경 (공백 제거)
+for dir in "Trending Searches"; do
   if [ -d "$dir" ]; then
     new="${dir// /}"
     mv -- "$dir" "$new" 2>>"$LOG" && echo "Folder: $dir -> $new" >> "$LOG"

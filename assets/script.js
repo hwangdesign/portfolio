@@ -254,9 +254,7 @@ const PROJECT_BG_IMAGE_MAP = {
     '11street-dx.html': 'images/eXperience/thumbnail.png',
     'amazon-global-store.html': 'images/AmazonGlobalStore/thumbnail.png',
     'InteractiveAnalogClock.html': 'images/InteractiveAnalogClock/thumbnail.png',
-    'lab-2.html': 'images/Lab2/thumbnail.png',
-    'lab-3.html': 'images/Lab3/thumbnail.png',
-    'lab-4.html': 'images/Lab4/thumbnail.png'
+    'lab-2.html': 'images/Lab2/thumbnail.png'
 };
 
 function getProjectBgImageSrc() {
