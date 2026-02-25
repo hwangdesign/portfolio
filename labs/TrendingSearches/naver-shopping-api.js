@@ -98,6 +98,7 @@ function fetchKeywordTrend(keywords, startDate, endDate) {
         try {
           const json = JSON.parse(data);
           if (json.errorMessage || json.errorCode) {
+            console.error('API 오류:', json.errorCode || '', json.errorMessage || '');
             resolve([]);
             return;
           }
@@ -135,8 +136,9 @@ function scoreFromResult(result) {
   }
 
   const end = new Date();
-  end.setDate(end.getDate() - 1);  // 데이터랩은 전일 집계 기준이므로 어제 날짜 사용
-  const start = new Date(end);     // 조회 기간: 1일 (어제 하루)
+  end.setDate(end.getDate() - 1);  // 데이터랩 전일 집계 기준
+  const start = new Date(end);
+  start.setDate(start.getDate() - 6);  // 조회 기간: 최근 7일 (데이터 확보·순위 변동용)
   const startDate = getDateString(start);
   const endDate = getDateString(end);
 
@@ -165,6 +167,17 @@ function scoreFromResult(result) {
   const sorted = [...scoreMap.entries()]
     .map(([keyword, score]) => ({ keyword, score }))
     .sort((a, b) => b.score - a.score);
+
+  const totalScore = sorted.reduce((acc, [, s]) => acc + s, 0);
+  const hasRealData = totalScore > 0;
+
+  if (!hasRealData) {
+    console.warn('⚠️ API에서 트렌드 데이터가 없습니다. 조회 기간을 확인하거나 시크릿/앱 설정을 점검하세요.');
+    if (fs.existsSync(samplePath)) {
+      console.warn('   기존 결과를 유지합니다. 파일을 덮어쓰지 않습니다.');
+      return;
+    }
+  }
 
   const top10 = sorted.slice(0, 10).map((r, i) => ({
     ranking: String(i + 1),
