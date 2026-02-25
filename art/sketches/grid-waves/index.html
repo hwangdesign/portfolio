@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid Waves</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #111; min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        canvas { display: block; max-width: 100%; max-height: 100vh; }
+    </style>
+</head>
+<body>
+    <canvas id="c"></canvas>
+    <script>
+        (function () {
+            var c = document.getElementById('c');
+            var ctx = c.getContext('2d');
+            var w = c.width = Math.min(800, window.innerWidth);
+            var h = c.height = Math.min(600, window.innerHeight);
+            var cols = 14;
+            var rows = 10;
+            var spacingX = w / (cols + 1);
+            var spacingY = h / (rows + 1);
+            var t = 0;
+
+            function draw() {
+                t += 0.02;
+                ctx.fillStyle = '#111';
+                ctx.fillRect(0, 0, w, h);
+                ctx.strokeStyle = 'rgba(255, 255, 0, 0.4)';
+                ctx.lineWidth = 1;
+
+                for (var i = 0; i <= cols; i++) {
+                    ctx.beginPath();
+                    for (var j = 0; j <= rows; j++) {
+                        var x = spacingX * (i + 1);
+                        var y = spacingY * (j + 1) + Math.sin(t + i * 0.3) * 12 + Math.cos(t * 0.7 + j * 0.2) * 8;
+                        if (j === 0) ctx.moveTo(x, y);
+                        else ctx.lineTo(x, y);
+                    }
+                    ctx.stroke();
+                }
+                for (var j = 0; j <= rows; j++) {
+                    ctx.beginPath();
+                    for (var i = 0; i <= cols; i++) {
+                        var x = spacingX * (i + 1) + Math.cos(t + j * 0.25) * 10;
+                        var y = spacingY * (j + 1) + Math.sin(t * 0.8 + i * 0.2) * 6;
+                        if (i === 0) ctx.moveTo(x, y);
+                        else ctx.lineTo(x, y);
+                    }
+                    ctx.stroke();
+                }
+                requestAnimationFrame(draw);
+            }
+            draw();
+
+            window.addEventListener('resize', function () {
+                w = c.width = Math.min(800, window.innerWidth);
+                h = c.height = Math.min(600, window.innerHeight);
+                spacingX = w / (cols + 1);
+                spacingY = h / (rows + 1);
+            });
+        })();
+    </script>
+</body>
+</html>

@@ -1157,6 +1157,21 @@ body.portfolio-floating-inactive .portfolio-view-toggle {
     transform: scale(1.05);
 }
 
+/* Art: Labs와 동일한 그리드 구조, 카드는 썸네일만·이미지 원본 비율 */
+.art-grid .portfolio-info {
+    display: none;
+}
+.art-grid .portfolio-thumbnail {
+    padding-bottom: 0;
+    height: auto;
+}
+.art-grid .portfolio-thumbnail img {
+    position: relative;
+    width: 100%;
+    height: auto;
+    object-fit: none;
+}
+
 .portfolio-info {
     position: relative;
     width: 100%;

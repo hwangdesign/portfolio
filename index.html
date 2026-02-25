@@ -167,11 +167,55 @@
                 </div>
             </div>
         </section>
+
+        <div class="divider"></div>
+        <section id="art" class="section portfolio-section">
+            <div class="container">
+                <div class="portfolio-header">
+                    <h2 class="section-title animated-section-title" data-title="Art">Art</h2>
+                    <div class="portfolio-view-toggle">
+                        <button class="view-toggle-btn active" data-view="grid" title="그리드뷰" aria-label="그리드뷰"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v8h8V3H3zm6 6H5V5h4v4zm-6 4v8h8v-8H3zm6 6H5v-4h4v4zm4-16v8h8V3h-8zm6 6h-4V5h4v4zm-6 4v8h8v-8h-8zm6 6h-4v-4h4v4z"/></svg></button>
+                        <button class="view-toggle-btn" data-view="text" title="텍스트뷰" aria-label="텍스트뷰"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4v3h5.5v12h3V7H19V4H5z"/></svg></button>
+                    </div>
+                </div>
+                <div id="artGrid" class="portfolio-grid art-grid"></div>
+            </div>
+        </section>
     </main>
 
     <div id="shared-footer"></div>
 
     <script src="assets/script.js"></script>
+    <script>
+        (function () {
+            var grid = document.getElementById('artGrid');
+            if (!grid) return;
+            fetch('art/data/exhibition.json')
+                .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+                .then(function (data) {
+                    var works = Array.isArray(data.works) ? data.works : [];
+                    works.forEach(function (work) {
+                        if (!work.thumbnail && !work.detailUrl) return;
+                        var a = document.createElement('a');
+                        a.className = 'portfolio-item';
+                        a.href = work.detailUrl ? 'art/' + work.detailUrl : '#';
+                        if (work.detailUrl) a.setAttribute('target', '_blank');
+                        a.setAttribute('rel', 'noopener noreferrer');
+                        var thumb = document.createElement('div');
+                        thumb.className = 'portfolio-thumbnail';
+                        var img = document.createElement('img');
+                        img.src = work.thumbnail ? (work.thumbnail.indexOf('http') === 0 ? work.thumbnail : 'art/' + work.thumbnail) : 'https://via.placeholder.com/600x400/111111/333333?text=Art';
+                        img.alt = work.title || 'Art';
+                        img.loading = 'lazy';
+                        img.onerror = function () { img.src = 'https://via.placeholder.com/600x400/111111/333333?text=Art'; };
+                        thumb.appendChild(img);
+                        a.appendChild(thumb);
+                        grid.appendChild(a);
+                    });
+                })
+                .catch(function () {});
+        })();
+    </script>
 </body>
 </html>
 

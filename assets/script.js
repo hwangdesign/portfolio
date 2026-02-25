@@ -17,7 +17,7 @@ function renderSharedLayout() {
     const lastSegment = currentPath.substring(currentPath.lastIndexOf('/') + 1);
     const isIndexPath = lastSegment === '' || lastSegment === 'index.html';
     const baseHref = isIndexPath ? '' : '../index.html';
-    const navTargets = ['about', 'works', 'labs'];
+    const navTargets = ['about', 'works', 'labs', 'art'];
     const navLinksHtml = navTargets.map(section => {
         const hrefValue = isIndexPath ? `#${section}` : `${baseHref}#${section}`;
         return `<a href="${hrefValue}" class="nav-menu-item text-nav-menu">${section.charAt(0).toUpperCase() + section.slice(1)}</a>`;

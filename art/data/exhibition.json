@@ -1,0 +1,15 @@
+{
+  "title": "Online Exhibition",
+  "updatedAt": "2025-02-25T00:00:00.000Z",
+  "works": [
+    {
+      "id": "grid-waves",
+      "title": "Grid Waves",
+      "description": "Canvas로 그린 단순 그리드와 파동. 코드로 생성한 그래픽.",
+      "year": "2025",
+      "technique": "Canvas API",
+      "detailUrl": "sketches/grid-waves/index.html",
+      "createdAt": "2025-02-25"
+    }
+  ]
+}
