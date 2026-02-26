@@ -2,8 +2,7 @@
 const COLORS = {
     YELLOW: '#FFFF00',
     BLACK: '#000000',
-    YELLOW_20: 'rgba(255, 255, 0, 0.2)',
-    SHADOW: 'rgba(0, 0, 0, 0.2)'
+    YELLOW_20: 'rgba(255, 255, 0, 0.2)'
 };
 
 function renderSharedLayout() {
@@ -51,6 +50,36 @@ function renderSharedLayout() {
 
 renderSharedLayout();
 
+/** Art 섹션 그리드: exhibition.json 기반 동적 주입 (index 페이지에만 #artGrid 존재 시) */
+(function initArtGrid() {
+    const grid = document.getElementById('artGrid');
+    if (!grid) return;
+    const base = (location.pathname.endsWith('/') || location.pathname.endsWith('index.html')) ? '' : location.pathname.replace(/\/[^/]+$/, '/');
+    fetch((base || './') + 'art/data/exhibition.json')
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+        .then(function (data) {
+            const works = Array.isArray(data.works) ? data.works : [];
+            works.forEach(function (work) {
+                if (!work.thumbnail && !work.detailUrl) return;
+                const a = document.createElement('a');
+                a.className = 'portfolio-item';
+                a.href = work.detailUrl ? 'art/' + work.detailUrl : '#';
+                if (work.detailUrl) { a.setAttribute('target', '_blank'); a.setAttribute('rel', 'noopener noreferrer'); }
+                const thumb = document.createElement('div');
+                thumb.className = 'portfolio-thumbnail';
+                const img = document.createElement('img');
+                img.src = work.thumbnail ? (work.thumbnail.indexOf('http') === 0 ? work.thumbnail : 'art/' + work.thumbnail) : 'https://via.placeholder.com/600x400/111111/333333?text=Art';
+                img.alt = work.title || 'Art';
+                img.loading = 'lazy';
+                img.onerror = function () { img.src = 'https://via.placeholder.com/600x400/111111/333333?text=Art'; };
+                thumb.appendChild(img);
+                a.appendChild(thumb);
+                grid.appendChild(a);
+            });
+        })
+        .catch(function () {});
+})();
+
 /**
  * GA4 고객 동선 추적: 포트폴리오/랩/아트/CTA 클릭 시 select_content 이벤트 전송
  */
@@ -75,8 +104,8 @@ renderSharedLayout();
     }, false);
 })();
 
- * - body.project-detail-page 에서만 동작
- * - #project-nav-root 가 있으면 config 기준으로 nav 주입
+/**
+ * 프로젝트 상세 페이지 이전/다음글 네비: body.project-detail-page, #project-nav-root + config 기준
  */
 function renderProjectNav() {
     if (!document.body.classList.contains('project-detail-page')) return;
@@ -994,23 +1023,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 배경 라인 요소들 생성 및 관리
     const backgroundLines = [];
-    const shortLines = [];
     const lineSpacing = 640;
-    const shortLineSpacing = 640;
-    const minLineGap = 20;
-    const maxAttempts = 100;
-    const shortLineConfig = {
-        minLength: 10,
-        maxLength: 100,
-        lengthStep: 10,
-        minSpeed: 0.4,
-        maxSpeed: 0.6,
-        minCount: 3,
-        maxCount: 5,
-        opacity: 0.2
-    };
-    let animationFrameId = null;
-    
+
     // 라인 제거 헬퍼 함수
     function removeLines(lines) {
         lines.forEach(line => line.parentNode?.removeChild(line));
@@ -1048,84 +1062,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(line);
         return line;
     }
-    
-    // 겹치지 않는 Y축 위치 찾기
-    function findNonOverlappingY(usedPositions, lineHeight, viewportHeight) {
-        for (let attempts = 0; attempts < maxAttempts; attempts++) {
-            const randomY = Math.random() * (viewportHeight - lineHeight);
-            const lineTop = randomY;
-            const lineBottom = randomY + lineHeight;
-            
-            const overlaps = usedPositions.some(used => {
-                const usedBottom = used.top + used.height;
-                return !(lineBottom + minLineGap < used.top || lineTop > usedBottom + minLineGap);
-            });
-            
-            if (!overlaps) return randomY;
-        }
-        return null;
-    }
-    
-    // 랜덤 짧은 라인 생성
-    function createRandomShortLine(leftPosition, usedPositions) {
-        const viewportHeight = window.innerHeight;
-        const randomHeight = (Math.floor(Math.random() * 10) + 1) * shortLineConfig.lengthStep;
-        const randomY = findNonOverlappingY(usedPositions, randomHeight, viewportHeight);
-        
-        if (randomY === null) return null;
-        
-        const shortLine = document.createElement('div');
-        shortLine.className = 'background-line-short';
-        const speed = Math.random() * (shortLineConfig.maxSpeed - shortLineConfig.minSpeed) + shortLineConfig.minSpeed;
-        
-        // 현재 테마에 따라 색상 결정
-        const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-        const lineColor = currentTheme === 'light' ? 'rgba(0, 0, 0, 0.2)' : COLORS.YELLOW_20;
-        
-        Object.assign(shortLine.style, {
-            position: 'fixed',
-            left: `${leftPosition}px`,
-            width: '1px',
-            height: `${randomHeight}px`,
-            top: `${randomY}px`,
-            background: lineColor,
-            zIndex: '1',
-            pointerEvents: 'none',
-            transition: 'none'
-        });
-        
-        shortLine.dataset.speed = speed;
-        document.body.appendChild(shortLine);
-        shortLines.push(shortLine);
-        usedPositions.push({ top: randomY, height: randomHeight });
-        
-        return shortLine;
-    }
-    
-    // 애니메이션 함수
-    function animateShortLines() {
-        const viewportHeight = window.innerHeight;
-        
-        for (const line of shortLines) {
-            const currentTop = parseFloat(line.style.top) || 0;
-            const speed = parseFloat(line.dataset.speed) || shortLineConfig.minSpeed;
-            const lineHeight = parseFloat(line.style.height) || shortLineConfig.minLength;
-            const newTop = currentTop + speed;
-            
-            line.style.top = newTop > viewportHeight ? `${-lineHeight}px` : `${newTop}px`;
-        }
-        
-        animationFrameId = requestAnimationFrame(animateShortLines);
-    }
-    
+
     function createBackgroundLines() {
-        if (animationFrameId) {
-            cancelAnimationFrame(animationFrameId);
-            animationFrameId = null;
-        }
-        
         removeLines(backgroundLines);
-        removeLines(shortLines);
         
         const creativeDirectorTitle = document.getElementById('animatedTitle');
         if (!creativeDirectorTitle) return;
@@ -1157,12 +1096,9 @@ document.addEventListener('DOMContentLoaded', () => {
             for (let left = firstLineLeft - calculatedSpacing; left >= 0; left -= calculatedSpacing) {
                 backgroundLines.push(createVerticalLine(left, lineIndex++));
             }
-            
-            /* 떨어지는 세로 구분선 모션 비활성 */
         } else {
             // PC: 스크린 처음부터 끝까지 세로 라인 생성
             const currentLineSpacing = lineSpacing;
-            const currentShortLineSpacing = shortLineSpacing;
             
             let lineIndex = 0;
             // 오른쪽으로 라인 생성 (firstLineLeft ~ windowWidth)
@@ -1173,11 +1109,7 @@ document.addEventListener('DOMContentLoaded', () => {
             for (let left = firstLineLeft - currentLineSpacing; left >= 0; left -= currentLineSpacing) {
                 backgroundLines.push(createVerticalLine(left, lineIndex++));
             }
-            
-            /* 떨어지는 세로 구분선 모션 비활성 */
         }
-        
-        /* animateShortLines(); 비활성 */
     }
     
     // 초기 실행
