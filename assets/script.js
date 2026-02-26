@@ -52,7 +52,29 @@ function renderSharedLayout() {
 renderSharedLayout();
 
 /**
- * 이전글/다음글 네비게이션 렌더 (project-nav-config.js 사용)
+ * GA4 고객 동선 추적: 포트폴리오/랩/아트/CTA 클릭 시 select_content 이벤트 전송
+ */
+(function initGA4FlowTracking() {
+    function sendGA4Event(eventName, params) {
+        if (typeof gtag === 'function') {
+            gtag('event', eventName, params);
+        }
+    }
+    document.addEventListener('click', function (e) {
+        var link = e.target.closest('a');
+        if (!link || !link.href) return;
+        var href = link.getAttribute('href') || '';
+        var titleEl = link.querySelector('.portfolio-title, .section-title');
+        var label = titleEl ? (titleEl.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 100) : link.textContent.trim().slice(0, 100);
+        if (link.classList.contains('portfolio-item')) {
+            var section = link.closest('#portfolioGrid') ? 'works' : link.closest('#labsGrid') ? 'labs' : link.closest('.art-grid') ? 'art' : 'portfolio';
+            sendGA4Event('select_content', { content_type: section, content_id: href, content_name: label || href });
+        } else if (link.classList.contains('btn-cta')) {
+            sendGA4Event('click_cta', { link_url: link.href, link_text: label || link.textContent.trim().slice(0, 80) });
+        }
+    }, false);
+})();
+
  * - body.project-detail-page 에서만 동작
  * - #project-nav-root 가 있으면 config 기준으로 nav 주입
  */
