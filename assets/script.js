@@ -17,9 +17,21 @@ function renderSharedLayout() {
     const isIndexPath = lastSegment === '' || lastSegment === 'index.html';
     const baseHref = isIndexPath ? '' : '../index.html';
     const navTargets = ['about', 'works', 'labs', 'art'];
+    const navLabelMap = { art: 'Arts' };
     const navLinksHtml = navTargets.map(section => {
         const hrefValue = isIndexPath ? `#${section}` : `${baseHref}#${section}`;
-        return `<a href="${hrefValue}" class="nav-menu-item text-nav-menu">${section.charAt(0).toUpperCase() + section.slice(1)}</a>`;
+        const label = navLabelMap[section] || section.charAt(0).toUpperCase() + section.slice(1);
+        return `<a href="${hrefValue}" class="nav-menu-item text-nav-menu">${label}</a>`;
+    }).join('');
+
+    const navMobileLinksHtml = navTargets.map((section, index) => {
+        const hrefValue = isIndexPath ? `#${section}` : `${baseHref}#${section}`;
+        // 모바일 메뉴에서는 Arts 항목에 (coming soon)을 윗첨자로 표시
+        if (section === 'art') {
+            return `<a href="${hrefValue}" class="nav-mobile-menu-item text-nav-menu" data-index="${index}">Arts<sup>(coming soon)</sup></a>`;
+        }
+        const label = navLabelMap[section] || section.charAt(0).toUpperCase() + section.slice(1);
+        return `<a href="${hrefValue}" class="nav-mobile-menu-item text-nav-menu" data-index="${index}">${label}</a>`;
     }).join('');
 
     const brandHtml = isIndexPath
@@ -32,6 +44,22 @@ function renderSharedLayout() {
         ${brandHtml}
         <div class="nav-menu-wrapper">
             ${navLinksHtml}
+        </div>
+        <button class="nav-hamburger" type="button" aria-label="메뉴 열기" aria-expanded="false" id="navHamburger">
+            <span class="nav-hamburger-line"></span>
+            <span class="nav-hamburger-line"></span>
+            <span class="nav-hamburger-line"></span>
+        </button>
+        <div class="nav-mobile-overlay" id="navMobileOverlay" aria-hidden="true">
+            <div class="nav-mobile-overlay-panel">
+                <button class="nav-mobile-close" type="button" aria-label="메뉴 닫기" id="navMobileClose">
+                    <span class="nav-mobile-close-line"></span>
+                    <span class="nav-mobile-close-line"></span>
+                </button>
+                <nav class="nav-mobile-menu" aria-label="모바일 메뉴">
+                    ${navMobileLinksHtml}
+                </nav>
+            </div>
         </div>
     </div>
 </nav>`;
@@ -49,6 +77,53 @@ function renderSharedLayout() {
 }
 
 renderSharedLayout();
+
+/** 모바일 GNB: 햄버거 버튼 클릭 시 절반 높이 레이어에 메뉴 순차 노출 */
+(function initMobileNav() {
+    const hamburger = document.getElementById('navHamburger');
+    const overlay = document.getElementById('navMobileOverlay');
+    const closeBtn = document.getElementById('navMobileClose');
+    if (!hamburger || !overlay) return;
+
+    function openOverlay() {
+        overlay.classList.add('is-open');
+        overlay.setAttribute('aria-hidden', 'false');
+        hamburger.setAttribute('aria-expanded', 'true');
+        hamburger.setAttribute('aria-label', '메뉴 닫기');
+        // 전체 페이지 세로 스크롤 방지
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+        document.body.classList.add('nav-mobile-open');
+    }
+
+    function closeOverlay() {
+        overlay.classList.remove('is-open');
+        overlay.setAttribute('aria-hidden', 'true');
+        hamburger.setAttribute('aria-expanded', 'false');
+        hamburger.setAttribute('aria-label', '메뉴 열기');
+        // 스크롤 잠금 해제
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
+        document.body.classList.remove('nav-mobile-open');
+    }
+
+    hamburger.addEventListener('click', function () {
+        if (overlay.classList.contains('is-open')) closeOverlay();
+        else openOverlay();
+    });
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeOverlay);
+    }
+
+    overlay.querySelectorAll('.nav-mobile-menu-item').forEach(function (link) {
+        link.addEventListener('click', closeOverlay);
+    });
+
+    overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) closeOverlay();
+    });
+})();
 
 /** Art 섹션 그리드: exhibition.json 기반 동적 주입 (index 페이지에만 #artGrid 존재 시) */
 (function initArtGrid() {
@@ -620,6 +695,8 @@ function animateToText(targetText, element, isLooping = false, loopTitles = [], 
                 element.innerHTML = '11Kitties<sup>Season 2</sup>';
             } else if (targetText === 'MartPlus') {
                 element.innerHTML = 'Mart<sup>Plus</sup>';
+            } else if (targetText === 'Arts') {
+                element.innerHTML = 'Arts<sup>(coming soon)</sup>';
             } else {
                 element.textContent = targetText;
             }
@@ -700,8 +777,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         entry.target.style.minHeight = '';
                         return;
                     }
-                    
-                    // 최종 텍스트의 높이를 미리 계산하여 고정
+                    if (targetText === 'Arts') {
+                        entry.target.innerHTML = 'Arts<sup>(coming soon)</sup>';
+                        entry.target.style.height = '';
+                        entry.target.style.minHeight = '';
+                        return;
+                    }
                     const tempHeight = entry.target.style.height;
                     entry.target.textContent = targetText;
                     const finalHeight = entry.target.offsetHeight;

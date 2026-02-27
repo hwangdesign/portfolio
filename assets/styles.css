@@ -295,7 +295,7 @@ body {
     width: 1px;
     height: 100vh;
     background: var(--yellow-color);
-    z-index: 9999;
+    z-index: -1; /* 모든 콘텐츠 및 오버레이 뒤에 위치 */
     pointer-events: none;
     opacity: 0.1;
     transition: opacity 0.1s ease-out, left 0.1s ease-out;
@@ -392,7 +392,8 @@ body.project-detail-page .background-line-second {
     border-bottom: 1px solid var(--border-white);
     z-index: 1000;
     padding: 32px 0;
-    overflow: hidden;
+    /* 모바일 메뉴 레이어가 GNB 위로 자연스럽게 올라오도록 overflow를 숨기지 않음 */
+    overflow: visible;
     transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
 }
 
@@ -450,6 +451,90 @@ body.project-detail-page .background-line-second {
 
 [data-theme="light"] .nav-menu-item:hover {
     color: #000000;
+}
+
+/* 햄버거 버튼: 데스크톱에서 숨김 */
+.nav-hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    gap: 6px;
+}
+
+.nav-mobile-overlay {
+    display: none; /* 기본(데스크톱)에서는 모바일 메뉴 레이어 완전히 숨김 */
+}
+
+.nav-hamburger-line {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--primary-color);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform-origin: center;
+}
+
+/* 햄버거 → X 애니메이션 (모바일 메뉴 열렸을 때) */
+.nav-hamburger[aria-expanded="true"] .nav-hamburger-line:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.nav-hamburger[aria-expanded="true"] .nav-hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.nav-hamburger[aria-expanded="true"] .nav-hamburger-line:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+/* 메뉴가 열린 X 상태에서는 항상 검은색 라인 유지 */
+.nav-hamburger[aria-expanded="true"] .nav-hamburger-line {
+    background: #000000;
+}
+
+/* 모바일 메뉴 레이어 내 X 버튼 (햄버거와 동일한 사이즈/위치감) */
+.nav-mobile-close {
+    position: absolute;
+    /* GNB 햄버거와 거의 동일한 위치 (네비 높이 기준 가운데 정렬) */
+    top: calc(var(--nav-height, 64px) / 2 - 22px);
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.nav-mobile-close-line {
+    position: absolute;
+    width: 24px;
+    height: 2px;
+    background: #000000;
+    transform-origin: center;
+}
+
+.nav-mobile-close-line:first-child {
+    transform: rotate(45deg);
+}
+
+.nav-mobile-close-line:last-child {
+    transform: rotate(-45deg);
+}
+
+/* 모바일 오버레이: 데스크톱에서 숨김 */
+.nav-mobile-overlay {
+    display: none;
 }
 
 /* Theme Toggle Button */
@@ -574,7 +659,8 @@ body.project-detail-page .background-line-second {
 
 .section-title sup,
 .animated-section-title sup,
-.project-nav-title sup {
+.project-nav-title sup,
+.nav-mobile-menu-item sup {
     font-size: 0.6em;
     vertical-align: super;
     line-height: 0;
@@ -583,7 +669,8 @@ body.project-detail-page .background-line-second {
 
 [data-theme="light"] .section-title sup,
 [data-theme="light"] .animated-section-title sup,
-[data-theme="light"] .project-nav-title sup {
+[data-theme="light"] .project-nav-title sup,
+[data-theme="light"] .nav-mobile-menu-item sup {
     color: rgba(0, 0, 0, 0.2);
 }
 
@@ -791,7 +878,108 @@ body.project-detail-page .background-line-second {
 /* Responsive Design */
 @media (max-width: 768px) {
     .nav-menu-wrapper {
+        display: none !important; /* 모바일에서는 메뉴 텍스트 숨기고 햄버거만 노출 */
         gap: 16px;
+    }
+
+    .nav-hamburger {
+        display: flex;
+    }
+
+    .nav-mobile-overlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        /* 전체 화면을 덮는 딤 레이어 (클릭/스크롤 차단) */
+        height: 100vh;
+        height: 100dvh;
+        /* 모든 페이지/요소 위에 위치하도록 충분히 높은 z-index 지정 */
+        z-index: 2147483000;
+        background: rgba(0, 0, 0, 0.5); /* 블랙 반투명 딤 */
+        box-shadow: none;
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none; /* 닫힌 상태에서는 완전히 비활성화 */
+        transition: visibility 0.3s ease, opacity 0.3s ease;
+    }
+
+    .nav-mobile-overlay.is-open {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* 메뉴 레이어가 열렸을 때 전체 페이지 스크롤 방지 */
+    body.nav-mobile-open {
+        overflow: hidden;
+        touch-action: none;
+    }
+
+    /* 플로팅 탑 버튼을 메뉴 레이어·딤 아래에 위치 (GNB보다 낮은 z-index) */
+    .scroll-top-btn {
+        z-index: 999;
+    }
+
+    .nav-mobile-overlay-panel {
+        /* 상단에 위치한 실제 메뉴 패널: 내용(About~Arts) 전체와 Arts 아래 여백까지의 높이만 사용 */
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: auto;
+        /* 상단 패딩을 GNB 높이만큼 주고, 하단에 여백 40px 추가 */
+        padding: var(--nav-height, 64px) 24px 40px;
+        background: var(--bg-color);
+        /* 내부에 스크롤바가 생기지 않도록 숨김 */
+        overflow: hidden;
+        /* 오버레이 내부에서도 최상위 컨텐츠 레이어로 지정 */
+        z-index: 1;
+    }
+
+    /* 메뉴 레이어창 내부에 GNB 하단 구분선과 동일한 라인 추가 */
+    .nav-mobile-overlay-panel::before {
+        content: "";
+        position: absolute;
+        top: var(--nav-height, 64px);
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: var(--border-white);
+    }
+
+    .nav-mobile-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        /* 첫 메뉴 위 여백 40px 확보 */
+        padding-top: 40px;
+    }
+
+    .nav-mobile-menu-item {
+        display: block;
+        padding: 0;
+        font-size: var(--font-size-title-mobile);
+        font-weight: 900;
+        font-family: var(--font-family-system);
+        letter-spacing: -1px;
+        line-height: normal;
+        color: var(--text-color);
+        text-decoration: none;
+        border: none;
+        background: none;
+        width: 100%;
+        min-height: 60px; /* section-title 컨테이너와 동일한 높이 리듬 */
+        margin-bottom: 16px;
+        text-align: left;
+        cursor: pointer;
+    }
+
+    .nav-mobile-menu-item:hover {
+        color: var(--yellow-color);
+    }
+
+    [data-theme="light"] .nav-mobile-menu-item:hover {
+        color: #000000;
     }
     
     .nav-menu-item {
@@ -800,6 +988,14 @@ body.project-detail-page .background-line-second {
 
     .text-nav-menu {
         font-size: 14px;
+    }
+
+    /* 모바일 메뉴 레이어의 About / Works / Labs / Arts를 container의 section-title과 동일한 크기로 */
+    .nav-mobile-menu .nav-mobile-menu-item.text-nav-menu {
+        font-size: var(--font-size-title-mobile);
+        font-weight: 900;
+        letter-spacing: -1px;
+        line-height: normal;
     }
     
     .theme-toggle {
@@ -851,6 +1047,15 @@ body.project-detail-page .background-line-second {
     :root {
         --font-size-base: 14px;
         --font-size-small: 14px;
+    }
+
+    /* 데스크톱에서는 모바일 전용 GNB 요소 완전히 숨김 */
+    .nav-hamburger,
+    .nav-mobile-overlay,
+    .nav-mobile-overlay-panel,
+    .nav-mobile-menu,
+    .nav-mobile-close {
+        display: none !important;
     }
 }
 
