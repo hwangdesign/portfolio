@@ -173,11 +173,22 @@ function scoreFromResult(result) {
   const hasRealData = totalScore > 0;
 
   if (!hasRealData) {
-    console.warn('⚠️ API에서 트렌드 데이터가 없습니다. 조회 기간을 확인하거나 시크릿/앱 설정을 점검하세요.');
+    console.warn('⚠️ API에서 트렌드 데이터가 없습니다. (totalScore=0)');
+    console.warn('   → Repository Secrets의 NAVER_CLIENT_ID, NAVER_CLIENT_SECRET 확인');
+    console.warn('   → 네이버 개발자센터 데이터랩 쇼핑인사이트 API 사용 설정·할당량 확인');
+    console.warn('   → 조회 기간: ' + startDate + ' ~ ' + endDate);
     if (fs.existsSync(samplePath)) {
       console.warn('   기존 결과를 유지합니다. 파일을 덮어쓰지 않습니다.');
       return;
     }
+    const noDataOutput = {
+      updatedAt: new Date().toISOString(),
+      items: [],
+      _noData: true
+    };
+    fs.writeFileSync(samplePath, JSON.stringify(noDataOutput, null, 2), 'utf-8');
+    console.warn('   샘플 파일이 없어 빈 결과( items: [] )를 저장했습니다.');
+    return;
   }
 
   const top10 = sorted.slice(0, 10).map((r, i) => ({

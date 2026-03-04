@@ -74,10 +74,14 @@ jobs:
         run: |
           echo "## Top 10 Keywords" >> $GITHUB_STEP_SUMMARY
           if [ -f labs/TrendingSearches/naver/naver_shopping_sample.json ]; then
-            jq -r '.items[]? | "\(.ranking). \(.keyword)"' labs/TrendingSearches/naver/naver_shopping_sample.json 2>/dev/null | head -10 | while read -r line; do
-              echo "$line" >> $GITHUB_STEP_SUMMARY
-              echo "$line"
-            done
+            if jq -e '.items | length > 0' labs/TrendingSearches/naver/naver_shopping_sample.json >/dev/null 2>&1; then
+              jq -r '.items[]? | "\(.ranking). \(.keyword)"' labs/TrendingSearches/naver/naver_shopping_sample.json 2>/dev/null | head -10 | while read -r line; do
+                echo "$line" >> $GITHUB_STEP_SUMMARY
+                echo "$line"
+              done
+            else
+              echo "⚠️ API에서 트렌드 데이터가 없습니다. Secrets(NAVER_CLIENT_ID/SECRET) 및 네이버 데이터랩 API 설정을 확인하세요." >> $GITHUB_STEP_SUMMARY
+            fi
           else
             echo "No data" >> $GITHUB_STEP_SUMMARY
           fi
