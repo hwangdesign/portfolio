@@ -1,45 +1,45 @@
 {
-  "updatedAt": "2026-02-24T07:22:57.914Z",
+  "updatedAt": "2026-03-04T03:03:14.573Z",
   "items": [
     {
       "ranking": "1",
-      "keyword": "겨울 패딩"
+      "keyword": "원피스"
     },
     {
       "ranking": "2",
-      "keyword": "선크림"
+      "keyword": "맨투맨"
     },
     {
       "ranking": "3",
-      "keyword": "노트북"
+      "keyword": "자켓"
     },
     {
       "ranking": "4",
-      "keyword": "에어팟"
+      "keyword": "후드티"
     },
     {
       "ranking": "5",
-      "keyword": "무선 이어폰"
+      "keyword": "니트"
     },
     {
       "ranking": "6",
-      "keyword": "아이패드"
+      "keyword": "블라우스"
     },
     {
       "ranking": "7",
-      "keyword": "가습기"
+      "keyword": "뉴발란스"
     },
     {
       "ranking": "8",
-      "keyword": "공기청정기"
+      "keyword": "청바지"
     },
     {
       "ranking": "9",
-      "keyword": "전기담요"
+      "keyword": "백팩"
     },
     {
       "ranking": "10",
-      "keyword": "스마트워치"
+      "keyword": "셔츠"
     }
   ]
 }
