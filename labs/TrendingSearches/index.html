@@ -259,12 +259,13 @@
         function formatUpdateTime(updatedAt) {
             if (!updatedAt) return '';
             var d = new Date(updatedAt);
+            var dateStr = d.getDate() + ' ' + d.toLocaleDateString('en-US', { month: 'long' }).toUpperCase() + ' ' + d.getFullYear();
             var rawTime = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true });
             var match = rawTime.match(/^(.+?)\s*(AM|PM)$/i);
             var timePart = match ? match[1].replace(/\s/g, '') : rawTime.replace(/\s/g, '');
             var period = match ? match[2].toUpperCase() : '';
             var timeStr = period ? '<sup>(' + period + ')</sup>' + timePart : timePart;
-            return 'TODAY<br>' + timeStr + '<br>UPDATED';
+            return dateStr + '<br>' + timeStr + '<br>UPDATED';
         }
 
         function renderChart(items, type, updateTime) {
