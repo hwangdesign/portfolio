@@ -59,12 +59,12 @@ window.PROJECT_NAV_CONFIG = {
   },
 
   /* ========== Labs ========== */
-  'labs/InteractiveAnalogClock.html': {
-    prev: null,
-    next: { href: 'TrendingSearches.html', title: 'Popular Shopping Keywords' }
-  },
   'labs/TrendingSearches.html': {
-    prev: { href: 'InteractiveAnalogClock.html', title: 'Interactive Analog Clock' },
+    prev: null,
+    next: { href: 'InteractiveAnalogClock.html', title: 'Interactive Analog Clock' }
+  },
+  'labs/InteractiveAnalogClock.html': {
+    prev: { href: 'TrendingSearches.html', title: 'Popular Shopping Keywords' },
     next: null
-  }
+  },
 };
