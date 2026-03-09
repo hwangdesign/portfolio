@@ -39,6 +39,10 @@ window.PROJECT_NAV_CONFIG = {
   },
   'works/amazon-global-store.html': {
     prev: { href: '11street-dx.html', title: '11STREET Design eXperience' },
+    next: { href: 'wedding.html', title: 'Wedding' }
+  },
+  'works/wedding.html': {
+    prev: { href: 'amazon-global-store.html', title: 'Amazon Global Store' },
     next: null
   },
   'works/pdp-ux.html': {
