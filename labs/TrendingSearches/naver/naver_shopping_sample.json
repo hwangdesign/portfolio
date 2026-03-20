@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-03-19T04:51:28.787Z",
+  "updatedAt": "2026-03-20T04:44:02.362Z",
   "items": [
     {
       "ranking": "1",
-      "keyword": "자켓"
+      "keyword": "원피스"
     },
     {
       "ranking": "2",
-      "keyword": "원피스"
+      "keyword": "자켓"
     },
     {
       "ranking": "3",
@@ -31,7 +31,7 @@
     },
     {
       "ranking": "8",
-      "keyword": "골프웨어"
+      "keyword": "청바지"
     },
     {
       "ranking": "9",
@@ -39,7 +39,7 @@
     },
     {
       "ranking": "10",
-      "keyword": "청바지"
+      "keyword": "골프웨어"
     }
   ]
 }
