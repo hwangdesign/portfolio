@@ -3,7 +3,7 @@
 수정·확장 시 일관된 클래스 이름을 사용하기 위한 가이드입니다.
 
 **공통 에셋 (한 폴더 관리)**  
-`assets/` — `styles.css`, `script.js`, `project-nav-config.js` 를 한 곳에서 관리합니다.
+`assets/` — `styles.css`, `script.js`, `works-order.js`(순서), `project-nav-config.js`(자동 생성) 를 한 곳에서 관리합니다.
 
 ---
 
@@ -115,7 +115,7 @@
 | `project-nav-link` | 이전/다음 링크 (prev, next, disabled) |
 | `project-nav-label` | 화살표 라벨 (←←, →→) |
 | `project-nav-title` | 이전/다음 프로젝트명 |
-| **설정** | **project-nav-config.js** 에서 href·title 일괄 관리 |
+| **설정** | **works-order.js** 에서 순서·제목 관리 → `project-nav-config.js`가 prev/next 생성 ( **WORKS_CHECKLIST.md** ) |
 
 ### 유틸리티 (색·폰트)
 - **텍스트**: `text-primary`, `text-yellow`, `text-description`, `text-nav-menu` 등
