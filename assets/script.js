@@ -78,6 +78,45 @@ function renderSharedLayout() {
 
 renderSharedLayout();
 
+/** 썸네일/상세 이미지 로드 실패 시 placeholder로 교체 (인라인 onerror 대체, CSP 호환) */
+(function initImgFallbacks() {
+    function bindImg(img) {
+        if (img.nodeName !== 'IMG' || !img.hasAttribute('data-img-fallback')) return;
+        if (img.dataset.imgFallbackBound === '1') return;
+        var fb = img.getAttribute('data-img-fallback');
+        if (!fb) return;
+        img.dataset.imgFallbackBound = '1';
+        function onErr() {
+            img.removeEventListener('error', onErr);
+            img.src = fb;
+        }
+        img.addEventListener('error', onErr);
+        if (img.src && img.complete && img.naturalWidth === 0) {
+            onErr();
+        }
+    }
+    function scan(root) {
+        (root || document).querySelectorAll('img[data-img-fallback]').forEach(bindImg);
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function () { scan(document); });
+    } else {
+        scan(document);
+    }
+    if (typeof MutationObserver !== 'undefined') {
+        var mo = new MutationObserver(function (mutations) {
+            mutations.forEach(function (m) {
+                m.addedNodes.forEach(function (n) {
+                    if (n.nodeType !== 1) return;
+                    if (n.matches && n.matches('img[data-img-fallback]')) bindImg(n);
+                    if (n.querySelectorAll) scan(n);
+                });
+            });
+        });
+        mo.observe(document.documentElement, { childList: true, subtree: true });
+    }
+})();
+
 /** 모바일 GNB: 햄버거 버튼 클릭 시 절반 높이 레이어에 메뉴 순차 노출 */
 (function initMobileNav() {
     const hamburger = document.getElementById('navHamburger');

@@ -62,17 +62,40 @@
                         var thumbUrl = work.thumbnail
                             ? (work.thumbnail.indexOf('http') === 0 ? work.thumbnail : base + work.thumbnail)
                             : '';
-                        card.innerHTML =
-                            '<div class="art-card__thumb">' +
-                            (thumbUrl
-                                ? '<img src="' + thumbUrl + '" alt="' + (work.title || '') + '" loading="lazy" onerror="this.parentElement.innerHTML=\'<span style=color:var(--text-light)>No image</span>\'">'
-                                : '<span style="color:var(--text-light)">No image</span>') +
-                            '</div>' +
-                            '<div class="art-card__info">' +
-                            '<div class="art-card__title">' + (work.title || 'Untitled') + '</div>' +
-                            '<div class="art-card__meta">' + [work.year, work.technique].filter(Boolean).join(' · ') + '</div>' +
-                            (work.description ? '<p style="margin-top:8px;font-size:var(--font-size-small);color:var(--text-light)">' + work.description + '</p>' : '') +
-                            '</div>';
+                        var thumbWrap = document.createElement('div');
+                        thumbWrap.className = 'art-card__thumb';
+                        if (thumbUrl) {
+                            var img = document.createElement('img');
+                            img.src = thumbUrl;
+                            img.alt = work.title || '';
+                            img.loading = 'lazy';
+                            img.addEventListener('error', function () {
+                                thumbWrap.innerHTML = '<span style="color:var(--text-light)">No image</span>';
+                            });
+                            thumbWrap.appendChild(img);
+                        } else {
+                            thumbWrap.innerHTML = '<span style="color:var(--text-light)">No image</span>';
+                        }
+                        var info = document.createElement('div');
+                        info.className = 'art-card__info';
+                        var titleEl = document.createElement('div');
+                        titleEl.className = 'art-card__title';
+                        titleEl.textContent = work.title || 'Untitled';
+                        info.appendChild(titleEl);
+                        var meta = document.createElement('div');
+                        meta.className = 'art-card__meta';
+                        meta.textContent = [work.year, work.technique].filter(Boolean).join(' · ');
+                        info.appendChild(meta);
+                        if (work.description) {
+                            var desc = document.createElement('p');
+                            desc.style.marginTop = '8px';
+                            desc.style.fontSize = 'var(--font-size-small)';
+                            desc.style.color = 'var(--text-light)';
+                            desc.textContent = work.description;
+                            info.appendChild(desc);
+                        }
+                        card.appendChild(thumbWrap);
+                        card.appendChild(info);
                         gallery.appendChild(card);
                     });
                 })

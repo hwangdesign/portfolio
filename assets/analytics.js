@@ -18,5 +18,6 @@
     var s = document.createElement('script');
     s.async = true;
     s.src = 'https://www.googletagmanager.com/gtag/js?id=' + MEASUREMENT_ID;
+    s.referrerPolicy = 'strict-origin-when-cross-origin';
     document.head.appendChild(s);
 })();

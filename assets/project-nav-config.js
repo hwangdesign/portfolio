@@ -13,8 +13,12 @@
  */
 window.PROJECT_NAV_CONFIG = {
   /* ========== Works ========== */
-  'works/martplus.html': {
+  'works/new-project.html': {
     prev: null,
+    next: { href: 'martplus.html', title: 'Mart<sup>Plus</sup>' }
+  },
+  'works/martplus.html': {
+    prev: { href: 'new-project.html', title: '신규 프로젝트' },
     next: { href: '11kitiz-s2.html', title: '11Kitties<sup>Season 2</sup>' }
   },
   'works/11kitiz-s2.html': {
