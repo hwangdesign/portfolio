@@ -1,0 +1,50 @@
+/* Next 전용 보조 스타일 — 본문은 /assets/styles.css */
+
+.next-site-header {
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.next-nav {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.next-nav a {
+  text-decoration: none;
+  color: inherit;
+  opacity: 0.85;
+}
+
+.next-nav a:hover {
+  opacity: 1;
+}
+
+.next-site-footer {
+  padding: 2.5rem 0;
+  margin-top: 3rem;
+  font-size: var(--font-size-small, 14px);
+  opacity: 0.65;
+}
+
+.project-details-content.markdown-body h2 {
+  font-size: var(--font-size-subtitle, 24px);
+  font-weight: 700;
+  margin: 2rem 0 0.75rem;
+  line-height: 1.35;
+}
+
+.project-details-content.markdown-body h2:first-child {
+  margin-top: 0;
+}
+
+.project-details-content.markdown-body ul,
+.project-details-content.markdown-body ol {
+  margin: 0.5em 0 0;
+  padding-left: 1.25em;
+}
+
+.project-details-content.markdown-body img {
+  margin-top: 0.5rem;
+}

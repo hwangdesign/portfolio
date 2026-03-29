@@ -2,8 +2,9 @@
 
 수정·확장 시 일관된 클래스 이름을 사용하기 위한 가이드입니다.
 
-**공통 에셋 (한 폴더 관리)**  
-`assets/` — `styles.css`, `script.js`, `works-order.js`(순서), `project-nav-config.js`(자동 생성) 를 한 곳에서 관리합니다.
+**공통 에셋**  
+- **Next 배포**: `public/assets/` — 빌드 후 `/assets/...` 로 제공 (`styles.css` 등).  
+- **레거시 HTML**: `legacy/assets/` — 이전 순수 정적 사이트용 (`works-order.js`, `project-nav-config.js` 등).
 
 ---
 
@@ -115,7 +116,7 @@
 | `project-nav-link` | 이전/다음 링크 (prev, next, disabled) |
 | `project-nav-label` | 화살표 라벨 (←←, →→) |
 | `project-nav-title` | 이전/다음 프로젝트명 |
-| **설정** | **works-order.js** 에서 순서·제목 관리 → `project-nav-config.js`가 prev/next 생성 ( **WORKS_CHECKLIST.md** ) |
+| **설정** | 레거시: **`legacy/assets/works-order.js`** → `project-nav-config.js`. Next 프로젝트 페이지는 `content/projects/*.md` ( **WORKS_CHECKLIST.md** ) |
 
 ### 유틸리티 (색·폰트)
 - **텍스트**: `text-primary`, `text-yellow`, `text-description`, `text-nav-menu` 등

@@ -1,39 +1,41 @@
 # Works 신규·수정 체크리스트
 
-메인 작업 순서와 이전/다음 네비는 **`assets/works-order.js`** 한 곳에서 관리합니다.  
-`project-nav-config.js`는 수정하지 않습니다(자동 생성).
+## 현재 (Next.js · 권장)
+
+1. **`content/projects/슬러그.md`** — 프론트매터(`title`, `slug`, `date`, `summary`, `thumbnail` 등) + Case Study 본문 (`CASE_STUDY_GUIDE.md`).
+2. **`public/works/images/...`** — 썸네일·상세 이미지 (URL은 `/works/images/...`).
+3. **`npm run build`** → **`out/`** 을 FTP 업로드.
+
+홈·Works 그리드는 `content/projects/*.md` 메타데이터로 **`app/page.tsx`**에서 자동 나열됩니다.
 
 ---
 
-## 메인 라인에 작업 추가 (그리드에 노출)
+## 레거시 HTML (`legacy/` 참고)
 
-1. **`assets/works-order.js`** — `main` 배열에 `{ file, title }` 한 줄 추가 (원하는 순서).
-2. **`index.html`** — `#portfolioGrid`에 카드 블록 추가 (`href`, 썸네일, 제목, `data-date`).
-3. **`works/프로젝트.html`** — 상세 페이지 작성.
-4. **`works/images/프로젝트폴더/`** — `thumbnail` 등 에셋.
-5. 상세 HTML 하단 스크립트: **`works-order.js` → `project-nav-config.js` → `script.js`** 순서, 본문에 `<div id="project-nav-root"></div>` 포함.
+이전 순수 HTML 운영 시: 메인 순서는 **`legacy/assets/works-order.js`** 한 곳에서 관리하고, `project-nav-config.js`는 자동 생성됩니다.
 
-## 분기 라인만 있는 페이지 (그리드 없음)
+### 메인 라인에 작업 추가 (구 방식)
 
-- **`works-order.js`** — `branches`에 시리즈를 추가하거나, 기존 `items` / `entryPrev` / `exitNext`만 조정.
-- 메인 `main` 배열에는 넣지 않습니다.
+1. **`legacy/assets/works-order.js`** — `main` 배열에 한 줄 추가.
+2. **`legacy/index.html`** — `#portfolioGrid`에 카드 추가.
+3. **`legacy/works/프로젝트.html`** — 상세 페이지.
+4. **`legacy/works/images/...`** — 에셋.
+5. 스크립트: **`works-order.js` → `project-nav-config.js` → `script.js`**, `#project-nav-root` 포함.
 
-## Labs 추가
+## 분기 / Labs (레거시 HTML)
 
-1. **`works-order.js`** — `labs` 배열에 `{ file, title }` 추가.
-2. **`index.html`** — `#labsGrid` 카드 추가.
-3. 랩 상세 HTML에 네비 스크립트 순서 동일.
+- **`legacy/assets/works-order.js`** — `branches`·`labs` 조정 (구조 동일).
+- 페이지·그리드: `legacy/index.html` 등.
 
-## 빠른 점검
+## 빠른 점검 (레거시)
 
 | 항목 | 위치 |
 |------|------|
-| 이전/다음 순서 | `assets/works-order.js` |
-| 그리드 노출 | `index.html` (수동) |
-| 네비 DOM 슬롯 | 상세 페이지 `#project-nav-root` |
-| 스크립트 순서 | `works-order.js` → `project-nav-config.js` → `script.js` |
+| 이전/다음 순서 | `legacy/assets/works-order.js` |
+| 그리드 노출 | `legacy/index.html` |
+| 네비 | `#project-nav-root` + 스크립트 순서 (위 참고) |
 
 ---
 
-**메인 라인**은 `back-to-basics` → … → `wedding` 순입니다.  
-**분기**는 `design-system`에서 `pdp-ux`로 갈라져 `ooah-luxury` 후 다시 `ooah`로 합류합니다 (`works-order.js` 주석 참고).
+**메인 라인**(레거시 네비)은 `back-to-basics` → … → `wedding` 순입니다.  
+**분기**는 `design-system` → `pdp-ux` … → `ooah-luxury` → `ooah` (`works-order.js` 주석).
