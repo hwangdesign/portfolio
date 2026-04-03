@@ -1112,34 +1112,60 @@ document.addEventListener('DOMContentLoaded', () => {
     // 배경 라인 요소들 생성 및 관리
     const backgroundLines = [];
     const lineSpacing = 640;
+    const LAYER_ID = 'portfolio-bg-lines-layer';
 
-    // 라인 제거 헬퍼 함수
     function removeLines(lines) {
         lines.forEach(line => line.parentNode?.removeChild(line));
         lines.length = 0;
     }
-    
-    // 배경 세로 라인 생성 헬퍼 함수 (index: 0=1번째, 1=2번째, ... 짝수번째는 투명도 0%)
-    function createVerticalLine(left, index) {
+
+    function ensureLinesLayer() {
+        let layer = document.getElementById(LAYER_ID);
+        if (!layer) {
+            layer = document.createElement('div');
+            layer.id = LAYER_ID;
+            layer.className = 'portfolio-bg-lines-layer';
+            layer.setAttribute('aria-hidden', 'true');
+            document.body.appendChild(layer);
+        }
+        return layer;
+    }
+
+    function elementDocumentTop(el) {
+        const r = el.getBoundingClientRect();
+        return r.top + window.scrollY;
+    }
+
+    function updateLinesLayerGeometry() {
+        const layer = ensureLinesLayer();
+        const nav = document.querySelector('.navbar');
+        const footer = document.querySelector('.site-footer');
+        const navH = nav ? nav.offsetHeight : 80;
+        if (!footer) {
+            layer.style.top = `${navH}px`;
+            layer.style.height = '0px';
+            return;
+        }
+        const footerTop = elementDocumentTop(footer);
+        const h = Math.max(0, Math.round(footerTop - navH));
+        layer.style.top = `${navH}px`;
+        layer.style.height = `${h}px`;
+    }
+
+    function createVerticalLine(layer, left, index) {
         const line = document.createElement('div');
         line.className = index === 1 ? 'background-line background-line-second' : 'background-line';
-        
-        const isProjectDetailPage = document.body.classList.contains('project-detail-page');
-        const lineZIndex = (index === 1 && isProjectDetailPage) ? '0' : '1';
-        const navbar = document.querySelector('.navbar');
-        const navHeight = navbar ? navbar.offsetHeight : 80;
-        
+
         Object.assign(line.style, {
             left: `${left}px`,
-            top: `${navHeight}px`,
-            height: `calc(100vh - ${navHeight}px)`,
-            position: 'fixed',
+            position: 'absolute',
+            top: '0',
+            bottom: '0',
             width: '1px',
-            zIndex: lineZIndex,
             pointerEvents: 'none',
-            transition: 'left 0.1s ease-out'
+            transition: 'left 0.1s ease-out',
         });
-        document.body.appendChild(line);
+        layer.appendChild(line);
         return line;
     }
 
@@ -1150,7 +1176,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function getThumbnailColumnRhythm() {
-        var grid = document.querySelector('#portfolioGrid, #labsGrid, #artGrid');
+        var grid = document.getElementById('portfolioGrid')
+            || document.querySelector('#labsGrid, #artGrid');
         if (!grid || grid.classList.contains('text-view')) return null;
         var thumbs = grid.querySelectorAll('.portfolio-thumbnail');
         if (!thumbs.length) return null;
@@ -1162,16 +1189,18 @@ document.addEventListener('DOMContentLoaded', () => {
         var firstRow = rects.filter(function (r) { return Math.abs(r.top - minTop) < 8; });
         if (!firstRow.length) return null;
         firstRow.sort(function (a, b) { return a.left - b.left; });
-        var startX = Math.round(firstRow[0].left);
         var step = lineSpacing;
         if (firstRow.length >= 2) {
             var s = Math.round(firstRow[1].left - firstRow[0].left);
             if (s >= 100 && s <= 2000) step = s;
         }
+        var startX = Math.round(firstRow[0].left);
         return { startX: startX, step: step };
     }
 
     function createBackgroundLines() {
+        updateLinesLayerGeometry();
+        const layer = ensureLinesLayer();
         removeLines(backgroundLines);
 
         var windowWidth = window.innerWidth;
@@ -1222,13 +1251,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
         positions.sort(function (a, b) { return a - b; });
         for (var li = 0; li < positions.length; li++) {
-            backgroundLines.push(createVerticalLine(positions[li], li));
+            backgroundLines.push(createVerticalLine(layer, positions[li], li));
         }
+    }
+
+    let bodyLineObserveStarted = false;
+    let contentRoTimer = 0;
+    let contentResizeObserver = null;
+    function observeBodyForLines() {
+        if (bodyLineObserveStarted || typeof ResizeObserver === 'undefined') return;
+        bodyLineObserveStarted = true;
+        contentResizeObserver = new ResizeObserver(() => {
+            clearTimeout(contentRoTimer);
+            contentRoTimer = window.setTimeout(createBackgroundLines, 100);
+        });
+        contentResizeObserver.observe(document.body);
     }
     
     // 초기 실행
     setTimeout(() => {
         createBackgroundLines();
+        observeBodyForLines();
     }, 100);
     
     // 리사이즈 이벤트는 위의 handleResize 함수에서 통합 처리됨

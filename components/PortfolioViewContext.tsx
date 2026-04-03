@@ -25,6 +25,10 @@ export function PortfolioViewProvider({ children }: { children: React.ReactNode 
       if (v === 'text') grid.classList.add('text-view');
       else grid.classList.remove('text-view');
     });
+    requestAnimationFrame(() => {
+      const rebuild = (window as Window & { portfolioRebuildBackgroundLines?: () => void }).portfolioRebuildBackgroundLines;
+      if (typeof rebuild === 'function') rebuild();
+    });
   }, []);
 
   const setView = useCallback(

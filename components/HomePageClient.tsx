@@ -94,6 +94,23 @@ export function HomePageClient({ home, works, labs }: Props) {
     return () => window.removeEventListener('resize', setNav);
   }, []);
 
+  /** portfolio-interactions 로드·그리드 레이아웃 후 세로선이 썸네일 열에 맞게 다시 그려지도록 */
+  useEffect(() => {
+    const w = window as Window & { portfolioRebuildBackgroundLines?: () => void };
+    const run = () => w.portfolioRebuildBackgroundLines?.();
+    run();
+    const timeouts = [80, 250, 700, 1500].map((ms) => window.setTimeout(run, ms));
+    const grid = document.getElementById('portfolioGrid');
+    const ro = new ResizeObserver(run);
+    if (grid) ro.observe(grid);
+    window.addEventListener('resize', run, { passive: true });
+    return () => {
+      timeouts.forEach(clearTimeout);
+      ro.disconnect();
+      window.removeEventListener('resize', run);
+    };
+  }, [works.length, labs.length]);
+
   return (
     <>
       <header className="hero" />

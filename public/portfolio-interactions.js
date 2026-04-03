@@ -660,83 +660,81 @@ function portfolioSetupAnimatedSectionTitles() {
 
 window.portfolioSetupAnimatedSectionTitles = portfolioSetupAnimatedSectionTitles;
 
-document.addEventListener('DOMContentLoaded', () => {
-    portfolioSetupAnimatedSectionTitles();
-    
-    // 해상도 변경 시 모든 section-title-box 위치 재조정
-    let resizeTimeout;
-    let isResizing = false;
-    
-    function handleResize() {
-        // 타이틀 박스 위치 재조정
-        const upd = window.__portfolioUpdateTitleBox;
-        const allSectionTitles = document.querySelectorAll('.animated-section-title');
-        allSectionTitles.forEach(title => {
-            const text = title.textContent || title.dataset.title || '';
-            if (text && text.length >= 1 && typeof upd === 'function') {
-                upd(title);
-            }
-        });
-        
-        // 배경 라인 재생성
-        createBackgroundLines();
-    }
-    
-    window.addEventListener('resize', () => {
-        if (!isResizing) {
-            isResizing = true;
-        }
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-            handleResize();
-            isResizing = false;
-        }, 250); // 디바운싱을 위해 250ms 대기
-    }, { passive: true });
-    
-    // 배경 라인 요소들 생성 및 관리
+/**
+ * 배경 세로선 — Next.js Script(afterInteractive)는 DOMContentLoaded 이후에 로드되므로
+ * 이 코드를 DOMContentLoaded 안에만 두면 콜백이 절대 실행되지 않음. 즉시 초기화 IIFE로 분리.
+ */
+(function initPortfolioBackgroundVerticalLines() {
     const backgroundLines = [];
     const lineSpacing = 640;
+    const LAYER_ID = 'portfolio-bg-lines-layer';
 
-    // 라인 제거 헬퍼 함수
     function removeLines(lines) {
-        lines.forEach(line => line.parentNode?.removeChild(line));
+        lines.forEach((line) => line.parentNode && line.parentNode.removeChild(line));
         lines.length = 0;
     }
-    
-    // 배경 세로 라인 생성 헬퍼 함수 (index: 0=1번째, 1=2번째, ... 짝수번째는 투명도 0%)
-    function createVerticalLine(left, index) {
+
+    function ensureLinesLayer() {
+        var layer = document.getElementById(LAYER_ID);
+        if (!layer) {
+            layer = document.createElement('div');
+            layer.id = LAYER_ID;
+            layer.className = 'portfolio-bg-lines-layer';
+            layer.setAttribute('aria-hidden', 'true');
+            document.body.appendChild(layer);
+        }
+        return layer;
+    }
+
+    function elementDocumentTop(el) {
+        var r = el.getBoundingClientRect();
+        return r.top + window.scrollY;
+    }
+
+    /** GNB 아래부터 푸터 시작 직전까지(문서 좌표). 뷰포트 vh 미사용 — 컨텐츠 길이에 맞춤 */
+    function updateLinesLayerGeometry() {
+        var layer = ensureLinesLayer();
+        var nav = document.querySelector('.navbar');
+        var footer = document.querySelector('.site-footer');
+        var navH = nav ? nav.offsetHeight : 80;
+        if (!footer) {
+            layer.style.top = navH + 'px';
+            layer.style.height = '0px';
+            return;
+        }
+        var footerTop = elementDocumentTop(footer);
+        var h = Math.max(0, Math.round(footerTop - navH));
+        layer.style.top = navH + 'px';
+        layer.style.height = h + 'px';
+    }
+
+    function createVerticalLine(layer, left, index) {
         const line = document.createElement('div');
         line.className = index === 1 ? 'background-line background-line-second' : 'background-line';
-        
-        const isProjectDetailPage = document.body.classList.contains('project-detail-page');
-        /* 본문(z-index:2) 아래·body 배경 위. 색은 CSS .background-line + data-theme */
-        const lineZIndex = (index === 1 && isProjectDetailPage) ? '0' : '1';
-        const navbar = document.querySelector('.navbar');
-        const navHeight = navbar ? navbar.offsetHeight : 80;
-        
+
         Object.assign(line.style, {
             left: `${left}px`,
-            top: `${navHeight}px`,
-            height: `calc(100vh - ${navHeight}px)`,
-            position: 'fixed',
+            position: 'absolute',
+            top: '0',
+            bottom: '0',
             width: '1px',
-            zIndex: lineZIndex,
             pointerEvents: 'none',
-            transition: 'left 0.1s ease-out'
+            transition: 'left 0.1s ease-out',
         });
-        document.body.appendChild(line);
+        layer.appendChild(line);
         return line;
     }
 
     function getBackgroundLinesAnchor() {
-        return document.getElementById('animatedTitle')
-            || document.querySelector('main .hero-content .animated-section-title')
-            || document.querySelector('main .animated-section-title');
+        return (
+            document.getElementById('animatedTitle') ||
+            document.querySelector('main .hero-content .animated-section-title') ||
+            document.querySelector('main .animated-section-title')
+        );
     }
 
-    /** Works/Labs(또는 Art) 그리드 썸네일 열과 동일한 시작 X·열 간격 (픽셀). 없으면 null */
     function getThumbnailColumnRhythm() {
-        var grid = document.querySelector('#portfolioGrid, #labsGrid, #artGrid');
+        var grid = document.getElementById('portfolioGrid') || document.querySelector('#labsGrid, #artGrid');
         if (!grid || grid.classList.contains('text-view')) return null;
         var thumbs = grid.querySelectorAll('.portfolio-thumbnail');
         if (!thumbs.length) return null;
@@ -748,16 +746,19 @@ document.addEventListener('DOMContentLoaded', () => {
         var firstRow = rects.filter(function (r) { return Math.abs(r.top - minTop) < 8; });
         if (!firstRow.length) return null;
         firstRow.sort(function (a, b) { return a.left - b.left; });
-        var startX = Math.round(firstRow[0].left);
         var step = lineSpacing;
         if (firstRow.length >= 2) {
             var s = Math.round(firstRow[1].left - firstRow[0].left);
             if (s >= 100 && s <= 2000) step = s;
         }
+        /* 썸네일(열) 왼쪽 시작선과 겹침 — 첫 썸네일 left가 첫 직선 */
+        var startX = Math.round(firstRow[0].left);
         return { startX: startX, step: step };
     }
 
     function createBackgroundLines() {
+        updateLinesLayerGeometry();
+        var layer = ensureLinesLayer();
         removeLines(backgroundLines);
 
         var windowWidth = window.innerWidth;
@@ -808,18 +809,87 @@ document.addEventListener('DOMContentLoaded', () => {
 
         positions.sort(function (a, b) { return a - b; });
         for (var li = 0; li < positions.length; li++) {
-            backgroundLines.push(createVerticalLine(positions[li], li));
+            backgroundLines.push(createVerticalLine(layer, positions[li], li));
         }
     }
 
     window.portfolioRebuildBackgroundLines = createBackgroundLines;
-    
-    // 초기 실행 (Next 하이드레이션 전이면 실패할 수 있음 → portfolioRebuildBackgroundLines 재호출)
-    setTimeout(function () {
+
+    var lineResizeTimeout;
+    window.addEventListener(
+        'resize',
+        function () {
+            clearTimeout(lineResizeTimeout);
+            lineResizeTimeout = setTimeout(createBackgroundLines, 250);
+        },
+        { passive: true }
+    );
+
+    var contentResizeObserver = null;
+    var contentRoTimer = 0;
+    var bodyLineObserveStarted = false;
+    function observeBodyForLines() {
+        if (bodyLineObserveStarted || typeof ResizeObserver === 'undefined') return;
+        bodyLineObserveStarted = true;
+        contentResizeObserver = new ResizeObserver(function () {
+            clearTimeout(contentRoTimer);
+            contentRoTimer = window.setTimeout(createBackgroundLines, 100);
+        });
+        contentResizeObserver.observe(document.body);
+    }
+
+    function bootLines() {
         createBackgroundLines();
-    }, 100);
+        observeBodyForLines();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function onDomReady() {
+            document.removeEventListener('DOMContentLoaded', onDomReady);
+            bootLines();
+            setTimeout(bootLines, 120);
+            setTimeout(bootLines, 500);
+        });
+    } else {
+        bootLines();
+        setTimeout(bootLines, 120);
+        setTimeout(bootLines, 500);
+    }
+})();
+
+document.addEventListener('DOMContentLoaded', () => {
+    portfolioSetupAnimatedSectionTitles();
     
-    // 리사이즈 이벤트는 위의 handleResize 함수에서 통합 처리됨
+    // 해상도 변경 시 모든 section-title-box 위치 재조정
+    let resizeTimeout;
+    let isResizing = false;
+    
+    function handleResize() {
+        // 타이틀 박스 위치 재조정
+        const upd = window.__portfolioUpdateTitleBox;
+        const allSectionTitles = document.querySelectorAll('.animated-section-title');
+        allSectionTitles.forEach(title => {
+            const text = title.textContent || title.dataset.title || '';
+            if (text && text.length >= 1 && typeof upd === 'function') {
+                upd(title);
+            }
+        });
+        
+        if (typeof window.portfolioRebuildBackgroundLines === 'function') {
+            window.portfolioRebuildBackgroundLines();
+        }
+    }
+    
+    window.addEventListener('resize', () => {
+        if (!isResizing) {
+            isResizing = true;
+        }
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            handleResize();
+            isResizing = false;
+        }, 250); // 디바운싱을 위해 250ms 대기
+    }, { passive: true });
     
     // nav-brand 애니메이션
     const navBrand = document.getElementById('navBrandAnimated');
