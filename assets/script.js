@@ -372,6 +372,7 @@ const PROJECT_BG_EXTRACT = {
 };
 
 const PROJECT_BG_IMAGE_MAP = {
+    'back-to-basics.html': 'images/Back_to_Basics/thumbnail.png',
     'martplus.html': 'images/MartPlus/thumbnail.png',
     '11kitiz-s2.html': 'images/11Kitties/thumbnail.png',
     'ootd.html': 'images/ootd/thumbnail.png',
