@@ -3,26 +3,27 @@
 
 html, body { overflow-x: hidden; max-width: 100vw; }
 
+/* 기본(다크 토글)도 배경은 흰색 고정 — 전경 토큰은 라이트와 동일해 가독성 유지 */
 :root {
-    color-scheme: dark light;
-    --primary-color: #ffffff;
+    color-scheme: light;
+    --primary-color: #000000;
     --yellow-color: #FFFF00;
-    --black-color: #000000;
-    --text-color: #ffffff;
-    --text-light: #cccccc;
-    --bg-color: #111111;
-    --border-white: rgba(255, 255, 255, 1);
-    --border-white-50: rgba(255, 255, 255, 0.5);
-    --border-white-20: rgba(255, 255, 255, 0.2);
-    --border-black-20: rgba(0, 0, 0, 0.2);
+    --black-color: #ffffff;
+    --text-color: #000000;
+    --text-light: #333333;
+    --bg-color: #ffffff;
+    --border-white: rgba(0, 0, 0, 1);
+    --border-white-50: rgba(0, 0, 0, 0.5);
+    --border-white-20: rgba(0, 0, 0, 0.2);
+    --border-black-20: rgba(255, 255, 255, 0.2);
     --yellow-20: rgba(255, 255, 0, 0.2);
-    --white-50: rgba(255, 255, 255, 0.5);
-    --white-100: rgba(255, 255, 255, 1);
-    --white-0: rgba(255, 255, 255, 0);
-    --dark-30: rgba(17, 17, 17, 0.3);
-    --text-tertiary-color: rgba(255, 255, 255, 0.2);
-    --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    --shadow-emoji: 0 10px 30px rgba(0, 0, 0, 0.5), 0 5px 15px rgba(0, 0, 0, 0.3);
+    --white-50: rgba(0, 0, 0, 0.5);
+    --white-100: rgba(0, 0, 0, 1);
+    --white-0: rgba(0, 0, 0, 0);
+    --dark-30: rgba(255, 255, 255, 0.3);
+    --text-tertiary-color: rgba(0, 0, 0, 0.2);
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --shadow-emoji: 0 10px 30px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.1);
     --transition: all 0.3s ease;
     --font-family-base: 'Helvetica Neue', Helvetica, 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
     --font-family-system: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, 'Segoe UI', sans-serif;
@@ -60,7 +61,7 @@ html, body { overflow-x: hidden; max-width: 100vw; }
     --black-color: #ffffff;
     --text-color: #000000;
     --text-light: #333333;
-    --bg-color: #fafafa;
+    --bg-color: #ffffff;
     --border-white: rgba(0, 0, 0, 1);
     --border-white-50: rgba(0, 0, 0, 0.5);
     --border-white-20: rgba(0, 0, 0, 0.2);
@@ -288,28 +289,27 @@ body {
     flex-direction: column;
 }
 
-/* 배경 라인 스타일 */
+/* 배경 라인 스타일 — 흰 배경에서도 보이도록 알파·스택 조정 (JS가 top/height/zIndex만 인라인 지정) */
 .background-line {
     position: fixed;
     top: 0;
     width: 1px;
     height: 100vh;
-    background: var(--yellow-color);
-    z-index: -1; /* 모든 콘텐츠 및 오버레이 뒤에 위치 */
+    /* data-theme 없을 때: 다크 선호 톤(노랑 계열, 흰 바탕 대비) */
+    background: rgba(255, 215, 0, 0.38);
+    z-index: 1;
     pointer-events: none;
-    opacity: 0.1;
-    transition: opacity 0.1s ease-out, left 0.1s ease-out;
+    opacity: 1;
+    transition: background 0.2s ease, opacity 0.1s ease-out, left 0.1s ease-out;
 }
 
-/* 라이트 모드에서 배경 라인 색상 변경 */
 [data-theme="light"] .background-line {
-    background: #000000;
-    opacity: 0.1;
+    background: rgba(0, 0, 0, 0.14);
 }
 
-/* 프로젝트 본문: 두 번째 세로 구분선을 디테일 이미지 아래 레이어로 */
+/* 프로젝트 본문: 두 번째 세로선만 본문 뒤로 (디테일 이미지와 겹침 완화) */
 body.project-detail-page .background-line-second {
-    z-index: -1;
+    z-index: 0;
 }
 
 .background-line-short {
@@ -365,6 +365,8 @@ body.project-detail-page .background-line-second {
     overflow-x: hidden;
     max-width: 100vw;
     flex: 1;
+    position: relative;
+    z-index: 2; /* 배경 세로선(.background-line z-index:1) 위에 본문 */
 }
 
 .container {
@@ -1040,6 +1042,36 @@ body.project-detail-page .background-line-second {
         }
     }
 
+    /* 태블릿·모바일: 포트폴리오 카드 600px 고정 → 뷰포트 폭에 맞춤 (가로 스크롤 방지) */
+    .container {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    .portfolio-grid {
+        grid-template-columns: 1fr;
+        gap: 60px 24px;
+    }
+
+    .portfolio-item {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .portfolio-thumbnail {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .portfolio-header {
+        flex-wrap: wrap;
+        gap: 16px;
+        align-items: center;
+    }
+
+    .portfolio-header .portfolio-view-toggle {
+        margin-left: auto;
+    }
 }
 
 /* PC에서 폰트 사이즈 14px로 설정 */
@@ -1935,6 +1967,7 @@ body.project-detail-page .project-navigation-wrapper {
     padding: 0;
     border-top: none;
     position: relative;
+    z-index: 2; /* 본문·배경선과 동일 레이어, 하단에 정상 표시 */
     background-color: rgba(255, 255, 255, 0.05);
 }
 

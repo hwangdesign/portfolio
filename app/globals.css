@@ -1,0 +1,108 @@
+@import '../assets/styles.css';
+
+/* Amazon Global Store detail (migrated from legacy inline block) */
+.project-image-detail--centered {
+  display: block;
+  width: 500px;
+  max-width: 100%;
+  height: auto;
+  margin-left: auto;
+  margin-right: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+}
+.project-image-detail-wrap--bg-white {
+  width: 100%;
+  max-width: 1080px;
+  background: #fff;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --------------------------------------------------------------------------
+   resume-btn — 인덱스 About(BRUNCH·RESUME·LINKEDIN), Lab SITE 등
+   기존 HTML에서 쓰이지만 styles.css에 규칙이 없어 전역에서 보강함.
+   시각 톤은 .btn-cta 와 동일 계열(키컬러 버튼).
+   -------------------------------------------------------------------------- */
+.resume-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 32px;
+  margin-right: 8px;
+  padding: 6px 16px;
+  font-size: var(--font-size-base);
+  font-weight: 900;
+  font-family: var(--font-family-system);
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #000000;
+  background-color: var(--yellow-color);
+  border: 1px solid var(--yellow-color);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.hero__actions .resume-btn {
+  margin-top: 0;
+  margin-right: 0;
+}
+
+.resume-btn:hover,
+.resume-btn:active {
+  background-color: var(--yellow-color);
+  color: #000000;
+  border-color: var(--yellow-color);
+}
+
+[data-theme='light'] .resume-btn {
+  color: #ffffff;
+  background-color: #000000;
+  border-color: #000000;
+}
+
+[data-theme='light'] .resume-btn:hover,
+[data-theme='light'] .resume-btn:active {
+  background-color: #000000;
+  color: var(--yellow-color);
+  border-color: #000000;
+}
+
+/* --------------------------------------------------------------------------
+   Markdown 본문·상세 이미지: 뷰포트보다 큰 이미지 방지 (모바일 대응)
+   -------------------------------------------------------------------------- */
+.project-details-content img,
+.project-details-content video {
+  max-width: 100%;
+  height: auto;
+}
+
+.project-details-content picture {
+  display: block;
+  max-width: 100%;
+}
+
+/* Wedding: 투명 PNG 디테일 배경 (기존 인라인 #FFD400과 동일) */
+.project-details-content img[src*='/images/works/wedding/Details'] {
+  background: #ffd400;
+}
+
+/* 홈: Works+Labs 플로팅 토글 관측용 래퍼(레이아웃만 담당) */
+.portfolio-works-labs-zone {
+  display: block;
+}
+
+/* next/image fill 래퍼가 썸네일 비율 영역을 채우도록 */
+.portfolio-thumbnail > span {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.portfolio-thumbnail .portfolio-thumb-img {
+  object-fit: cover;
+}

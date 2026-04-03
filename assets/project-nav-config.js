@@ -45,22 +45,6 @@ window.PROJECT_NAV_CONFIG = {
     prev: { href: '11street-dx.html', title: '11STREET Design eXperience' },
     next: null
   },
-  'works/pdp-ux.html': {
-    prev: { href: 'design-system.html', title: 'Design System' },
-    next: { href: '11kitties.html', title: '11Kitties' }
-  },
-  'works/11kitties.html': {
-    prev: { href: 'pdp-ux.html', title: 'PDP UX' },
-    next: { href: 'ootd-fashion.html', title: '#OOTD Fashion' }
-  },
-  'works/ootd-fashion.html': {
-    prev: { href: '11kitties.html', title: '11Kitties' },
-    next: { href: 'ooah-luxury.html', title: 'OOAh Luxury' }
-  },
-  'works/ooah-luxury.html': {
-    prev: { href: 'ootd-fashion.html', title: '#OOTD Fashion' },
-    next: { href: 'ooah.html', title: 'OOAh' }
-  },
 
   /* ========== Labs ========== */
   'labs/TrendingSearches.html': {

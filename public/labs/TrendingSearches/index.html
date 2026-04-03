@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <script async src="../../assets/analytics.js"></script>
+  <meta name="description" content="Popular Shopping Keywords - 네이버 쇼핑 인기 검색어">
+  <title>Popular Shopping Keywords | 네이버 쇼핑 인기 검색어</title>
+  <script>
+    (function() {
+      var stored = localStorage.getItem('lab-keywords-dark-mode');
+      var dark = stored === '1' || (stored !== '0' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      if (dark) document.documentElement.classList.add('dark-mode');
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+</head>
+<body>
+  <div class="area-1 area-title-group">
+  <section class="area-title">
+    <div class="area-title-scaler">
+    <div class="area-title-content">
+      <span class="page-title">Popular<br>Shopping Keywords</span>
+      <span class="title-meta"><span id="locationCity">—</span><sup>(<span id="locationCountry">—</span>)</sup></span>
+      <span class="title-meta" id="todayDate">—</span>
+      <span class="title-meta" id="currentTime">—</span>
+    </div>
+    </div>
+  </section>
+
+  <div class="area-between">
+    <div class="area-between-side area-between-side--left"></div>
+    <div class="area-between-box area-between-box--left">
+      <div class="area-between-circle"></div>
+    </div>
+    <div class="area-between-box area-between-box--right">
+      <div class="area-between-circle"></div>
+    </div>
+    <div class="area-between-side area-between-side--right"></div>
+  </div>
+  <div class="area-lines-overlay">
+    <div class="falling-lines" id="fallingLines"></div>
+  </div>
+  <div class="area-center-line"></div>
+  <div class="falling-lines falling-lines--center" id="fallingLinesCenter"></div>
+  </div>
+
+  <section class="area-2 area-rank-list">
+    <div id="chartContainer">
+      <div class="loading lang-ko">로딩 중...</div>
+    </div>
+  </section>
+
+  <div class="area-3">
+    <div class="area-between">
+      <div class="area-between-side area-between-side--left"></div>
+      <div class="area-between-box area-between-box--left">
+        <div class="area-between-circle"></div>
+      </div>
+      <div class="area-between-box area-between-box--right">
+        <div class="area-between-circle"></div>
+      </div>
+      <div class="area-between-side area-between-side--right"></div>
+    </div>
+  </div>
+
+  <div class="area-3-title area-title-group">
+    <section class="area-title">
+      <div class="area-title-scaler">
+        <div class="area-title-content">
+          <span class="page-title">____</span>
+          <span class="title-meta title-meta--spacer"></span>
+          <span class="title-meta"><span id="locationCity2">—</span><sup>(<span id="locationCountry2">—</span>)</sup></span>
+          <span class="title-meta" id="temperature2">—</span>
+        </div>
+      </div>
+    </section>
+    <div class="area-lines-overlay">
+      <div class="falling-lines" id="fallingLines2"></div>
+    </div>
+    <div class="falling-lines falling-lines--center" id="fallingLinesCenter2"></div>
+  </div>
+
+  <script>
+    (function initFallingLines() {
+      const positionsAll = ['calc(50% - 44vw)', 'calc(50% - 22vw)', '50%', 'calc(50% + 22vw)', 'calc(50% + 44vw)'];
+      const positionsMobile = ['calc(50% - 33vw)', '50%', 'calc(50% + 33vw)'];
+      const containers = [
+        document.getElementById('fallingLines'),
+        document.getElementById('fallingLines2')
+      ].filter(Boolean);
+      const centerContainers = [
+        document.getElementById('fallingLinesCenter'),
+        document.getElementById('fallingLinesCenter2')
+      ].filter(Boolean);
+      if (containers.length === 0) return;
+      function getPositions() {
+        return window.matchMedia('(max-width: 768px)').matches ? positionsMobile : positionsAll;
+      }
+      function createLine(target, positions) {
+        const line = document.createElement('div');
+        line.className = 'falling-line';
+        const pos = positions[Math.floor(Math.random() * positions.length)];
+        const len = 20 + Math.random() * 80;
+        const delay = Math.random() * 8;
+        const dur = 4 + Math.random() * 6;
+        line.style.left = pos;
+        line.style.height = len + 'px';
+        line.style.animationDuration = dur + 's';
+        line.style.animationDelay = -delay + 's';
+        target.appendChild(line);
+        setTimeout(() => line.remove(), (dur + delay) * 1000);
+      }
+      function createCenterLine(centerContainer) {
+        if (!centerContainer || centerContainer.children.length > 0) return;
+        const line = document.createElement('div');
+        line.className = 'falling-line falling-line--center';
+        const len = 20 + Math.random() * 80;
+        const delay = Math.random() * 8;
+        const dur = 4 + Math.random() * 6;
+        line.style.left = '50%';
+        line.style.height = len + 'px';
+        line.style.animationDuration = dur + 's';
+        line.style.animationDelay = -delay + 's';
+        centerContainer.appendChild(line);
+        setTimeout(() => {
+          line.remove();
+          createCenterLine(centerContainer);
+        }, (dur + delay) * 1000);
+      }
+      containers.forEach(function(c) {
+        for (let i = 0; i < 12; i++) createLine(c, getPositions());
+        setInterval(() => createLine(c, getPositions()), 800);
+      });
+      centerContainers.forEach(function(cc) {
+        createCenterLine(cc);
+      });
+    })();
+
+    (function updateTitleMeta() {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const city = tz.split('/').pop().replace(/_/g, ' ');
+      const tzToCountry = { 'Asia/Seoul':'KOREA','Asia/Tokyo':'JAPAN','Asia/Shanghai':'CHINA','Asia/Singapore':'SINGAPORE','America/New_York':'USA','America/Los_Angeles':'USA','America/Chicago':'USA','Europe/London':'UK','Europe/Paris':'FRANCE','Europe/Berlin':'GERMANY','Australia/Sydney':'AUSTRALIA','Pacific/Auckland':'NEW ZEALAND','Asia/Hong_Kong':'HONG KONG','Asia/Dubai':'UAE','America/Sao_Paulo':'BRAZIL','America/Mexico_City':'MEXICO','Asia/Mumbai':'INDIA' };
+      const country = tzToCountry[tz] || tz.split('/')[0].replace(/_/g, ' ');
+      const locEl = document.getElementById('locationCity');
+      const countryEl = document.getElementById('locationCountry');
+      const dateEl = document.getElementById('todayDate');
+      const timeEl = document.getElementById('currentTime');
+      const setText = (el, text) => { if (el) el.textContent = text; };
+      setText(locEl, city.toUpperCase());
+      setText(countryEl, country.toUpperCase());
+      const monthNames = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+      function tick() {
+        const now = new Date();
+        const dateStr = now.getDate() + ' ' + monthNames[now.getMonth()] + ' ' + now.getFullYear();
+        const rawTime = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true, timeZone: tz });
+        const match = rawTime.match(/^(.+?)\s*(AM|PM)$/i);
+        const timePart = match ? match[1].replace(/\s/g, '') : rawTime.replace(/\s/g, '');
+        const period = match ? match[2].toUpperCase() : '';
+        const timeStr = period ? '<sup>(' + period + ')</sup>' + timePart : timePart;
+        setText(dateEl, dateStr);
+        if (timeEl) timeEl.innerHTML = timeStr;
+      }
+      tick();
+      setInterval(tick, 1000);
+
+      (function updateArea3Meta() {
+        const cityEl = document.getElementById('locationCity2');
+        const countryEl = document.getElementById('locationCountry2');
+        const tempEl = document.getElementById('temperature2');
+        if (cityEl) cityEl.textContent = city.toUpperCase();
+        if (countryEl) countryEl.textContent = country.toUpperCase();
+        const tzToCoords = { 'Asia/Seoul':[37.57,126.98], 'Asia/Tokyo':[35.68,139.69], 'Asia/Shanghai':[31.23,121.47], 'Asia/Singapore':[1.29,103.85], 'Asia/Hong_Kong':[22.28,114.16], 'Asia/Dubai':[25.20,55.27], 'America/New_York':[40.71,-74.01], 'America/Los_Angeles':[34.05,-118.24], 'America/Chicago':[41.88,-87.63], 'Europe/London':[51.51,-0.13], 'Europe/Paris':[48.85,2.35], 'Europe/Berlin':[52.52,13.41], 'Australia/Sydney':[-33.87,151.21], 'Pacific/Auckland':[-36.85,174.76] };
+        const coords = tzToCoords[tz] || [37.57, 126.98];
+        fetch('https://api.open-meteo.com/v1/forecast?latitude=' + coords[0] + '&longitude=' + coords[1] + '&current=temperature_2m')
+          .then(function(r) { return r.json(); })
+          .then(function(d) {
+            if (tempEl && d.current && d.current.temperature_2m != null) {
+              tempEl.textContent = Math.round(d.current.temperature_2m) + '\u00B0C';
+            }
+          })
+          .catch(function() { if (tempEl) tempEl.textContent = '—'; });
+      })();
+    })();
+
+    (function() {
+      var rawBase = 'https://raw.githubusercontent.com/hwangdesign/portfolio/';
+      var raw = rawBase + 'trends-data/labs/TrendingSearches/naver/naver_shopping_sample.json';
+      try {
+        var h = location.hostname || '';
+        var p = location.pathname || '';
+        if (h === 'localhost' || h === '127.0.0.1') {
+          rawBase = '';
+          raw = 'naver/naver_shopping_sample.json';
+        } else if (h.endsWith('.github.io') && p.indexOf('/') >= 0) {
+          var owner = h.split('.')[0];
+          var repo = p.split('/').filter(Boolean)[0] || 'portfolio';
+          rawBase = 'https://raw.githubusercontent.com/' + owner + '/' + repo + '/';
+          raw = rawBase + 'trends-data/labs/TrendingSearches/naver/naver_shopping_sample.json';
+        } else if (h) {
+          rawBase = 'https://raw.githubusercontent.com/hwangdesign/portfolio/';
+          raw = rawBase + 'trends-data/labs/TrendingSearches/naver/naver_shopping_sample.json';
+        }
+      } catch (_) {}
+      var cacheBust = raw.indexOf('?') === -1 ? '?t=' + Math.floor(Date.now() / (4 * 60 * 60 * 1000)) : '';
+      window.TRENDS_NAVER_URL = raw + cacheBust;
+      window.TRENDS_NAVER_RAW_BASE = rawBase;
+    })();
+
+    const SOURCES = { naver: window.TRENDS_NAVER_URL || 'naver/naver_shopping_sample.json' };
+
+        const FALLBACK_DATA = {
+            naver: [{"ranking":"1","keyword":"겨울 패딩"},{"ranking":"2","keyword":"선크림"},{"ranking":"3","keyword":"노트북"},{"ranking":"4","keyword":"에어팟"},{"ranking":"5","keyword":"무선 이어폰"},{"ranking":"6","keyword":"아이패드"},{"ranking":"7","keyword":"스마트워치"},{"ranking":"8","keyword":"가습기"},{"ranking":"9","keyword":"공기청정기"},{"ranking":"10","keyword":"전기담요"}]
+        };
+
+        function normalize(str) {
+            if (!str || typeof str !== 'string') return '';
+            return str.trim().toLowerCase().replace(/\s+/g, ' ').replace(/[^\w\uac00-\ud7a3\s]/g, '');
+        }
+
+        function parseRank(item, fallback) {
+            const r = item.ranking || item.rank || fallback;
+            return Math.max(1, parseInt(r, 10) || fallback);
+        }
+
+        async function fetchOrFallback(url, key) {
+            var opts = { cache: 'no-store' };
+            try {
+                var res = await fetch(url, url.startsWith('http') ? opts : {});
+                if (res.ok) return await res.json();
+                if (key === 'naver' && window.TRENDS_NAVER_RAW_BASE) {
+                    var base = window.TRENDS_NAVER_RAW_BASE;
+                    var path = 'labs/TrendingSearches/naver/naver_shopping_sample.json';
+                    res = await fetch(base + 'trends-data/' + path, opts);
+                    if (res.ok) return await res.json();
+                    res = await fetch(base + 'main/' + path, opts);
+                    if (res.ok) return await res.json();
+                }
+            } catch (_) {}
+            if (key === 'naver') {
+                try {
+                    var rel = await fetch('naver/naver_shopping_sample.json');
+                    if (rel.ok) return await rel.json();
+                } catch (_) {}
+            }
+            return FALLBACK_DATA[key] || { items: [], updatedAt: null };
+        }
+
+        function parseNaverData(raw) {
+            if (Array.isArray(raw)) return { items: raw, updatedAt: null };
+            return { items: raw.items || raw.data || [], updatedAt: raw.updatedAt || null };
+        }
+
+        function formatUpdateTime(updatedAt) {
+            if (!updatedAt) return '';
+            var d = new Date(updatedAt);
+            var dateStr = d.getDate() + ' ' + d.toLocaleDateString('en-US', { month: 'long' }).toUpperCase() + ' ' + d.getFullYear();
+            var rawTime = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true });
+            var match = rawTime.match(/^(.+?)\s*(AM|PM)$/i);
+            var timePart = match ? match[1].replace(/\s/g, '') : rawTime.replace(/\s/g, '');
+            var period = match ? match[2].toUpperCase() : '';
+            var timeStr = period ? '<sup>(' + period + ')</sup>' + timePart : timePart;
+            return dateStr + '<br>' + timeStr + '<br>UPDATED';
+        }
+
+        function renderChart(items, type, updateTime) {
+            const target = document.getElementById('chartContainer');
+            if (!items || items.length === 0) {
+                const err = '<div class="error lang-ko">데이터가 없습니다.</div>';
+                target.innerHTML = err;
+                return err;
+            }
+            const top10 = items.slice(0, 10);
+            const searchUrlBase = 'https://search.shopping.naver.com/ns/search?query=';
+            const html = top10.map((item, i) => {
+                const rank = item.ranking || item.rank || (i + 1);
+                const rankNum = parseInt(rank, 10) || (i + 1);
+                const rankDisplay = String(rankNum);
+                const searchUrl = searchUrlBase + encodeURIComponent(item.keyword || '');
+                const isKo = /[\uac00-\ud7a3]/.test(item.keyword);
+                return `<a href="${searchUrl}" target="_blank" rel="noopener" class="keyword-item">
+                    <span class="keyword keyword-flip${isKo ? ' lang-ko' : ''}"><sup>${rankDisplay}</sup>${item.keyword}</span>
+                </a>`;
+            }).join('');
+            var displayTime = updateTime || localStorage.getItem('lab-keywords-last-update') || new Date().toISOString();
+            if (updateTime) {
+                try { localStorage.setItem('lab-keywords-last-update', updateTime); } catch (_) {}
+            }
+            var updateHtml = displayTime ? '<div class="keyword-update-time">' + formatUpdateTime(displayTime) + '</div>' : '';
+            const wrapped = updateHtml + `<div class="chart-list">${html}</div>`;
+            target.innerHTML = wrapped;
+            return wrapped;
+        }
+
+        async function loadChart() {
+            const container = document.getElementById('chartContainer');
+            container.innerHTML = '<div class="loading lang-ko">로딩 중...</div>';
+            const url = SOURCES.naver;
+            try {
+                const raw = await fetchOrFallback(url, 'naver');
+                const parsed = parseNaverData(raw);
+                renderChart(parsed.items, 'naver', parsed.updatedAt);
+            } catch (e) {
+                container.innerHTML = `<div class="error lang-ko">로드 실패: ${e.message}</div>`;
+            }
+        }
+
+        loadChart();
+
+        setInterval(loadChart, 4 * 60 * 60 * 1000);
+
+        (function initTouchHover() {
+            const container = document.getElementById('chartContainer');
+            if (!container) return;
+            container.addEventListener('touchstart', function(e) {
+                const item = e.target.closest('.keyword-item');
+                if (item) {
+                    item.classList.add('touch-active');
+                    container.querySelectorAll('.keyword-item.touch-active').forEach(function(el) {
+                        if (el !== item) el.classList.remove('touch-active');
+                    });
+                }
+            }, { passive: true });
+            container.addEventListener('touchend', function() {
+                container.querySelectorAll('.keyword-item.touch-active').forEach(function(el) {
+                    el.classList.remove('touch-active');
+                });
+            }, { passive: true });
+            container.addEventListener('touchcancel', function() {
+                container.querySelectorAll('.keyword-item.touch-active').forEach(function(el) {
+                    el.classList.remove('touch-active');
+                });
+            }, { passive: true });
+        })();
+
+        (function initAutoHoverCycle() {
+            var area2 = document.querySelector('.area-2.area-rank-list');
+            if (!area2) return;
+            var cycleInterval = null;
+            var currentIndex = 0;
+            var pauseMs = 1500;
+
+            function clearAllAutoHover() {
+                var items = area2.querySelectorAll('.keyword-item');
+                items.forEach(function(el) { el.classList.remove('auto-hover'); });
+            }
+
+            function tick() {
+                var items = area2.querySelectorAll('.chart-list .keyword-item');
+                if (items.length === 0) return;
+                items.forEach(function(el, i) { el.classList.toggle('auto-hover', i === currentIndex); });
+                currentIndex = (currentIndex + 1) % items.length;
+            }
+
+            var observer = new IntersectionObserver(function(entries) {
+                var ent = entries[0];
+                if (ent.isIntersecting) {
+                    if (!cycleInterval) {
+                        currentIndex = 0;
+                        tick();
+                        cycleInterval = setInterval(tick, pauseMs);
+                    }
+                } else {
+                    if (cycleInterval) {
+                        clearInterval(cycleInterval);
+                        cycleInterval = null;
+                    }
+                    clearAllAutoHover();
+                }
+            }, { rootMargin: '0px', threshold: 0.2 });
+
+            observer.observe(area2);
+        })();
+    </script>
+</body>
+</html>

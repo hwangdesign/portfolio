@@ -1,0 +1,10 @@
+{
+  "heroTitle": "Creative Director",
+  "name": "황선윤",
+  "email": "hwangdesign@gmail.com",
+  "links": [
+    { "label": "BRUNCH", "href": "https://brunch.co.kr/@hwangdesign" },
+    { "label": "RESUME", "href": "/resume/index.html" },
+    { "label": "LINKEDIN", "href": "https://www.linkedin.com/in/hwangdesign/" }
+  ]
+}

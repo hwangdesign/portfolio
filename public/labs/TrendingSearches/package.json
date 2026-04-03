@@ -1,0 +1,11 @@
+{
+  "name": "shopping-keywords-kr",
+  "version": "1.0.0",
+  "description": "네이버 쇼핑 검색 API 인기 키워드 순위 (4시간 갱신)",
+  "scripts": {
+    "naver": "node naver-shopping-api.js",
+    "collect": "node naver-shopping-api.js"
+  },
+  "keywords": ["shopping", "keywords", "naver", "search-api"],
+  "license": "MIT"
+}
