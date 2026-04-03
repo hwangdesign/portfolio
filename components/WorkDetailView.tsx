@@ -1,8 +1,13 @@
+import dynamic from 'next/dynamic';
 import type { WorkEntry } from '@/lib/works';
-import { MarkdownBody } from '@/components/MarkdownBody';
 import { ProjectNavLinks } from '@/components/ProjectNavLinks';
-import { KittiesDetailLottie } from '@/components/KittiesDetailLottie';
 import { ProjectKeyboardNav } from '@/components/ProjectKeyboardNav';
+import { CtaArrowIcon } from '@/components/CtaArrowIcon';
+import { KittiesDetailLottie } from '@/components/KittiesDetailLottie';
+
+const MarkdownBody = dynamic(() =>
+  import('@/components/MarkdownBody').then((m) => ({ default: m.MarkdownBody }))
+);
 
 type Props = {
   work: WorkEntry;
@@ -57,9 +62,7 @@ export function WorkDetailView({ work, prev, next }: Props) {
                     >
                       {cta.label}
                       <span className="btn-cta__icon-wrap">
-                        <span className="material-symbols-outlined btn-cta__icon" aria-hidden="true">
-                          keyboard_arrow_right
-                        </span>
+                        <CtaArrowIcon />
                       </span>
                     </a>
                   ))}

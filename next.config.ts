@@ -14,6 +14,9 @@ const nextConfig: NextConfig = {
   images: { unoptimized: true },
   trailingSlash: true,
   outputFileTracingRoot: path.join(__dirname),
+  experimental: {
+    optimizePackageImports: ['react-markdown'],
+  },
 };
 
 export default nextConfig;

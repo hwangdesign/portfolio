@@ -147,7 +147,7 @@ export function HomePageClient({ home, works, labs }: Props) {
                   </div>
                 </div>
                 <div className="portfolio-grid" id="portfolioGrid">
-                  {works.map((w) => (
+                  {works.map((w, i) => (
                     <Link
                       key={w.slug}
                       href={`/works/${w.slug}/`}
@@ -162,6 +162,7 @@ export function HomePageClient({ home, works, labs }: Props) {
                           sizes="(max-width: 768px) 100vw, min(600px, 100vw)"
                           className="portfolio-thumb-img"
                           unoptimized
+                          priority={i === 0}
                         />
                       </div>
                       <div className="portfolio-info">

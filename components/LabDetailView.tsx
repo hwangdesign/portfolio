@@ -1,8 +1,13 @@
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import type { LabEntry } from '@/lib/labs';
-import { MarkdownBody } from '@/components/MarkdownBody';
 import { ProjectNavLinks } from '@/components/ProjectNavLinks';
 import { ProjectKeyboardNav } from '@/components/ProjectKeyboardNav';
+import { CtaArrowIcon } from '@/components/CtaArrowIcon';
+
+const MarkdownBody = dynamic(() =>
+  import('@/components/MarkdownBody').then((m) => ({ default: m.MarkdownBody }))
+);
 
 type Props = {
   lab: LabEntry;
@@ -67,9 +72,7 @@ export function LabDetailView({ lab, prev, next }: Props) {
                       <Link key={cta.href + cta.label} href={cta.href} className="btn-cta">
                         {cta.label}
                         <span className="btn-cta__icon-wrap">
-                          <span className="material-symbols-outlined btn-cta__icon" aria-hidden="true">
-                            keyboard_arrow_right
-                          </span>
+                          <CtaArrowIcon />
                         </span>
                       </Link>
                     ) : (
@@ -82,9 +85,7 @@ export function LabDetailView({ lab, prev, next }: Props) {
                       >
                         {cta.label}
                         <span className="btn-cta__icon-wrap">
-                          <span className="material-symbols-outlined btn-cta__icon" aria-hidden="true">
-                            keyboard_arrow_right
-                          </span>
+                          <CtaArrowIcon />
                         </span>
                       </a>
                     )
