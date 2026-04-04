@@ -467,6 +467,17 @@ body {
     transition: color 0.3s ease;
 }
 
+button.nav-brand {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    text-align: left;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
 .nav-brand,
 .nav-brand:hover,
 .nav-brand:focus {
@@ -687,9 +698,8 @@ body {
     opacity: 1;
 }
 
-/* 공통 애니메이션/타이틀 컨테이너 스타일 */
-.section-title,
-.animated-section-title {
+/* 공통 타이틀 컨테이너 */
+.section-title {
     position: relative;
     display: inline-block;
     min-height: 60px;
@@ -700,9 +710,9 @@ body {
 }
 
 .section-title sup,
-.animated-section-title sup,
 .project-nav-title sup,
-.nav-mobile-menu-item sup {
+.nav-mobile-menu-item sup,
+.nav-menu-item sup {
     font-size: 0.6em;
     vertical-align: super;
     line-height: 0;
@@ -710,9 +720,9 @@ body {
 }
 
 [data-theme="light"] .section-title sup,
-[data-theme="light"] .animated-section-title sup,
 [data-theme="light"] .project-nav-title sup,
-[data-theme="light"] .nav-mobile-menu-item sup {
+[data-theme="light"] .nav-mobile-menu-item sup,
+[data-theme="light"] .nav-menu-item sup {
     color: rgba(0, 0, 0, 0.2);
 }
 
@@ -916,11 +926,6 @@ body {
     height: 4px;
     background: var(--white-100);
     margin: 0;
-}
-
-
-.animated-section-title {
-    opacity: 1;
 }
 
 

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { PortfolioViewProvider } from '@/components/PortfolioViewContext';
 import { PortfolioViewControls } from '@/components/PortfolioViewControls';
+import { CtaArrowIcon } from '@/components/CtaArrowIcon';
 import type { HomeSiteConfig } from '@/lib/site';
 import type { WorkEntry } from '@/lib/works';
 import type { LabEntry } from '@/lib/labs';
@@ -119,7 +120,7 @@ export function HomePageClient({ home, works, labs }: Props) {
         <section id="about" className="section">
           <div className="container">
             <div className="hero-content">
-              <h1 className="section-title animated-section-title" id="animatedTitle" data-title={home.heroTitle}>
+              <h1 className="section-title" id="animatedTitle" data-title={home.heroTitle}>
                 {home.heroTitle}
               </h1>
               <div className="hero-info-description">
@@ -138,9 +139,12 @@ export function HomePageClient({ home, works, labs }: Props) {
                     href={resolveSiteHref(l.href)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="resume-btn"
+                    className="btn-cta"
                   >
                     {l.label}
+                    <span className="btn-cta__icon-wrap">
+                      <CtaArrowIcon />
+                    </span>
                   </a>
                 ))}
               </div>
@@ -154,7 +158,7 @@ export function HomePageClient({ home, works, labs }: Props) {
             <section id="works" className="section portfolio-section">
               <div className="container">
                 <div className="portfolio-header">
-                  <h2 className="section-title animated-section-title" data-title="Works">
+                  <h2 className="section-title" data-title="Works">
                     Works
                   </h2>
                   <div
@@ -186,13 +190,13 @@ export function HomePageClient({ home, works, labs }: Props) {
                         <div className="portfolio-title-wrapper">
                           {w.meta.titleHtml ? (
                             <h3
-                              className="portfolio-title section-title animated-section-title"
+                              className="portfolio-title section-title"
                               data-title={w.meta.title}
                               dangerouslySetInnerHTML={{ __html: w.meta.titleHtml }}
                             />
                           ) : (
                             <h3
-                              className="portfolio-title section-title animated-section-title"
+                              className="portfolio-title section-title"
                               data-title={w.meta.title}
                             >
                               {w.meta.title}
@@ -211,7 +215,7 @@ export function HomePageClient({ home, works, labs }: Props) {
             <section id="labs" className="section portfolio-section">
               <div className="container">
                 <div className="portfolio-header">
-                  <h2 className="section-title animated-section-title" data-title="Labs">
+                  <h2 className="section-title" data-title="Labs">
                     Labs
                   </h2>
                   <div className="portfolio-view-toggle">
@@ -240,13 +244,13 @@ export function HomePageClient({ home, works, labs }: Props) {
                         <div className="portfolio-title-wrapper">
                           {lab.meta.titleHtml ? (
                             <h3
-                              className="portfolio-title section-title animated-section-title"
+                              className="portfolio-title section-title"
                               data-title={lab.meta.title}
                               dangerouslySetInnerHTML={{ __html: lab.meta.titleHtml }}
                             />
                           ) : (
                             <h3
-                              className="portfolio-title section-title animated-section-title"
+                              className="portfolio-title section-title"
                               data-title={lab.meta.title}
                             >
                               {lab.meta.title}
@@ -267,8 +271,8 @@ export function HomePageClient({ home, works, labs }: Props) {
         <section id="art" className="section portfolio-section">
           <div className="container">
             <div className="portfolio-header">
-              <h2 className="section-title animated-section-title" data-title="Arts">
-                Arts
+              <h2 className="section-title" data-title="Arts">
+                Arts<sup>(coming soon)</sup>
               </h2>
             </div>
             <p className="hero-info-description">

@@ -531,7 +531,7 @@ if (document.readyState === 'loading') {
     initProjectPageBackground();
 }
 
-// Nav brand click 이벤트는 nav-brand 애니메이션 부분에서 처리됨
+// Nav brand hover/클릭은 아래 DOMContentLoaded 블록에서 처리
 
 
 
@@ -610,494 +610,16 @@ window.addEventListener('scroll', () => {
 
 // 탑 버튼 호버 스타일은 CSS에서 처리
 
-// Airport Display Board Animation
-const titles = ['Hwang Seonyoon', 'Creative Director', 'Product Designer'];
-const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?';
-let currentTitleIndex = 0;
-let isAnimating = false;
-
-function getRandomChar() {
-    return chars[Math.floor(Math.random() * chars.length)];
-}
-
-// 바이트 수 계산 함수
-function getByteLength(str) {
-    let byteLength = 0;
-    for (let i = 0; i < str.length; i++) {
-        const char = str.charCodeAt(i);
-        if (char <= 0x007F) {
-            byteLength += 1; // ASCII
-        } else if (char <= 0x07FF) {
-            byteLength += 2; // Latin, Greek, Cyrillic, etc.
-        } else {
-            byteLength += 3; // 한글, 중국어 등
-        }
-    }
-    return byteLength;
-}
-
-function animateToText(targetText, element, isLooping = false, loopTitles = [], onComplete = null) {
-    const targetByteLength = getByteLength(targetText);
-    let currentText = '';
-    let iterations = 0;
-    const maxIterations = 20; // 랜덤 문자 반복 횟수
-    let revealedLength = 0; // 현재까지 노출된 문자 수
-    
-    if (element.dataset.animating === 'true') return;
-    element.dataset.animating = 'true';
-    
-    // 레이아웃 시프트 방지: 최종 텍스트의 높이를 미리 계산하여 고정
-    const originalHeight = element.style.height;
-    const originalMinHeight = element.style.minHeight;
-    element.textContent = targetText;
-    const finalHeight = element.offsetHeight;
-    element.style.height = finalHeight + 'px';
-    element.style.minHeight = finalHeight + 'px';
-    element.textContent = '';
-    
-    const interval = setInterval(() => {
-        if (iterations < maxIterations) {
-            // 순차적으로 앞글자부터 노출
-            const revealProgress = Math.min(1, iterations / maxIterations);
-            revealedLength = Math.floor(targetText.length * revealProgress);
-            
-            currentText = '';
-            let currentByteLength = 0;
-            
-            for (let i = 0; i < targetText.length; i++) {
-                const char = targetText[i];
-                const charByteLength = getByteLength(char);
-                
-                if (i < revealedLength) {
-                    // 이미 노출된 문자는 실제 문자 사용
-                    currentText += char;
-                    currentByteLength += charByteLength;
-                } else {
-                    // 아직 노출되지 않은 문자는 랜덤 문자로
-                    if (currentByteLength + charByteLength <= targetByteLength) {
-                        // 바이트 수를 맞추기 위해 랜덤 문자 추가
-                        if (charByteLength === 1) {
-                            currentText += getRandomChar();
-                            currentByteLength += 1;
-                        } else if (charByteLength === 2) {
-                            // 2바이트 문자 (예: 그리스어 등)
-                            currentText += getRandomChar() + getRandomChar();
-                            currentByteLength += 2;
-                        } else {
-                            // 3바이트 문자 (한글 등)
-                            currentText += getRandomChar() + getRandomChar() + getRandomChar();
-                            currentByteLength += 3;
-                        }
-                    }
-                }
-            }
-            
-            // 바이트 수가 부족하면 랜덤 문자로 채우기
-            while (currentByteLength < targetByteLength) {
-                currentText += getRandomChar();
-                currentByteLength += 1;
-            }
-            
-            element.textContent = currentText;
-            iterations++;
-        } else {
-            // 최종 텍스트로 정착 (위첨자 표기 필요한 경우 innerHTML 사용)
-            if (targetText === '11KittiesSeason 2') {
-                element.innerHTML = '11Kitties<sup>Season 2</sup>';
-            } else if (targetText === 'MartPlus') {
-                element.innerHTML = 'Mart<sup>Plus</sup>';
-            } else if (targetText === 'Arts') {
-                element.innerHTML = 'Arts<sup>(coming soon)</sup>';
-            } else {
-                element.textContent = targetText;
-            }
-            // 높이 고정 해제 (자동 높이로 복원)
-            element.style.height = '';
-            element.style.minHeight = '';
-            clearInterval(interval);
-            element.dataset.animating = 'false';
-            
-            // 완료 콜백 실행
-            if (onComplete) {
-                onComplete();
-            }
-            
-            // 루핑 모드인 경우에만 다음 문장으로 전환
-            if (isLooping && loopTitles.length > 0) {
-                setTimeout(() => {
-                    currentTitleIndex = (currentTitleIndex + 1) % loopTitles.length;
-                    animateToText(loopTitles[currentTitleIndex], element, true, loopTitles);
-                }, 3000);
-            }
-        }
-    }, 50); // 50ms마다 업데이트
-}
-
-// 섹션별 이모티콘 매핑 (모든 OS 호환성 고려)
-const EMOJI_MAP = {
-    'Creative Director': '🥳',
-    'Creative Director Hwang Seonyoon': '🥳',
-    'Core Competencies': '🖋️',
-    'Career Experience': '💡',
-    'Education': '🎒',
-    'Awards': '🪅',
-    'Activities': '🪄',
-    'Cover Letter': '🦄',
-    'Works': '💎',
-    'Labs': '🧪',
-    'About': '😎',
-    'MartPlus': '🎨',
-    'Design System': '🎨',
-    'OOAh': '🎨',
-    '11STREET Design eXperience': '🎨',
-    '11KittiesSeason 2': '🎨',
-    '#ootd': '🎨',
-    'Amazon Global Store': '🎨'
-};
-
-// 페이지 로드 시 메인 타이틀 및 섹션 제목 애니메이션을 위한 Intersection Observer
+// 페이지 로드 시 배경 라인·내비 등 (정적 HTML)
 document.addEventListener('DOMContentLoaded', () => {
-    // 섹션 제목 애니메이션을 위한 Intersection Observer
-    const sectionTitleObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            const targetText = entry.target.dataset.title;
-            if (targetText) {
-                // 이미 애니메이션이 실행되었는지 확인
-                if (entry.target.dataset.animated === 'true') {
-                    return; // 이미 실행되었으면 더 이상 실행하지 않음
-                }
-                
-                if (entry.isIntersecting) {
-                    // 영역에 들어올 때 한 번만 애니메이션 실행
-                    entry.target.dataset.animated = 'true';
-                    
-                    // (Season 2), Plus 등 위첨자 표기가 필요한 타이틀은 애니메이션 없이 즉시 표기
-                    if (targetText === '11KittiesSeason 2') {
-                        entry.target.innerHTML = '11Kitties<sup>Season 2</sup>';
-                        entry.target.style.height = '';
-                        entry.target.style.minHeight = '';
-                        return;
-                    }
-                    if (targetText === 'MartPlus') {
-                        entry.target.innerHTML = 'Mart<sup>Plus</sup>';
-                        entry.target.style.height = '';
-                        entry.target.style.minHeight = '';
-                        return;
-                    }
-                    if (targetText === 'Arts') {
-                        entry.target.innerHTML = 'Arts<sup>(coming soon)</sup>';
-                        entry.target.style.height = '';
-                        entry.target.style.minHeight = '';
-                        return;
-                    }
-                    const tempHeight = entry.target.style.height;
-                    entry.target.textContent = targetText;
-                    const finalHeight = entry.target.offsetHeight;
-                    entry.target.style.height = finalHeight + 'px';
-                    entry.target.style.minHeight = finalHeight + 'px';
-                    entry.target.textContent = '';
-                    setTimeout(() => {
-                        animateToText(targetText, entry.target, false);
-                    }, 300);
-                }
-            }
-        });
-    }, {
-        threshold: 0.3,
-        rootMargin: '0px 0px -100px 0px'
-    });
-    
-    // 섹션 타이틀에 박스 추가 및 위치 업데이트 함수
-    function updateTitleBox(title) {
-        // portfolio-info 내의 타이틀은 이모지를 표시하지 않음
-        if (title.closest('.portfolio-info')) {
-            return;
-        }
-        
-        // 기존 박스가 있으면 제거
-        const existingBox = title.querySelector('.section-title-box');
-        if (existingBox) {
-            existingBox.remove();
-        }
-        
-        // 텍스트 내용 가져오기
-        const text = title.textContent || title.dataset.title || '';
-        if (!text || text.length < 1) return;
-        
-        // 텍스트 노드 찾기
-        let textNode = null;
-        for (let node of title.childNodes) {
-            if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
-                textNode = node;
-                break;
-            }
-        }
-        
-        if (!textNode) return;
-        
-        // 마지막 1.5개 음절 위치 계산
-        const textLength = text.length;
-        if (textLength < 2) {
-            // 2글자 미만이면 마지막 1글자만 사용
-            const lastOneCharStart = textLength - 1;
-            const lastOneCharEnd = textLength;
-            
-            try {
-                const range = document.createRange();
-                range.setStart(textNode, lastOneCharStart);
-                range.setEnd(textNode, lastOneCharEnd);
-                
-                const rect = range.getBoundingClientRect();
-                const titleRect = title.getBoundingClientRect();
-                
-                // 박스 생성
-                const box = document.createElement('div');
-                box.className = 'section-title-box';
-                
-                // 박스 위치 계산 (마지막 1글자와 겹치게)
-                const boxLeft = rect.left - titleRect.left;
-                const boxTop = rect.top - titleRect.top;
-                
-                // Y축을 위로 20% 올리기 (박스 높이의 20%)
-                const isMobile = window.innerWidth <= 768;
-                const boxHeight = isMobile ? 120 : 200;
-                const offsetY = boxHeight * 0.2;
-                const adjustedTop = boxTop - offsetY;
-                
-                // 기울기 각도 고정
-                let rotation = parseFloat(title.dataset.boxRotation);
-                if (isNaN(rotation)) {
-                    rotation = (Math.random() * 30) - 15;
-                    title.dataset.boxRotation = rotation.toString();
-                }
-                
-                // 섹션별 이모티콘 매핑
-                const sectionTitle = title.dataset.title || text;
-                const emoji = EMOJI_MAP[sectionTitle] || '';
-                
-                if (emoji) {
-                    const emojiElement = document.createElement('span');
-                    emojiElement.className = 'section-title-box-emoji';
-                    emojiElement.setAttribute('role', 'img');
-                    emojiElement.setAttribute('aria-label', `${sectionTitle} icon`);
-                    emojiElement.textContent = emoji;
-                    emojiElement.style.cursor = 'pointer';
-                    emojiElement.style.pointerEvents = 'auto';
-                    const emojiFontSize = isMobile ? 70 : 100;
-                    emojiElement.style.fontSize = `${emojiFontSize}px`;
-                    
-                    const handleEmojiClick = (e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        const originalTop = parseFloat(box.dataset.originalTop) || adjustedTop;
-                        const currentTop = parseFloat(box.style.top) || originalTop;
-                        const newTop = currentTop - 80;
-                        box.style.top = `${newTop}px`;
-                        box.style.transition = 'top 0.3s ease-out';
-                        setTimeout(() => {
-                            box.style.top = `${originalTop}px`;
-                            setTimeout(() => {
-                                box.style.transition = '';
-                            }, 300);
-                        }, 300);
-                    };
-                    
-                    emojiElement.addEventListener('click', handleEmojiClick);
-                    emojiElement.addEventListener('touchstart', handleEmojiClick);
-                    box.appendChild(emojiElement);
-                }
-                
-                const boxWidth = isMobile ? 120 : 200;
-                box.style.width = `${boxWidth}px`;
-                box.style.height = `${boxHeight}px`;
-                box.style.left = `${boxLeft}px`;
-                box.style.top = `${adjustedTop}px`;
-                box.style.transform = `rotate(${rotation}deg)`;
-                box.style.transformOrigin = 'center center';
-                box.dataset.originalTop = adjustedTop;
-                title.appendChild(box);
-            } catch (e) {
-                // 에러 발생 시 무시
-            }
-            return;
-        }
-        
-        // 마지막 2글자 범위 구하기 (1.5개 음절 계산용)
-        const lastTwoCharsStart = textLength - 2;
-        const lastTwoCharsEnd = textLength;
-        
-        try {
-            // 마지막 2글자의 범위
-            const rangeTwoChars = document.createRange();
-            rangeTwoChars.setStart(textNode, lastTwoCharsStart);
-            rangeTwoChars.setEnd(textNode, lastTwoCharsEnd);
-            const rectTwoChars = rangeTwoChars.getBoundingClientRect();
-            
-            // 마지막 1글자의 범위
-            const rangeOneChar = document.createRange();
-            rangeOneChar.setStart(textNode, textLength - 1);
-            rangeOneChar.setEnd(textNode, textLength);
-            const rectOneChar = rangeOneChar.getBoundingClientRect();
-            
-            const titleRect = title.getBoundingClientRect();
-            
-            // 박스 생성
-            const box = document.createElement('div');
-            box.className = 'section-title-box';
-            
-            // 마지막 1.8개 음절 위치 계산
-            // 마지막 1글자의 시작 위치에서 그 앞 0.8글자 너비만큼 왼쪽으로 이동
-            const lastCharWidth = rectOneChar.width;
-            const twoCharsWidth = rectTwoChars.width;
-            const prevCharWidth = twoCharsWidth - lastCharWidth; // 앞 글자의 전체 너비
-            const pointEightCharWidth = prevCharWidth * 0.8; // 앞 글자의 0.8배 너비
-            
-            // 박스 위치 계산 (마지막 1.8개 음절과 겹치게)
-            const boxLeft = rectOneChar.left - titleRect.left - pointEightCharWidth;
-            const boxTop = rectOneChar.top - titleRect.top;
-            
-            // Y축을 위로 20% 올리기 (박스 높이의 20%)
-            // 모바일 환경 고려: 화면 너비에 따라 박스 높이 결정
-            const isMobile = window.innerWidth <= 768;
-            const boxWidth = isMobile ? 120 : 200;
-            const boxHeight = isMobile ? 120 : 200;
-            const emojiFontSize = isMobile ? 70 : 100;
-            const offsetY = boxHeight * 0.2;
-            const adjustedTop = boxTop - offsetY;
-            
-            // 기울기 각도 고정 (각 타이틀마다 한 번만 생성하여 저장)
-            let rotation = parseFloat(title.dataset.boxRotation);
-            if (isNaN(rotation)) {
-                // 각도가 없으면 새로 생성하고 저장
-                rotation = (Math.random() * 30) - 15; // -15도 ~ +15도
-                title.dataset.boxRotation = rotation.toString();
-            }
-            
-            const sectionTitle = title.dataset.title || text;
-            const emoji = EMOJI_MAP[sectionTitle] || '';
-            
-            // 이모티콘 요소 생성
-            if (emoji) {
-                const emojiElement = document.createElement('span');
-                emojiElement.className = 'section-title-box-emoji';
-                emojiElement.setAttribute('role', 'img');
-                emojiElement.setAttribute('aria-label', `${sectionTitle} icon`);
-                emojiElement.textContent = emoji;
-                emojiElement.style.cursor = 'pointer';
-                emojiElement.style.pointerEvents = 'auto';
-                // 모바일에서 이모티콘 폰트 크기 명시적으로 설정
-                emojiElement.style.fontSize = `${emojiFontSize}px`;
-                
-                // 클릭/터치 이벤트: y축 위로 80px 이동
-                const handleEmojiClick = (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    const originalTop = parseFloat(box.dataset.originalTop) || adjustedTop;
-                    const currentTop = parseFloat(box.style.top) || originalTop;
-                    const newTop = currentTop - 80;
-                    
-                    box.style.top = `${newTop}px`;
-                    box.style.transition = 'top 0.3s ease-out';
-                    
-                    // 애니메이션 완료 후 원래 위치로 복귀
-                    setTimeout(() => {
-                        box.style.top = `${originalTop}px`;
-                        setTimeout(() => {
-                            box.style.transition = '';
-                        }, 300);
-                    }, 300);
-                };
-                
-                emojiElement.addEventListener('click', handleEmojiClick);
-                emojiElement.addEventListener('touchstart', handleEmojiClick);
-                
-                box.appendChild(emojiElement);
-            }
-            
-            // 박스 크기를 인라인 스타일로 명시적으로 설정 (사파리 브라우저 호환성)
-            box.style.width = `${boxWidth}px`;
-            box.style.height = `${boxHeight}px`;
-            box.style.left = `${boxLeft}px`;
-            box.style.top = `${adjustedTop}px`;
-            box.style.transform = `rotate(${rotation}deg)`;
-            box.style.transformOrigin = 'center center';
-            box.dataset.originalTop = adjustedTop; // 원래 위치 저장
-            
-            title.appendChild(box);
-        } catch (e) {
-            // 에러 발생 시 무시
-        }
-    }
-    
-    // 모든 애니메이션 섹션 제목 관찰
-    const animatedSectionTitles = document.querySelectorAll('.animated-section-title');
-    animatedSectionTitles.forEach(title => {
-        // portfolio-info 내부의 타이틀은 애니메이션 제외
-        if (title.closest('.portfolio-info')) {
-            // 텍스트를 즉시 표시 (애니메이션 없이)
-            const targetText = title.dataset.title || title.textContent;
-            if (targetText) {
-                if (targetText === '11KittiesSeason 2') {
-                    title.innerHTML = '11Kitties<sup>Season 2</sup>';
-                } else if (targetText === 'MartPlus') {
-                    title.innerHTML = 'Mart<sup>Plus</sup>';
-                } else {
-                    title.textContent = targetText;
-                }
-            }
-            return;
-        }
-        sectionTitleObserver.observe(title);
-        
-        // 애니메이션 완료 후 박스 업데이트를 위한 MutationObserver
-        let mutationTimeout = null;
-        const boxObserver = new MutationObserver(() => {
-            // 디바운싱으로 불필요한 업데이트 방지
-            if (mutationTimeout) {
-                clearTimeout(mutationTimeout);
-            }
-            mutationTimeout = setTimeout(() => {
-                const text = title.textContent || '';
-                const targetText = title.dataset.title || '';
-                // 텍스트가 완성되었을 때만 박스 업데이트
-                if (text && text === targetText && text.length >= 1) {
-                    updateTitleBox(title);
-                }
-                mutationTimeout = null;
-            }, 150); // 100ms에서 150ms로 조정하여 성능 개선
-        });
-        
-        boxObserver.observe(title, {
-            childList: true,
-            characterData: true,
-            subtree: true
-        });
-        
-        // 초기 박스 추가 시도
-        setTimeout(() => {
-            updateTitleBox(title);
-        }, 2000);
-    });
-    
-    // 해상도 변경 시 모든 section-title-box 위치 재조정
+    // 해상도 변경 시 배경 라인 재생성
     let resizeTimeout;
     let isResizing = false;
-    
+
     function handleResize() {
-        // 타이틀 박스 위치 재조정
-        const allSectionTitles = document.querySelectorAll('.animated-section-title');
-        allSectionTitles.forEach(title => {
-            const text = title.textContent || title.dataset.title || '';
-            if (text && text.length >= 1) {
-                updateTitleBox(title);
-            }
-        });
-        
-        // 배경 라인 재생성
         createBackgroundLines();
     }
-    
+
     window.addEventListener('resize', () => {
         if (!isResizing) {
             isResizing = true;
@@ -1106,9 +628,9 @@ document.addEventListener('DOMContentLoaded', () => {
         resizeTimeout = setTimeout(() => {
             handleResize();
             isResizing = false;
-        }, 250); // 디바운싱을 위해 250ms 대기
+        }, 250);
     }, { passive: true });
-    
+
     // 배경 라인 요소들 생성 및 관리
     const backgroundLines = [];
     const lineSpacing = 640;
@@ -1170,9 +692,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function getBackgroundLinesAnchor() {
-        return document.getElementById('animatedTitle')
-            || document.querySelector('main .hero-content .animated-section-title')
-            || document.querySelector('main .animated-section-title');
+        return (
+            document.getElementById('animatedTitle') ||
+            document.querySelector('main .hero-content .section-title') ||
+            document.querySelector('main h1.section-title')
+        );
     }
 
     function getThumbnailColumnRhythm() {
@@ -1276,150 +800,82 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 리사이즈 이벤트는 위의 handleResize 함수에서 통합 처리됨
     
-    // nav-brand 애니메이션
+    // nav-brand (스크램블 없이 텍스트만 전환)
     const navBrand = document.getElementById('navBrandAnimated');
     if (navBrand) {
         const navBrandTitles = ['welcome to'];
         const hoverText = '← go to home';
-        let navBrandTimer = null;
-        let isHovering = false;
-        
-        // index.html 페이지인지 확인
-        const isIndexPage = !window.location.pathname.includes('/works/');
-        
-        function animateNavBrand() {
-            if (navBrand.dataset.animating === 'true' || isHovering) return;
-            
-            const currentTitle = navBrandTitles[0];
-            const repeatDelay = isIndexPage ? 10000 : 30000; // index.html은 10초, 프로젝트 페이지는 30초
-            
-            // 애니메이션 완료 후 대기하고 재실행
-            animateToText(currentTitle, navBrand, false, [], () => {
-                if (!isHovering) {
-                    navBrandTimer = setTimeout(() => {
-                        // 대기 후 모션 재실행
-                        animateNavBrand();
-                    }, repeatDelay);
-                }
-            });
-        }
-        
-        // 프로젝트 페이지에서만 마우스 오버 이벤트 추가
+        const isIndexPage = !/(?:\/works\/|\/labs\/)/.test(window.location.pathname);
+        navBrand.textContent = navBrandTitles[0];
+
+        const brandIsLink = navBrand.tagName === 'A';
+
         if (!isIndexPage) {
-            // 마우스 오버 시 텍스트 변경 (랜덤 모션 적용)
             navBrand.addEventListener('mouseenter', () => {
-                isHovering = true;
-                // 타이머 취소
-                if (navBrandTimer) {
-                    clearTimeout(navBrandTimer);
-                    navBrandTimer = null;
-                }
-                // 랜덤 모션으로 텍스트 변경
-                if (navBrand.dataset.animating !== 'true') {
-                    animateToText(hoverText, navBrand, false, [], () => {
-                        navBrand.dataset.animating = 'false';
-                    });
-                }
+                navBrand.textContent = hoverText;
             });
-            
-            // 마우스 아웃 시 원래 텍스트로 복원 (랜덤 모션 적용)
             navBrand.addEventListener('mouseleave', () => {
-                isHovering = false;
-                // 랜덤 모션으로 원래 텍스트로 복원
-                if (navBrand.dataset.animating !== 'true') {
-                    animateToText(navBrandTitles[0], navBrand, false, [], () => {
-                        navBrand.dataset.animating = 'false';
-                        // 애니메이션 재시작
-                        navBrandTimer = setTimeout(() => {
-                            animateNavBrand();
-                        }, 30000);
-                    });
-                }
+                navBrand.textContent = navBrandTitles[0];
             });
         }
-        
-        // 모바일 터치 이벤트 추가 (모든 페이지)
+
         let isTouching = false;
         let touchHandled = false;
-        
-        navBrand.addEventListener('touchstart', (e) => {
+
+        navBrand.addEventListener('touchstart', () => {
             isTouching = true;
             touchHandled = false;
-            isHovering = true;
-            // 타이머 취소
-            if (navBrandTimer) {
-                clearTimeout(navBrandTimer);
-                navBrandTimer = null;
-            }
-            // 랜덤 모션으로 텍스트 변경
-            if (navBrand.dataset.animating !== 'true') {
-                animateToText(hoverText, navBrand, false, [], () => {
-                    navBrand.dataset.animating = 'false';
-                });
+            if (!isIndexPage) {
+                navBrand.textContent = hoverText;
             }
         });
-        
-        navBrand.addEventListener('touchend', (e) => {
+
+        navBrand.addEventListener('touchend', () => {
+            if (brandIsLink) {
+                isTouching = false;
+                if (!isIndexPage) {
+                    navBrand.textContent = navBrandTitles[0];
+                }
+                return;
+            }
             if (isTouching && !touchHandled) {
                 touchHandled = true;
                 isTouching = false;
-                isHovering = false;
-                
-                // 프로젝트 페이지인 경우 index.html로 이동
-                const isProjectPage = window.location.pathname.includes('/works/') || 
-                                     window.location.pathname.includes('/labs/');
+                const isProjectPage =
+                    window.location.pathname.includes('/works/') ||
+                    window.location.pathname.includes('/labs/');
                 if (isProjectPage) {
-                    const baseHref = window.location.pathname.includes('/works/') ? '../index.html' : '../index.html';
-                    window.location.href = baseHref;
+                    window.location.href = '../index.html';
                 } else {
-                    // 메인 페이지인 경우 페이지 새로고침
                     window.location.reload();
                 }
             }
         });
-        
+
         navBrand.addEventListener('touchcancel', () => {
             isTouching = false;
-            isHovering = false;
-            // 랜덤 모션으로 원래 텍스트로 복원
-            if (navBrand.dataset.animating !== 'true') {
-                animateToText(navBrandTitles[0], navBrand, false, [], () => {
-                    navBrand.dataset.animating = 'false';
-                    // 애니메이션 재시작
-                    if (!isIndexPage) {
-                        navBrandTimer = setTimeout(() => {
-                            animateNavBrand();
-                        }, 30000);
-                    }
-                });
+            if (!isIndexPage) {
+                navBrand.textContent = navBrandTitles[0];
             }
         });
-        
-        // 클릭 이벤트 추가 (데스크톱용, 모바일에서는 touchHandled로 중복 방지)
-        navBrand.style.cursor = 'pointer';
-        navBrand.addEventListener('click', (e) => {
-            // 모바일 터치로 처리된 경우 클릭 이벤트 무시
-            if (touchHandled) {
-                e.preventDefault();
-                return;
-            }
-            
-            // 프로젝트 페이지인 경우 index.html로 이동
-            const isProjectPage = window.location.pathname.includes('/works/') || 
-                                 window.location.pathname.includes('/labs/');
-            if (isProjectPage) {
-                const baseHref = window.location.pathname.includes('/works/') ? '../index.html' : '../index.html';
-                window.location.href = baseHref;
-            } else {
-                // 메인 페이지인 경우 페이지 새로고침
-                window.location.reload();
-            }
-        });
-        
-        // 모든 페이지에서 초기 애니메이션 시작
-        setTimeout(() => {
-            animateNavBrand();
-        }, 500);
+
+        if (!brandIsLink) {
+            navBrand.style.cursor = 'pointer';
+            navBrand.addEventListener('click', (e) => {
+                if (touchHandled) {
+                    e.preventDefault();
+                    return;
+                }
+                const isProjectPage =
+                    window.location.pathname.includes('/works/') ||
+                    window.location.pathname.includes('/labs/');
+                if (isProjectPage) {
+                    window.location.href = '../index.html';
+                } else {
+                    window.location.reload();
+                }
+            });
+        }
     }
     
     // 모바일에서도 링크가 새창으로 열리도록 처리

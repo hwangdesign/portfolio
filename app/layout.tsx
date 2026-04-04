@@ -5,7 +5,6 @@ import { ThemeInit } from '@/components/ThemeInit';
 import { SiteNav } from '@/components/SiteNav';
 import { SiteFooter } from '@/components/SiteFooter';
 import { ProjectDetailEffects } from '@/components/ProjectDetailEffects';
-import { PortfolioTitleAnimationsBridge } from '@/components/PortfolioTitleAnimationsBridge';
 import { DeferredPretendard } from '@/components/DeferredPretendard';
 
 const pretendardHref =
@@ -50,7 +49,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <DeferredPretendard href={pretendardHref} />
         <ThemeInit />
         <ProjectDetailEffects />
-        <PortfolioTitleAnimationsBridge />
         <SiteNav />
         {children}
         <SiteFooter />

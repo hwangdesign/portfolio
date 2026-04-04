@@ -31,13 +31,13 @@ export function LabDetailView({ lab, prev, next }: Props) {
               <div className="project-date">{meta.date}</div>
               {meta.titleHtml ? (
                 <h1
-                  className="section-title animated-section-title"
+                  className="section-title"
                   id="animatedTitle"
                   data-title={meta.title}
                   dangerouslySetInnerHTML={{ __html: meta.titleHtml }}
                 />
               ) : (
-                <h1 className="section-title animated-section-title" id="animatedTitle" data-title={meta.title}>
+                <h1 className="section-title" id="animatedTitle" data-title={meta.title}>
                   {meta.title}
                 </h1>
               )}

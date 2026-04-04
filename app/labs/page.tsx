@@ -14,7 +14,7 @@ export default function LabsIndexPage() {
         <div className="divider" />
         <section className="section">
           <div className="container">
-            <h1 className="section-title animated-section-title" data-title="Labs">
+            <h1 className="section-title" data-title="Labs">
               Labs
             </h1>
             <ul className="hero-info-description" style={{ listStyle: 'none', padding: 0 }}>

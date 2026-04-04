@@ -32,9 +32,16 @@ export function SiteNav() {
     <nav className="navbar">
       <div className="container">
         {isHome ? (
-          <div className="nav-brand" id="navBrandAnimated">
+          <button
+            type="button"
+            className="nav-brand"
+            id="navBrandAnimated"
+            data-nav-brand-react="1"
+            aria-label="페이지 새로고침"
+            onClick={() => window.location.reload()}
+          >
             welcome to
-          </div>
+          </button>
         ) : (
           <Link className="nav-brand" id="navBrandAnimated" href="/">
             welcome to
@@ -43,7 +50,13 @@ export function SiteNav() {
         <div className="nav-menu-wrapper">
           {SECTIONS.map((s) => (
             <Link key={s.id} href={`${base}#${s.id}`} className="nav-menu-item text-nav-menu">
-              {s.label}
+              {s.id === 'art' ? (
+                <>
+                  Arts<sup>(coming soon)</sup>
+                </>
+              ) : (
+                s.label
+              )}
             </Link>
           ))}
         </div>

@@ -19,8 +19,8 @@ export default function ArtPage() {
         <div className="divider" />
         <section className="section">
           <div className="container">
-            <h1 className="section-title animated-section-title" data-title="Arts">
-              Arts
+            <h1 className="section-title" data-title="Arts">
+              Arts<sup>(coming soon)</sup>
             </h1>
             <p className="hero-info-description">
               <span className="prefix-char">+</span> 아카이브 데이터는 <code>content/art/archive.json</code>에서 관리해요.
