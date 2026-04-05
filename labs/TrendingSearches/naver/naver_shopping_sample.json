@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-04T04:46:39.524Z",
+  "updatedAt": "2026-04-05T05:07:44.842Z",
   "items": [
     {
       "ranking": "1",
@@ -27,19 +27,19 @@
     },
     {
       "ranking": "7",
-      "keyword": "골프웨어"
-    },
-    {
-      "ranking": "8",
       "keyword": "뉴발란스"
     },
     {
-      "ranking": "9",
+      "ranking": "8",
       "keyword": "니트"
     },
     {
-      "ranking": "10",
+      "ranking": "9",
       "keyword": "청바지"
+    },
+    {
+      "ranking": "10",
+      "keyword": "스커트"
     }
   ]
 }
