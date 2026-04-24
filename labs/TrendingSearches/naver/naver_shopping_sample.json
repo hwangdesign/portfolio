@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-04-23T05:25:09.542Z",
+  "updatedAt": "2026-04-24T05:30:07.053Z",
   "items": [
     {
       "ranking": "1",
-      "keyword": "셔츠"
+      "keyword": "원피스"
     },
     {
       "ranking": "2",
-      "keyword": "원피스"
+      "keyword": "셔츠"
     },
     {
       "ranking": "3",
@@ -15,23 +15,23 @@
     },
     {
       "ranking": "4",
-      "keyword": "뉴발란스"
-    },
-    {
-      "ranking": "5",
       "keyword": "자켓"
     },
     {
+      "ranking": "5",
+      "keyword": "뉴발란스"
+    },
+    {
       "ranking": "6",
-      "keyword": "후드티"
+      "keyword": "니트"
     },
     {
       "ranking": "7",
-      "keyword": "블라우스"
+      "keyword": "후드티"
     },
     {
       "ranking": "8",
-      "keyword": "니트"
+      "keyword": "블라우스"
     },
     {
       "ranking": "9",
