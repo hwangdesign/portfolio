@@ -1,41 +1,41 @@
 {
-  "updatedAt": "2026-05-10T05:59:32.280Z",
+  "updatedAt": "2026-05-11T06:33:51.490Z",
   "items": [
     {
       "ranking": "1",
-      "keyword": "원피스"
-    },
-    {
-      "ranking": "2",
       "keyword": "셔츠"
     },
     {
-      "ranking": "3",
-      "keyword": "생일선물"
+      "ranking": "2",
+      "keyword": "원피스"
     },
     {
-      "ranking": "4",
+      "ranking": "3",
       "keyword": "맨투맨"
     },
     {
+      "ranking": "4",
+      "keyword": "생일선물"
+    },
+    {
       "ranking": "5",
-      "keyword": "자켓"
-    },
-    {
-      "ranking": "6",
-      "keyword": "후드티"
-    },
-    {
-      "ranking": "7",
       "keyword": "뉴발란스"
     },
     {
+      "ranking": "6",
+      "keyword": "자켓"
+    },
+    {
+      "ranking": "7",
+      "keyword": "후드티"
+    },
+    {
       "ranking": "8",
-      "keyword": "블라우스"
+      "keyword": "니트"
     },
     {
       "ranking": "9",
-      "keyword": "니트"
+      "keyword": "블라우스"
     },
     {
       "ranking": "10",
