@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-11T06:33:51.490Z",
+  "updatedAt": "2026-05-12T06:09:41.660Z",
   "items": [
     {
       "ranking": "1",
@@ -7,31 +7,31 @@
     },
     {
       "ranking": "2",
-      "keyword": "원피스"
-    },
-    {
-      "ranking": "3",
       "keyword": "맨투맨"
     },
     {
+      "ranking": "3",
+      "keyword": "원피스"
+    },
+    {
       "ranking": "4",
-      "keyword": "생일선물"
+      "keyword": "니트"
     },
     {
       "ranking": "5",
-      "keyword": "뉴발란스"
-    },
-    {
-      "ranking": "6",
-      "keyword": "자켓"
-    },
-    {
-      "ranking": "7",
       "keyword": "후드티"
     },
     {
+      "ranking": "6",
+      "keyword": "뉴발란스"
+    },
+    {
+      "ranking": "7",
+      "keyword": "자켓"
+    },
+    {
       "ranking": "8",
-      "keyword": "니트"
+      "keyword": "생일선물"
     },
     {
       "ranking": "9",
@@ -39,7 +39,7 @@
     },
     {
       "ranking": "10",
-      "keyword": "골프웨어"
+      "keyword": "청바지"
     }
   ]
 }
