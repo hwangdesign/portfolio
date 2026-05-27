@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-26T06:41:32.256Z",
+  "updatedAt": "2026-05-27T06:59:42.796Z",
   "items": [
     {
       "ranking": "1",
@@ -31,15 +31,15 @@
     },
     {
       "ranking": "8",
-      "keyword": "뉴발란스"
-    },
-    {
-      "ranking": "9",
       "keyword": "블라우스"
     },
     {
+      "ranking": "9",
+      "keyword": "등산화"
+    },
+    {
       "ranking": "10",
-      "keyword": "골프"
+      "keyword": "뉴발란스"
     }
   ]
 }
