@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-05-27T06:59:42.796Z",
+  "updatedAt": "2026-05-28T06:50:22.581Z",
   "items": [
     {
       "ranking": "1",
-      "keyword": "셔츠"
+      "keyword": "원피스"
     },
     {
       "ranking": "2",
-      "keyword": "원피스"
+      "keyword": "셔츠"
     },
     {
       "ranking": "3",
@@ -19,11 +19,11 @@
     },
     {
       "ranking": "5",
-      "keyword": "골프웨어"
+      "keyword": "맨투맨"
     },
     {
       "ranking": "6",
-      "keyword": "맨투맨"
+      "keyword": "블라우스"
     },
     {
       "ranking": "7",
@@ -31,15 +31,15 @@
     },
     {
       "ranking": "8",
-      "keyword": "블라우스"
-    },
-    {
-      "ranking": "9",
       "keyword": "등산화"
     },
     {
-      "ranking": "10",
+      "ranking": "9",
       "keyword": "뉴발란스"
+    },
+    {
+      "ranking": "10",
+      "keyword": "골프웨어"
     }
   ]
 }
