@@ -1,29 +1,29 @@
 {
-  "updatedAt": "2026-06-02T07:20:48.906Z",
+  "updatedAt": "2026-06-03T08:11:24.871Z",
   "items": [
     {
       "ranking": "1",
-      "keyword": "원피스"
-    },
-    {
-      "ranking": "2",
-      "keyword": "니트"
-    },
-    {
-      "ranking": "3",
       "keyword": "셔츠"
     },
     {
+      "ranking": "2",
+      "keyword": "원피스"
+    },
+    {
+      "ranking": "3",
+      "keyword": "니트"
+    },
+    {
       "ranking": "4",
-      "keyword": "블라우스"
+      "keyword": "자켓"
     },
     {
       "ranking": "5",
-      "keyword": "후드티"
+      "keyword": "블라우스"
     },
     {
       "ranking": "6",
-      "keyword": "수영복"
+      "keyword": "골프웨어"
     },
     {
       "ranking": "7",
@@ -31,15 +31,15 @@
     },
     {
       "ranking": "8",
-      "keyword": "등산화"
+      "keyword": "수영복"
     },
     {
       "ranking": "9",
-      "keyword": "맨투맨"
+      "keyword": "후드티"
     },
     {
       "ranking": "10",
-      "keyword": "자켓"
+      "keyword": "맨투맨"
     }
   ]
 }
