@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-03T08:11:24.871Z",
+  "updatedAt": "2026-06-04T07:20:35.060Z",
   "items": [
     {
       "ranking": "1",
@@ -15,19 +15,19 @@
     },
     {
       "ranking": "4",
-      "keyword": "자켓"
-    },
-    {
-      "ranking": "5",
-      "keyword": "블라우스"
-    },
-    {
-      "ranking": "6",
       "keyword": "골프웨어"
     },
     {
-      "ranking": "7",
+      "ranking": "5",
       "keyword": "뉴발란스"
+    },
+    {
+      "ranking": "6",
+      "keyword": "블라우스"
+    },
+    {
+      "ranking": "7",
+      "keyword": "자켓"
     },
     {
       "ranking": "8",
