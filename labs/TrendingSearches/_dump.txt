@@ -1,0 +1,156 @@
+{
+  "name": "shopping-keywords-kr",
+  "version": "1.0.0",
+  "description": "Google Trends · 네이버쇼핑 인기 검색어 종합 랭킹",
+  "scripts": {
+    "google": "node google-trends.js",
+    "naver": "node naver-shopping.js",
+    "collect": "node google-trends.js && node naver-shopping.js"
+  },
+  "keywords": ["shopping", "keywords", "trends", "naver", "google"],
+  "license": "MIT",
+  "dependencies": {
+    "puppeteer": "^24.6.1"
+  }
+}
+
+
+---
+
+
+google:
+total 8
+drwxr-xr-x@  3 a1700054  staff   96  2월 23 11:42 .
+drwxr-xr-x@ 12 a1700054  staff  384  2월 23 11:48 ..
+-rw-r--r--@  1 a1700054  staff  412  2월 23 11:42 google_trends_sample.json
+
+naver:
+total 8
+drwxr-xr-x@  3 a1700054  staff   96  2월 23 11:42 .
+drwxr-xr-x@ 12 a1700054  staff  384  2월 23 11:48 ..
+-rw-r--r--@  1 a1700054  staff  473  2월 23 11:42 naver_shopping_sample.json
+
+
+---
+
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Trending Searches - Google Trends · 네이버쇼핑">
+  <title>Trending Searches | Google Trends · 네이버쇼핑</title>
+  <script>
+    (function() {
+      var stored = localStorage.getItem('lab-keywords-dark-mode');
+      var dark = stored === '1' || (stored !== '0' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      if (dark) document.documentElement.classList.add('dark-mode');
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+</head>
+<body>
+  <div class="area-1 area-title-group">
+  <section class="area-title">
+    <div class="area-title-scaler">
+    <div class="area-title-content">
+      <span class="page-title">Trending Searches</span>
+      <span class="title-meta"><span id="locationCity">—</span><sup>(<span id="locationCountry">—</span>)</sup></span>
+      <span class="title-meta" id="todayDate">—</span>
+      <span class="title-meta" id="currentTime">—</span>
+    </div>
+    </div>
+  </section>
+
+  <div class="area-between">
+    <div class="area-between-side area-between-side--left"></div>
+    <div class="area-between-box area-between-box--left">
+      <div class="area-between-circle"></div>
+    </div>
+    <div class="area-between-box area-between-box--right">
+      <div class="area-between-circle"></div>
+    </div>
+    <div class="area-between-side area-between-side--right"></div>
+  </div>
+  <div class="area-lines-overlay">
+    <div class="falling-lines" id="fallingLines"></div>
+  </div>
+  <div class="area-center-line"></div>
+  <div class="falling-lines falling-lines--center" id="fallingLinesCenter"></div>
+  </div>
+
+  <section class="area-2 area-rank-list">
+    <div id="chartContainer">
+      <div class="loading lang-ko">로딩 중...</div>
+    </div>
+  </section>
+
+  <div class="area-3">
+    <div class="area-between">
+      <div class="area-between-side area-between-side--left"></div>
+      <div class="area-between-box area-between-box--left">
+        <div class="area-between-circle"></div>
+      </div>
+      <div class="area-between-box area-between-box--right">
+        <div class="area-between-circle"></div>
+      </div>
+      <div class="area-between-side area-between-side--right"></div>
+    </div>
+  </div>
+
+  <div class="area-3-title area-title-group">
+    <section class="area-title">
+      <div class="area-title-scaler">
+        <div class="area-title-content">
+          <span class="page-title">____</span>
+          <span class="title-meta title-meta--spacer"></span>
+          <span class="title-meta"><span id="locationCity2">—</span><sup>(<span id="locationCountry2">—</span>)</sup></span>
+          <span class="title-meta" id="temperature2">—</span>
+        </div>
+      </div>
+    </section>
+    <div class="area-lines-overlay">
+      <div class="falling-lines" id="fallingLines2"></div>
+    </div>
+    <div class="falling-lines falling-lines--center" id="fallingLinesCenter2"></div>
+  </div>
+
+  <script>
+    (function initFallingLines() {
+      const positionsAll = ['calc(50% - 44vw)', 'calc(50% - 22vw)', '50%', 'calc(50% + 22vw)', 'calc(50% + 44vw)'];
+      const positionsMobile = ['calc(50% - 33vw)', '50%', 'calc(50% + 33vw)'];
+      const containers = [
+        document.getElementById('fallingLines'),
+        document.getElementById('fallingLines2')
+      ].filter(Boolean);
+      const centerContainers = [
+        document.getElementById('fallingLinesCenter'),
+        document.getElementById('fallingLinesCenter2')
+      ].filter(Boolean);
+      if (containers.length === 0) return;
+      function getPositions() {
+        return window.matchMedia('(max-width: 768px)').matches ? positionsMobile : positionsAll;
+      }
+      function createLine(target, positions) {
+        const line = document.createElement('div');
+        line.className = 'falling-line';
+        const pos = positions[Math.floor(Math.random() * positions.length)];
+        const len = 20 + Math.random() * 80;
+        const delay = Math.random() * 8;
+        const dur = 4 + Math.random() * 6;
+        line.style.left = pos;
+        line.style.height = len + 'px';
+        line.style.animationDuration = dur + 's';
+        line.style.animationDelay = -delay + 's';
+        target.appendChild(line);
+        setTimeout(() => line.remove(), (dur + delay) * 1000);
+      }
+      function createCenterLine(centerContainer) {
+        if (!centerContainer || centerContainer.children.length > 0) return;
+        const line = document.createElement('div');
