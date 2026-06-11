@@ -9,6 +9,7 @@ import { DeferredPretendard } from '@/components/DeferredPretendard';
 
 const pretendardHref =
   'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.css';
+const googleAnalyticsId = 'G-Y1X7S6RJYL';
 
 export const metadata: Metadata = {
   title: '황선윤__포트폴리오',
@@ -52,6 +53,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SiteNav />
         {children}
         <SiteFooter />
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`}
+          strategy="afterInteractive"
+        />
+        <Script
+          id="google-analytics"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${googleAnalyticsId}');`,
+          }}
+        />
         <Script src={interactionsSrc} strategy="afterInteractive" />
       </body>
     </html>
