@@ -43,14 +43,14 @@
 html {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
-  background: #ffffff;
+  background: #000000;
 }
 
 body {
   font-family: var(--font-family-base);
   font-size: var(--font-size-base);
   letter-spacing: -0.04em;
-  background: #ffffff;
+  background: #000000;
   color: #1a1a1a;
   min-height: 100vh;
   min-height: 100dvh;
@@ -78,7 +78,7 @@ body {
 .area-3-title {
   min-height: 50vh;
   min-height: 50dvh;
-  background: #ffffff;
+  background: #000000;
   margin-bottom: 0;
 }
 
@@ -182,7 +182,7 @@ body {
   margin-bottom: 0;
   min-height: 80dvh;
   padding: 1rem;
-  background: #ffffff;
+  background: linear-gradient(to bottom, #000000 0%, #111111 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -270,7 +270,7 @@ body {
   width: 8dvh;
   height: 8vh;
   height: 8dvh;
-  background: #ffffff;
+  background: #111111;
   position: relative;
   z-index: 0;
 }
@@ -303,10 +303,10 @@ body {
   z-index: 1;
 }
 
-/* 영역3: 박스+원 */
+/* 영역3: 박스+원 (페이지 하단 블랙) */
 .area-3 {
   width: 100%;
-  background: #ffffff;
+  background: #000000;
 }
 
 .area-3 .area-between-box--left .area-between-circle {
@@ -426,9 +426,9 @@ html.dark-mode .keyword-item.touch-active {
   box-shadow: inset 0 0 0 10px var(--accent);
 }
 
-/* 1~10위 순차 자동 호버 */
+/* 1~10위 순차 자동 호버: 블랙 배경 + 키컬러 텍스트 */
 .keyword-item.auto-hover {
-  background: #ffffff;
+  background: #000000;
 }
 
 .keyword-item.auto-hover .keyword-flip {
@@ -437,7 +437,7 @@ html.dark-mode .keyword-item.touch-active {
 }
 
 html.dark-mode .keyword-item.auto-hover {
-  background: #ffffff;
+  background: #000000;
 }
 
 
@@ -486,14 +486,14 @@ html.dark-mode .loading {
 
 .error { color: #d32f2f; }
 
-/* Dark mode: 배경도 흰색 고정 (텍스트는 기본 본문색 유지) */
+/* Dark mode */
 html.dark-mode {
-  --bg-primary: #ffffff;
+  --bg-primary: #0d0d0f;
 }
 
 html.dark-mode body {
   background: var(--bg-primary);
-  color: #1a1a1a;
+  color: #f0ebe3;
 }
 
 @media (min-width: 769px) {

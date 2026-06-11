@@ -3,29 +3,28 @@
 
 html, body { overflow-x: hidden; max-width: 100vw; }
 
-/* 기본(다크 토글)도 배경은 흰색 고정 — 전경 토큰은 라이트와 동일해 가독성 유지 */
 :root {
-    color-scheme: light;
-    --primary-color: #000000;
+    color-scheme: dark light;
+    --primary-color: #ffffff;
     --yellow-color: #FFFF00;
-    --black-color: #ffffff;
-    --text-color: #000000;
-    --text-light: #333333;
-    --bg-color: #ffffff;
-    --border-white: rgba(0, 0, 0, 1);
-    --border-white-50: rgba(0, 0, 0, 0.5);
-    --border-white-20: rgba(0, 0, 0, 0.2);
-    --border-black-20: rgba(255, 255, 255, 0.2);
+    --black-color: #000000;
+    --text-color: #ffffff;
+    --text-light: #cccccc;
+    --bg-color: #111111;
+    --border-white: rgba(255, 255, 255, 1);
+    --border-white-50: rgba(255, 255, 255, 0.5);
+    --border-white-20: rgba(255, 255, 255, 0.2);
+    --border-black-20: rgba(0, 0, 0, 0.2);
     --yellow-20: rgba(255, 255, 0, 0.2);
-    --white-50: rgba(0, 0, 0, 0.5);
-    --white-100: rgba(0, 0, 0, 1);
-    --white-0: rgba(0, 0, 0, 0);
-    --dark-30: rgba(255, 255, 255, 0.3);
-    --text-tertiary-color: rgba(0, 0, 0, 0.2);
-    --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    --shadow-emoji: 0 10px 30px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.1);
+    --white-50: rgba(255, 255, 255, 0.5);
+    --white-100: rgba(255, 255, 255, 1);
+    --white-0: rgba(255, 255, 255, 0);
+    --dark-30: rgba(17, 17, 17, 0.3);
+    --text-tertiary-color: rgba(255, 255, 255, 0.2);
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-emoji: 0 10px 30px rgba(0, 0, 0, 0.5), 0 5px 15px rgba(0, 0, 0, 0.3);
     --transition: all 0.3s ease;
-    --font-family-base: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Helvetica Neue', Helvetica, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-family-base: 'Helvetica Neue', Helvetica, 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
     --font-family-system: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, 'Segoe UI', sans-serif;
     --font-family-emoji: 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', 'Android Emoji', 'EmojiSymbols', 'EmojiOne Mozilla', 'Twemoji Mozilla', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
     --selection-bg: #FFFF00;
@@ -51,30 +50,6 @@ html, body { overflow-x: hidden; max-width: 100vw; }
 .font-small { font-size: var(--font-size-small); }
 .font-tiny { font-size: var(--font-size-tiny); }
 
-/* 다크 테마 — 페이지 배경 #111, 본문 대비용 토큰 */
-[data-theme="dark"] {
-    color-scheme: dark;
-    --bg-color: #111111;
-    --text-color: #f0f0f0;
-    --text-light: #b8b8b8;
-    --primary-color: #ffffff;
-    --black-color: #111111;
-    --border-white: rgba(255, 255, 255, 0.28);
-    --border-white-50: rgba(255, 255, 255, 0.45);
-    --border-white-20: rgba(255, 255, 255, 0.18);
-    --white-50: rgba(255, 255, 255, 0.45);
-    --white-100: rgba(255, 255, 255, 1);
-    --white-0: rgba(255, 255, 255, 0);
-    --shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
-    --text-tertiary-color: rgba(255, 255, 255, 0.28);
-    --dark-30: rgba(0, 0, 0, 0.4);
-}
-
-[data-theme="dark"] html,
-[data-theme="dark"] body {
-    background-color: #111111;
-}
-
 /* 라이트 테마 */
 [data-theme="light"] {
     color-scheme: light;
@@ -85,7 +60,7 @@ html, body { overflow-x: hidden; max-width: 100vw; }
     --black-color: #ffffff;
     --text-color: #000000;
     --text-light: #333333;
-    --bg-color: #ffffff;
+    --bg-color: #fafafa;
     --border-white: rgba(0, 0, 0, 1);
     --border-white-50: rgba(0, 0, 0, 0.5);
     --border-white-20: rgba(0, 0, 0, 0.2);
@@ -98,15 +73,6 @@ html, body { overflow-x: hidden; max-width: 100vw; }
     --text-tertiary-color: rgba(0, 0, 0, 0.2);
     --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     --shadow-emoji: 0 10px 30px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-[data-theme="light"] html,
-[data-theme="light"] body {
-    background-color: transparent;
-}
-
-[data-theme="light"] .main-content {
-    background-color: transparent;
 }
 
 /* 텍스트 드래그 스타일 - 모든 페이지 키컬러 적용 (Chrome 134+ 호환) */
@@ -322,34 +288,28 @@ body {
     flex-direction: column;
 }
 
-/* 배경 세로선: 문서 흐름 레이어(.portfolio-bg-lines-layer) 안에서만 그림 — 컨텐츠 전체 높이, 푸터 구간은 레이어 밖이라 안 보임 */
-.portfolio-bg-lines-layer {
-    position: absolute;
-    left: 0;
-    width: 100%;
-    pointer-events: none;
-    z-index: 5;
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-}
-
-.portfolio-bg-lines-layer .background-line {
-    position: absolute;
+/* 배경 라인 스타일 */
+.background-line {
+    position: fixed;
     top: 0;
-    bottom: 0;
     width: 1px;
+    height: 100vh;
+    background: var(--yellow-color);
+    z-index: -1; /* 모든 콘텐츠 및 오버레이 뒤에 위치 */
     pointer-events: none;
-    opacity: 1;
-    background: rgba(0, 0, 0, 0.05);
-    transition: background 0.2s ease, opacity 0.1s ease-out, left 0.1s ease-out;
+    opacity: 0.1;
+    transition: opacity 0.1s ease-out, left 0.1s ease-out;
 }
 
-[data-theme="dark"] .portfolio-bg-lines-layer .background-line {
-    background: rgba(0, 0, 0, 0.05);
+/* 라이트 모드에서 배경 라인 색상 변경 */
+[data-theme="light"] .background-line {
+    background: #000000;
+    opacity: 0.1;
 }
 
-[data-theme="light"] .portfolio-bg-lines-layer .background-line {
-    background: rgba(0, 0, 0, 0.05);
+/* 프로젝트 본문: 두 번째 세로 구분선을 디테일 이미지 아래 레이어로 */
+body.project-detail-page .background-line-second {
+    z-index: -1;
 }
 
 .background-line-short {
@@ -405,8 +365,6 @@ body {
     overflow-x: hidden;
     max-width: 100vw;
     flex: 1;
-    position: relative;
-    z-index: 2; /* 배경 세로선(z-index:5)은 본문 위 레이어 — 본문은 콘텐츠 스택만 담당 */
 }
 
 .container {
@@ -465,17 +423,6 @@ body {
     font-family: var(--font-family-system);
     color: var(--primary-color);
     transition: color 0.3s ease;
-}
-
-button.nav-brand {
-    margin: 0;
-    padding: 0;
-    border: none;
-    background: none;
-    cursor: pointer;
-    text-align: left;
-    appearance: none;
-    -webkit-appearance: none;
 }
 
 .nav-brand,
@@ -698,8 +645,9 @@ button.nav-brand {
     opacity: 1;
 }
 
-/* 공통 타이틀 컨테이너 */
-.section-title {
+/* 공통 애니메이션/타이틀 컨테이너 스타일 */
+.section-title,
+.animated-section-title {
     position: relative;
     display: inline-block;
     min-height: 60px;
@@ -710,9 +658,9 @@ button.nav-brand {
 }
 
 .section-title sup,
+.animated-section-title sup,
 .project-nav-title sup,
-.nav-mobile-menu-item sup,
-.nav-menu-item sup {
+.nav-mobile-menu-item sup {
     font-size: 0.6em;
     vertical-align: super;
     line-height: 0;
@@ -720,9 +668,9 @@ button.nav-brand {
 }
 
 [data-theme="light"] .section-title sup,
+[data-theme="light"] .animated-section-title sup,
 [data-theme="light"] .project-nav-title sup,
-[data-theme="light"] .nav-mobile-menu-item sup,
-[data-theme="light"] .nav-menu-item sup {
+[data-theme="light"] .nav-mobile-menu-item sup {
     color: rgba(0, 0, 0, 0.2);
 }
 
@@ -841,19 +789,12 @@ button.nav-brand {
     height: 18px;
 }
 
-.btn-cta .material-symbols-outlined.btn-cta__icon {
+.btn-cta .material-symbols-outlined.btn-cta__icon,
+.btn-cta .icon-svg.btn-cta__icon {
     font-family: "Material Symbols Outlined";
     font-size: 24px;
     font-weight: 400;
     line-height: 1;
-    display: inline-block;
-    vertical-align: middle;
-    color: currentColor;
-}
-
-.btn-cta .icon-svg.btn-cta__icon {
-    width: 24px;
-    height: 24px;
     display: inline-block;
     vertical-align: middle;
     color: currentColor;
@@ -926,6 +867,11 @@ button.nav-brand {
     height: 4px;
     background: var(--white-100);
     margin: 0;
+}
+
+
+.animated-section-title {
+    opacity: 1;
 }
 
 
@@ -1094,36 +1040,6 @@ button.nav-brand {
         }
     }
 
-    /* 태블릿·모바일: 포트폴리오 카드 600px 고정 → 뷰포트 폭에 맞춤 (가로 스크롤 방지) */
-    .container {
-        padding-left: 24px;
-        padding-right: 24px;
-    }
-
-    .portfolio-grid {
-        grid-template-columns: 1fr;
-        gap: 60px 24px;
-    }
-
-    .portfolio-item {
-        width: 100%;
-        max-width: 100%;
-    }
-
-    .portfolio-thumbnail {
-        width: 100%;
-        max-width: 100%;
-    }
-
-    .portfolio-header {
-        flex-wrap: wrap;
-        gap: 16px;
-        align-items: center;
-    }
-
-    .portfolio-header .portfolio-view-toggle {
-        margin-left: auto;
-    }
 }
 
 /* PC에서 폰트 사이즈 14px로 설정 */
@@ -2019,7 +1935,6 @@ body.project-detail-page .project-navigation-wrapper {
     padding: 0;
     border-top: none;
     position: relative;
-    z-index: 40; /* 배경 세로선(z-index:5) 위로 — 푸터가 선을 덮음 */
     background-color: rgba(255, 255, 255, 0.05);
 }
 
