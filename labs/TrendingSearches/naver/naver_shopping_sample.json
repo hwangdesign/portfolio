@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-17T08:24:35.240Z",
+  "updatedAt": "2026-06-18T08:03:27.837Z",
   "items": [
     {
       "ranking": "1",
@@ -27,19 +27,19 @@
     },
     {
       "ranking": "7",
-      "keyword": "골프웨어"
-    },
-    {
-      "ranking": "8",
       "keyword": "후드티"
     },
     {
+      "ranking": "8",
+      "keyword": "자켓"
+    },
+    {
       "ranking": "9",
-      "keyword": "맨투맨"
+      "keyword": "골프웨어"
     },
     {
       "ranking": "10",
-      "keyword": "자켓"
+      "keyword": "맨투맨"
     }
   ]
 }
