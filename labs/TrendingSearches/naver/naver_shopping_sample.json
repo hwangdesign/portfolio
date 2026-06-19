@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-18T08:03:27.837Z",
+  "updatedAt": "2026-06-19T08:27:51.969Z",
   "items": [
     {
       "ranking": "1",
@@ -23,23 +23,23 @@
     },
     {
       "ranking": "6",
-      "keyword": "등산화"
-    },
-    {
-      "ranking": "7",
       "keyword": "후드티"
     },
     {
-      "ranking": "8",
-      "keyword": "자켓"
+      "ranking": "7",
+      "keyword": "등산화"
     },
     {
-      "ranking": "9",
+      "ranking": "8",
       "keyword": "골프웨어"
     },
     {
-      "ranking": "10",
+      "ranking": "9",
       "keyword": "맨투맨"
+    },
+    {
+      "ranking": "10",
+      "keyword": "자켓"
     }
   ]
 }
