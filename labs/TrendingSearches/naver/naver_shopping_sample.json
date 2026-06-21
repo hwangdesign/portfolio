@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-20T06:57:34.761Z",
+  "updatedAt": "2026-06-21T07:29:16.296Z",
   "items": [
     {
       "ranking": "1",
@@ -23,23 +23,23 @@
     },
     {
       "ranking": "6",
-      "keyword": "골프웨어"
-    },
-    {
-      "ranking": "7",
-      "keyword": "후드티"
-    },
-    {
-      "ranking": "8",
-      "keyword": "맨투맨"
-    },
-    {
-      "ranking": "9",
       "keyword": "생일선물"
     },
     {
+      "ranking": "7",
+      "keyword": "골프웨어"
+    },
+    {
+      "ranking": "8",
+      "keyword": "후드티"
+    },
+    {
+      "ranking": "9",
+      "keyword": "맨투맨"
+    },
+    {
       "ranking": "10",
-      "keyword": "런닝화"
+      "keyword": "자켓"
     }
   ]
 }
