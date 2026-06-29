@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-28T06:59:00.581Z",
+  "updatedAt": "2026-06-29T07:25:45.772Z",
   "items": [
     {
       "ranking": "1",
-      "keyword": "셔츠"
+      "keyword": "원피스"
     },
     {
       "ranking": "2",
-      "keyword": "원피스"
+      "keyword": "셔츠"
     },
     {
       "ranking": "3",
@@ -19,15 +19,15 @@
     },
     {
       "ranking": "5",
-      "keyword": "자켓"
-    },
-    {
-      "ranking": "6",
       "keyword": "블라우스"
     },
     {
+      "ranking": "6",
+      "keyword": "자켓"
+    },
+    {
       "ranking": "7",
-      "keyword": "생일선물"
+      "keyword": "골프웨어"
     },
     {
       "ranking": "8",
@@ -39,7 +39,7 @@
     },
     {
       "ranking": "10",
-      "keyword": "골프웨어"
+      "keyword": "생일선물"
     }
   ]
 }
