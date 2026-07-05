@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-04T06:14:09.910Z",
+  "updatedAt": "2026-07-05T06:35:57.345Z",
   "items": [
     {
       "ranking": "1",
-      "keyword": "원피스"
+      "keyword": "셔츠"
     },
     {
       "ranking": "2",
-      "keyword": "셔츠"
+      "keyword": "원피스"
     },
     {
       "ranking": "3",
@@ -19,11 +19,11 @@
     },
     {
       "ranking": "5",
-      "keyword": "후드티"
+      "keyword": "골프웨어"
     },
     {
       "ranking": "6",
-      "keyword": "골프웨어"
+      "keyword": "후드티"
     },
     {
       "ranking": "7",
@@ -31,15 +31,15 @@
     },
     {
       "ranking": "8",
-      "keyword": "자켓"
-    },
-    {
-      "ranking": "9",
       "keyword": "가방"
     },
     {
-      "ranking": "10",
+      "ranking": "9",
       "keyword": "축구화"
+    },
+    {
+      "ranking": "10",
+      "keyword": "자켓"
     }
   ]
 }
