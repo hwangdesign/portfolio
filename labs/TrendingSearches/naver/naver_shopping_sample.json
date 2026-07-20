@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-19T05:45:13.688Z",
+  "updatedAt": "2026-07-20T06:11:52.218Z",
   "items": [
     {
       "ranking": "1",
@@ -19,19 +19,19 @@
     },
     {
       "ranking": "5",
-      "keyword": "뉴발란스"
-    },
-    {
-      "ranking": "6",
-      "keyword": "수영복"
-    },
-    {
-      "ranking": "7",
       "keyword": "후드티"
     },
     {
-      "ranking": "8",
+      "ranking": "6",
       "keyword": "블라우스"
+    },
+    {
+      "ranking": "7",
+      "keyword": "수영복"
+    },
+    {
+      "ranking": "8",
+      "keyword": "뉴발란스"
     },
     {
       "ranking": "9",
@@ -39,7 +39,7 @@
     },
     {
       "ranking": "10",
-      "keyword": "선물"
+      "keyword": "자켓"
     }
   ]
 }
