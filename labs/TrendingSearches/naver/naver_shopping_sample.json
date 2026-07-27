@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-26T05:54:43.087Z",
+  "updatedAt": "2026-07-27T06:22:34.479Z",
   "items": [
     {
       "ranking": "1",
@@ -19,7 +19,7 @@
     },
     {
       "ranking": "5",
-      "keyword": "자켓"
+      "keyword": "수영복"
     },
     {
       "ranking": "6",
@@ -27,19 +27,19 @@
     },
     {
       "ranking": "7",
-      "keyword": "블라우스"
-    },
-    {
-      "ranking": "8",
       "keyword": "생일선물"
     },
     {
+      "ranking": "8",
+      "keyword": "맨투맨"
+    },
+    {
       "ranking": "9",
-      "keyword": "수영복"
+      "keyword": "블라우스"
     },
     {
       "ranking": "10",
-      "keyword": "맨투맨"
+      "keyword": "후드티"
     }
   ]
 }
