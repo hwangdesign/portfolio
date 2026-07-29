@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-28T05:41:00.639Z",
+  "updatedAt": "2026-07-29T05:45:26.119Z",
   "items": [
     {
       "ranking": "1",
@@ -11,15 +11,15 @@
     },
     {
       "ranking": "3",
-      "keyword": "니트"
+      "keyword": "골프웨어"
     },
     {
       "ranking": "4",
-      "keyword": "수영복"
+      "keyword": "니트"
     },
     {
       "ranking": "5",
-      "keyword": "골프웨어"
+      "keyword": "수영복"
     },
     {
       "ranking": "6",
@@ -31,7 +31,7 @@
     },
     {
       "ranking": "8",
-      "keyword": "맨투맨"
+      "keyword": "후드티"
     },
     {
       "ranking": "9",
@@ -39,7 +39,7 @@
     },
     {
       "ranking": "10",
-      "keyword": "후드티"
+      "keyword": "맨투맨"
     }
   ]
 }
