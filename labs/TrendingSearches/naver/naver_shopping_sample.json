@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-20T03:41:00.312Z",
+  "updatedAt": "2026-08-21T03:44:34.210Z",
   "items": [
     {
       "ranking": "1",
@@ -7,11 +7,11 @@
     },
     {
       "ranking": "2",
-      "keyword": "원피스"
+      "keyword": "셔츠"
     },
     {
       "ranking": "3",
-      "keyword": "셔츠"
+      "keyword": "원피스"
     },
     {
       "ranking": "4",
@@ -27,19 +27,19 @@
     },
     {
       "ranking": "7",
-      "keyword": "골프웨어"
-    },
-    {
-      "ranking": "8",
       "keyword": "자켓"
     },
     {
+      "ranking": "8",
+      "keyword": "골프웨어"
+    },
+    {
       "ranking": "9",
-      "keyword": "수영복"
+      "keyword": "블라우스"
     },
     {
       "ranking": "10",
-      "keyword": "블라우스"
+      "keyword": "기념일선물"
     }
   ]
 }
