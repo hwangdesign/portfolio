@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-30T08:50:18.339Z",
+  "updatedAt": "2026-08-31T09:13:16.222Z",
   "items": [
     {
       "ranking": "1",
@@ -23,15 +23,15 @@
     },
     {
       "ranking": "6",
-      "keyword": "자켓"
-    },
-    {
-      "ranking": "7",
       "keyword": "니트"
     },
     {
+      "ranking": "7",
+      "keyword": "골프웨어"
+    },
+    {
       "ranking": "8",
-      "keyword": "수영복"
+      "keyword": "자켓"
     },
     {
       "ranking": "9",
@@ -39,7 +39,7 @@
     },
     {
       "ranking": "10",
-      "keyword": "결혼선물"
+      "keyword": "수영복"
     }
   ]
 }
