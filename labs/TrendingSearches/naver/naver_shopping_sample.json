@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-06T07:30:41.274Z",
+  "updatedAt": "2026-09-07T07:53:20.548Z",
   "items": [
     {
       "ranking": "1",
@@ -7,7 +7,7 @@
     },
     {
       "ranking": "2",
-      "keyword": "뉴발란스"
+      "keyword": "셔츠"
     },
     {
       "ranking": "3",
@@ -15,7 +15,7 @@
     },
     {
       "ranking": "4",
-      "keyword": "셔츠"
+      "keyword": "블라우스"
     },
     {
       "ranking": "5",
@@ -27,19 +27,19 @@
     },
     {
       "ranking": "7",
-      "keyword": "골프웨어"
-    },
-    {
-      "ranking": "8",
-      "keyword": "블라우스"
-    },
-    {
-      "ranking": "9",
       "keyword": "자켓"
     },
     {
-      "ranking": "10",
+      "ranking": "8",
       "keyword": "가방"
+    },
+    {
+      "ranking": "9",
+      "keyword": "청바지"
+    },
+    {
+      "ranking": "10",
+      "keyword": "스커트"
     }
   ]
 }
