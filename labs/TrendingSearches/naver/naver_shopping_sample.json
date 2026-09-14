@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-13T07:54:29.006Z",
+  "updatedAt": "2026-09-14T08:27:34.162Z",
   "items": [
     {
       "ranking": "1",
@@ -7,39 +7,39 @@
     },
     {
       "ranking": "2",
-      "keyword": "셔츠"
-    },
-    {
-      "ranking": "3",
       "keyword": "맨투맨"
     },
     {
-      "ranking": "4",
+      "ranking": "3",
       "keyword": "축구화"
     },
     {
+      "ranking": "4",
+      "keyword": "셔츠"
+    },
+    {
       "ranking": "5",
-      "keyword": "후드티"
+      "keyword": "골프웨어"
     },
     {
       "ranking": "6",
-      "keyword": "자켓"
-    },
-    {
-      "ranking": "7",
       "keyword": "블라우스"
     },
     {
+      "ranking": "7",
+      "keyword": "후드티"
+    },
+    {
       "ranking": "8",
-      "keyword": "뉴발란스"
+      "keyword": "자켓"
     },
     {
       "ranking": "9",
-      "keyword": "결혼선물"
+      "keyword": "뉴발란스"
     },
     {
       "ranking": "10",
-      "keyword": "니트"
+      "keyword": "결혼선물"
     }
   ]
 }
