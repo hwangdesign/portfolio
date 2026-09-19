@@ -1,17 +1,17 @@
 {
-  "updatedAt": "2026-09-18T07:52:34.965Z",
+  "updatedAt": "2026-09-19T07:43:50.983Z",
   "items": [
     {
       "ranking": "1",
-      "keyword": "자켓"
+      "keyword": "원피스"
     },
     {
       "ranking": "2",
-      "keyword": "맨투맨"
+      "keyword": "자켓"
     },
     {
       "ranking": "3",
-      "keyword": "원피스"
+      "keyword": "맨투맨"
     },
     {
       "ranking": "4",
@@ -39,7 +39,7 @@
     },
     {
       "ranking": "10",
-      "keyword": "축구화"
+      "keyword": "청바지"
     }
   ]
 }
