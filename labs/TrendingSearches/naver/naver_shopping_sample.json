@@ -1,37 +1,37 @@
 {
-  "updatedAt": "2026-09-22T08:09:30.726Z",
+  "updatedAt": "2026-09-23T08:12:00.166Z",
   "items": [
     {
       "ranking": "1",
-      "keyword": "원피스"
-    },
-    {
-      "ranking": "2",
-      "keyword": "셔츠"
-    },
-    {
-      "ranking": "3",
-      "keyword": "자켓"
-    },
-    {
-      "ranking": "4",
-      "keyword": "맨투맨"
-    },
-    {
-      "ranking": "5",
       "keyword": "후드티"
     },
     {
+      "ranking": "2",
+      "keyword": "맨투맨"
+    },
+    {
+      "ranking": "3",
+      "keyword": "원피스"
+    },
+    {
+      "ranking": "4",
+      "keyword": "셔츠"
+    },
+    {
+      "ranking": "5",
+      "keyword": "자켓"
+    },
+    {
       "ranking": "6",
-      "keyword": "뉴발란스"
+      "keyword": "니트"
     },
     {
       "ranking": "7",
-      "keyword": "블라우스"
+      "keyword": "뉴발란스"
     },
     {
       "ranking": "8",
-      "keyword": "니트"
+      "keyword": "블라우스"
     },
     {
       "ranking": "9",
@@ -39,7 +39,7 @@
     },
     {
       "ranking": "10",
-      "keyword": "청바지"
+      "keyword": "가방"
     }
   ]
 }
