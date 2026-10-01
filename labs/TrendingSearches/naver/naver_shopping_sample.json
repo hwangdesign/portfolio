@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-30T09:13:14.338Z",
+  "updatedAt": "2026-10-01T09:41:04.624Z",
   "items": [
     {
       "ranking": "1",
@@ -15,7 +15,7 @@
     },
     {
       "ranking": "4",
-      "keyword": "셔츠"
+      "keyword": "자켓"
     },
     {
       "ranking": "5",
@@ -23,19 +23,19 @@
     },
     {
       "ranking": "6",
-      "keyword": "자켓"
+      "keyword": "셔츠"
     },
     {
       "ranking": "7",
-      "keyword": "결혼선물"
-    },
-    {
-      "ranking": "8",
       "keyword": "니트"
     },
     {
-      "ranking": "9",
+      "ranking": "8",
       "keyword": "블라우스"
+    },
+    {
+      "ranking": "9",
+      "keyword": "결혼선물"
     },
     {
       "ranking": "10",
