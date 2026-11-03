@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-02T10:25:55.203Z",
+  "updatedAt": "2026-11-03T10:23:21.704Z",
   "items": [
     {
       "ranking": "1",
@@ -15,15 +15,15 @@
     },
     {
       "ranking": "4",
-      "keyword": "맨투맨"
-    },
-    {
-      "ranking": "5",
       "keyword": "뉴발란스"
     },
     {
+      "ranking": "5",
+      "keyword": "맨투맨"
+    },
+    {
       "ranking": "6",
-      "keyword": "청바지"
+      "keyword": "셔츠"
     },
     {
       "ranking": "7",
@@ -31,7 +31,7 @@
     },
     {
       "ranking": "8",
-      "keyword": "셔츠"
+      "keyword": "청바지"
     },
     {
       "ranking": "9",
@@ -39,7 +39,7 @@
     },
     {
       "ranking": "10",
-      "keyword": "블라우스"
+      "keyword": "스커트"
     }
   ]
 }
