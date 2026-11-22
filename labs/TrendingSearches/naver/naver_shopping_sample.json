@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-21T10:32:44.264Z",
+  "updatedAt": "2026-11-22T10:37:38.958Z",
   "items": [
     {
       "ranking": "1",
@@ -11,11 +11,11 @@
     },
     {
       "ranking": "3",
-      "keyword": "뉴발란스"
+      "keyword": "니트"
     },
     {
       "ranking": "4",
-      "keyword": "니트"
+      "keyword": "뉴발란스"
     },
     {
       "ranking": "5",
@@ -23,23 +23,23 @@
     },
     {
       "ranking": "6",
-      "keyword": "청바지"
-    },
-    {
-      "ranking": "7",
       "keyword": "자켓"
     },
     {
-      "ranking": "8",
-      "keyword": "스커트"
-    },
-    {
-      "ranking": "9",
+      "ranking": "7",
       "keyword": "셔츠"
     },
     {
+      "ranking": "8",
+      "keyword": "청바지"
+    },
+    {
+      "ranking": "9",
+      "keyword": "스커트"
+    },
+    {
       "ranking": "10",
-      "keyword": "블라우스"
+      "keyword": "결혼선물"
     }
   ]
 }
