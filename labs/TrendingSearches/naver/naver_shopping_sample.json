@@ -1,17 +1,17 @@
 {
-  "updatedAt": "2026-11-26T11:47:22.789Z",
+  "updatedAt": "2026-11-27T11:40:37.395Z",
   "items": [
     {
       "ranking": "1",
-      "keyword": "후드티"
-    },
-    {
-      "ranking": "2",
       "keyword": "니트"
     },
     {
-      "ranking": "3",
+      "ranking": "2",
       "keyword": "원피스"
+    },
+    {
+      "ranking": "3",
+      "keyword": "후드티"
     },
     {
       "ranking": "4",
@@ -39,7 +39,7 @@
     },
     {
       "ranking": "10",
-      "keyword": "골프웨어"
+      "keyword": "결혼선물"
     }
   ]
 }
