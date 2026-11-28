@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-27T11:40:37.395Z",
+  "updatedAt": "2026-11-28T11:15:30.314Z",
   "items": [
     {
       "ranking": "1",
@@ -19,27 +19,27 @@
     },
     {
       "ranking": "5",
-      "keyword": "셔츠"
-    },
-    {
-      "ranking": "6",
       "keyword": "맨투맨"
     },
     {
-      "ranking": "7",
-      "keyword": "뉴발란스"
-    },
-    {
-      "ranking": "8",
+      "ranking": "6",
       "keyword": "청바지"
     },
     {
+      "ranking": "7",
+      "keyword": "결혼선물"
+    },
+    {
+      "ranking": "8",
+      "keyword": "뉴발란스"
+    },
+    {
       "ranking": "9",
-      "keyword": "스커트"
+      "keyword": "셔츠"
     },
     {
       "ranking": "10",
-      "keyword": "결혼선물"
+      "keyword": "스커트"
     }
   ]
 }
